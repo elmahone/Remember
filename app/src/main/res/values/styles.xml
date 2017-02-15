@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="ListView" parent="Widget.AppCompat.ListView">
+        <item name="android:divider">@color/light_gray</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+
 </resources>

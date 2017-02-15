@@ -26,6 +26,11 @@ public class ReminderAdapter extends BaseAdapter {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public void addItem(final Reminder reminder) {
+        data.add(reminder);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return data.size();
@@ -46,15 +51,27 @@ public class ReminderAdapter extends BaseAdapter {
         if (view == null) {
             view = inflater.inflate(R.layout.list_row, null);
         }
+        Reminder reminder = data.get(position);
+
         TextView header = (TextView) view.findViewById(R.id.list_header);
         TextView date = (TextView) view.findViewById(R.id.list_date);
         TextView text = (TextView) view.findViewById(R.id.list_text);
 
-        header.setText(data.get(position).getTitle());
-        date.setText(data.get(position).getDate());
-        text.setText(data.get(position).getDescription());
+        switch (reminder.getCategory()){
+            case "Alarm": {
+                header.setText(reminder.getTitle() + " alert");
+                date.setText(reminder.getDate() + " alert");
+                text.setText(reminder.getDescription() + " alert");
+                break;
+            }
+            case "Exercise": {
+                header.setText(reminder.getTitle() + " ex");
+                date.setText(reminder.getDate() + " ex");
+                text.setText(reminder.getDescription() + " ex");
+                break;
+            }
 
+        }
         return view;
     }
-
 }

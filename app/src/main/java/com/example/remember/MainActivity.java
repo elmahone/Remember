@@ -20,13 +20,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         reminder = new Reminder("Wake up", "Good morgon", "Alarm", 30, 21, 22, 2, 2017);
         dataList.add(reminder);
-
         reminder = new Reminder("Go to jog", "", "Exercise", 0, 10, 16, 2, 2017);
         dataList.add(reminder);
-
-        listView = (ListView)findViewById(R.id.reminder_list);
+        
+        listView = (ListView) findViewById(R.id.reminder_list);
         listView.setAdapter(new ReminderAdapter(this, dataList));
 
     }
