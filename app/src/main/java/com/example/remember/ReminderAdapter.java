@@ -11,11 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Black on 2017-02-15.
- */
-
 public class ReminderAdapter extends BaseAdapter {
+    private static final String TAG = "ReminderAdapter";
     Context context;
     ArrayList<Reminder> data;
     private static LayoutInflater inflater = null;
@@ -57,16 +54,16 @@ public class ReminderAdapter extends BaseAdapter {
         TextView date = (TextView) view.findViewById(R.id.list_date);
         TextView text = (TextView) view.findViewById(R.id.list_text);
 
-        switch (reminder.getCategory()){
-            case "Alarm": {
+        switch (Long.toString(reminder.getCategory())){
+            case "1": {
                 header.setText(reminder.getTitle() + " alert");
-                date.setText(reminder.getDate() + " alert");
+                date.setText(reminder.stringDate() + " alert");
                 text.setText(reminder.getDescription() + " alert");
                 break;
             }
-            case "Exercise": {
+            case "2": {
                 header.setText(reminder.getTitle() + " ex");
-                date.setText(reminder.getDate() + " ex");
+                date.setText(reminder.stringDate() + " ex");
                 text.setText(reminder.getDescription() + " ex");
                 break;
             }
