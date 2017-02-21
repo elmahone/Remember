@@ -67,7 +67,7 @@ public class DataSource {
         reminder.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
         reminder.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
         reminder.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESC)));
-        reminder.setCategory(cursor.getLong(cursor.getColumnIndex(KEY_CAT_ID)));
+        reminder.setCategory(cursor.getInt(cursor.getColumnIndex(KEY_CAT_ID)));
 
         reminder.setMinute(cursor.getInt(cursor.getColumnIndex(KEY_MIN)));
         reminder.setHour(cursor.getInt(cursor.getColumnIndex(KEY_HOUR)));
@@ -77,7 +77,6 @@ public class DataSource {
 
         return reminder;
     }
-
 
     //Fetch all reminders
     public List<Reminder> getAllReminders() {
@@ -93,7 +92,7 @@ public class DataSource {
                 reminder.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
                 reminder.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
                 reminder.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESC)));
-                reminder.setCategory(cursor.getLong(cursor.getColumnIndex(KEY_CAT_ID)));
+                reminder.setCategory(cursor.getInt(cursor.getColumnIndex(KEY_CAT_ID)));
 
                 reminder.setMinute(cursor.getInt(cursor.getColumnIndex(KEY_MIN)));
                 reminder.setHour(cursor.getInt(cursor.getColumnIndex(KEY_HOUR)));
@@ -123,7 +122,7 @@ public class DataSource {
                 reminder.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
                 reminder.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
                 reminder.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESC)));
-                reminder.setCategory(cursor.getLong(cursor.getColumnIndex(KEY_CAT_ID)));
+                reminder.setCategory(cursor.getInt(cursor.getColumnIndex(KEY_CAT_ID)));
 
                 reminder.setMinute(cursor.getInt(cursor.getColumnIndex(KEY_MIN)));
                 reminder.setHour(cursor.getInt(cursor.getColumnIndex(KEY_HOUR)));
@@ -181,6 +180,7 @@ public class DataSource {
             open();
             ContentValues values = new ContentValues();
             values.put(KEY_CAT_NAME, category.getCategory());
+            values.put(KEY_CAT_COLOR, category.getColor());
 
             // insert row
             long category_id = db.insert(TABLE_CATEGORY, null, values);
@@ -203,6 +203,7 @@ public class DataSource {
         Category category = new Category();
         category.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
         category.setCategory(cursor.getString(cursor.getColumnIndex(KEY_CAT_NAME)));
+        category.setColor(cursor.getString(cursor.getColumnIndex(KEY_CAT_COLOR)));
 
         return category;
     }
@@ -221,6 +222,7 @@ public class DataSource {
                 Category category = new Category();
                 category.setId(cursor.getInt((cursor.getColumnIndex(KEY_ID))));
                 category.setCategory(cursor.getString(cursor.getColumnIndex(KEY_CAT_NAME)));
+                category.setColor(cursor.getString(cursor.getColumnIndex(KEY_CAT_COLOR)));
 
                 // adding to tags list
                 categories.add(category);
@@ -235,6 +237,7 @@ public class DataSource {
             open();
             ContentValues values = new ContentValues();
             values.put(KEY_CAT_NAME, category.getCategory());
+            values.put(KEY_CAT_COLOR, category.getColor());
 
             // updating row
             return db.update(TABLE_CATEGORY, values, KEY_ID + " = ?",

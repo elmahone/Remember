@@ -5,7 +5,7 @@ public class Reminder {
     private int id;
     private String title;
     private String description;
-    private long category_id;
+    private int category_id;
 
     private int minute;
     private int hour;
@@ -19,7 +19,7 @@ public class Reminder {
 
     }
 
-    public Reminder(int id, String title, String description, long category_id, int minute, int hour, int day, int month, int year) {
+    public Reminder(int id, String title, String description, int category_id, int minute, int hour, int day, int month, int year) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -31,7 +31,7 @@ public class Reminder {
         this.year = year;
     }
 
-    public Reminder(String title, String description, long category_id, int minute, int hour, int day, int month, int year) {
+    public Reminder(String title, String description, int category_id, int minute, int hour, int day, int month, int year) {
         this.title = title;
         this.description = description;
         this.category_id = category_id;
@@ -42,7 +42,7 @@ public class Reminder {
         this.year = year;
     }
 
-    public Reminder(String title, long category_id, int minute, int hour, int day, int month, int year) {
+    public Reminder(String title, int category_id, int minute, int hour, int day, int month, int year) {
         this.title = title;
         this.category_id = category_id;
         this.minute = minute;
@@ -67,7 +67,7 @@ public class Reminder {
         return description;
     }
 
-    public long getCategory() {
+    public int getCategory() {
         return category_id;
     }
 
@@ -106,7 +106,7 @@ public class Reminder {
         this.description = description;
     }
 
-    public void setCategory(long category_id) {
+    public void setCategory(int category_id) {
         this.category_id = category_id;
     }
 

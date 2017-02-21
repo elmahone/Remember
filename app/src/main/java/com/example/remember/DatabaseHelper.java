@@ -1,5 +1,6 @@
 package com.example.remember;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -40,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //region CATEGORY Table - column names
     public static final String KEY_CAT_NAME = "category_name";
+    public static final String KEY_CAT_COLOR = "category_color";
     //endregion
 
     //region Table Create Statements
@@ -53,8 +55,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Category table create statement
     private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE " + TABLE_CATEGORY
-            + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_CAT_NAME + " TEXT)";
-
+            + "(" + KEY_ID + " INTEGER PRIMARY KEY, "
+            + KEY_CAT_NAME + " TEXT, "
+            + KEY_CAT_COLOR + " TEXT)";
     //endregion
 
     public DatabaseHelper(Context context) {
@@ -66,8 +69,74 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // creating required tables
         Log.v(TAG, CREATE_TABLE_CATEGORY);
         Log.v(TAG, CREATE_TABLE_REMINDER);
-        db.execSQL(CREATE_TABLE_REMINDER);
         db.execSQL(CREATE_TABLE_CATEGORY);
+        db.execSQL(CREATE_TABLE_REMINDER);
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CAT_NAME, "Default");
+        values.put(KEY_CAT_COLOR, "#AEC6CF");
+        db.insert(TABLE_CATEGORY, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_CAT_NAME, "Exercise");
+        values.put(KEY_CAT_COLOR, "#FF4848");
+        db.insert(TABLE_CATEGORY, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_CAT_NAME, "Shopping");
+        values.put(KEY_CAT_COLOR, "#01F33E");
+        db.insert(TABLE_CATEGORY, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_TITLE, "Janus's birthday");
+        values.put(KEY_DESC, "40 v");
+        values.put(KEY_CAT_ID, 1);
+        values.put(KEY_MIN, 0);
+        values.put(KEY_HOUR, 12);
+        values.put(KEY_DAY, 2);
+        values.put(KEY_MONTH, 5);
+        values.put(KEY_YEAR, 2017);
+        db.insert(TABLE_REMINDER, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_TITLE, "Go buy pants");
+        values.put(KEY_DESC, "");
+        values.put(KEY_CAT_ID, 3);
+        values.put(KEY_MIN, 20);
+        values.put(KEY_HOUR, 16);
+        values.put(KEY_DAY, 7);
+        values.put(KEY_MONTH, 4);
+        values.put(KEY_YEAR, 2017);
+        db.insert(TABLE_REMINDER, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_TITLE, "Gym");
+        values.put(KEY_DESC, "Leg day");
+        values.put(KEY_CAT_ID, 2);
+        values.put(KEY_MIN, 0);
+        values.put(KEY_HOUR, 18);
+        values.put(KEY_DAY, 30);
+        values.put(KEY_MONTH, 3);
+        values.put(KEY_YEAR, 2017);
+        db.insert(TABLE_REMINDER, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_TITLE, "Look for jobs");
+        values.put(KEY_DESC, "McDonalds, Burger King, etc.");
+        values.put(KEY_CAT_ID, 1);
+        values.put(KEY_MIN, 0);
+        values.put(KEY_HOUR, 9);
+        values.put(KEY_DAY, 20);
+        values.put(KEY_MONTH, 5);
+        values.put(KEY_YEAR, 2017);
+        db.insert(TABLE_REMINDER, null, values);
+        values.clear();
     }
 
     @Override

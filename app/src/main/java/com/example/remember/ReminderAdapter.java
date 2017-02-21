@@ -1,6 +1,8 @@
 package com.example.remember;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,32 +12,35 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ReminderAdapter extends BaseAdapter {
     private static final String TAG = "ReminderAdapter";
-    Context context;
-    ArrayList<Reminder> data;
+    private Context context;
+    private List<Reminder> reminders;
+    private List<Category> categories;
     private static LayoutInflater inflater = null;
 
-    public ReminderAdapter(Context context, ArrayList<Reminder> data) {
+    public ReminderAdapter(Context context, List<Reminder> reminders, List<Category> categories) {
         this.context = context;
-        this.data = data;
+        this.reminders = reminders;
+        this.categories = categories;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void addItem(final Reminder reminder) {
-        data.add(reminder);
+        reminders.add(reminder);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        return reminders.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return data.get(position);
+        return reminders.get(position);
     }
 
     @Override
@@ -48,26 +53,38 @@ public class ReminderAdapter extends BaseAdapter {
         if (view == null) {
             view = inflater.inflate(R.layout.list_row, null);
         }
-        Reminder reminder = data.get(position);
-
+        Reminder reminder = reminders.get(position);
+        Category category = categories.get(reminder.getCategory() - 1);
         TextView header = (TextView) view.findViewById(R.id.list_header);
         TextView date = (TextView) view.findViewById(R.id.list_date);
         TextView text = (TextView) view.findViewById(R.id.list_text);
+        TextView cat_icon = (TextView) view.findViewById(R.id.list_icon_field);
 
-        switch (Long.toString(reminder.getCategory())){
-            case "1": {
-                header.setText(reminder.getTitle() + " alert");
-                date.setText(reminder.stringDate() + " alert");
-                text.setText(reminder.getDescription() + " alert");
+        switch (reminder.getCategory()) {
+            case 1: {
+                header.setText(reminder.getTitle());
+                date.setText(reminder.stringDate());
+                text.setText(reminder.getDescription());
+                cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                        new int[]{Color.parseColor(category.getColor())}));
                 break;
             }
-            case "2": {
-                header.setText(reminder.getTitle() + " ex");
-                date.setText(reminder.stringDate() + " ex");
-                text.setText(reminder.getDescription() + " ex");
+            case 2: {
+                header.setText(reminder.getTitle());
+                date.setText(reminder.stringDate());
+                text.setText(reminder.getDescription());
+                cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                        new int[]{Color.parseColor(category.getColor())}));
                 break;
             }
-
+            case 3: {
+                header.setText(reminder.getTitle());
+                date.setText(reminder.stringDate());
+                text.setText(reminder.getDescription());
+                cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                        new int[]{Color.parseColor(category.getColor())}));
+                break;
+            }
         }
         return view;
     }
