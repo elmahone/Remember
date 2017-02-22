@@ -3,41 +3,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/light_black"
     android:orientation="horizontal"
     android:paddingBottom="10dp"
     android:paddingTop="10dp">
 
     <LinearLayout
-        android:id="@+id/category_icon"
+        android:id="@+id/category_icon_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="5dp"
+        android:paddingLeft="10dp"
         android:paddingRight="5dp">
 
-        <ImageView
-            android:id="@+id/category_icon_field"
+        <LinearLayout
+            android:id="@+id/category_icon_background"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/circle"
             android:backgroundTint="@color/colorPrimaryDark"
-            android:gravity="center" />
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/category_icon_field"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/ic_shopping"
+                android:gravity="center" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
-        android:orientation="vertical">
-        <!-- Header -->
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
         <TextView
             android:id="@+id/category_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
-            android:textSize="20sp"
             android:paddingRight="10dp"
-            />
+            android:text="Name"
+            android:textColor="@color/smoky_white"
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>

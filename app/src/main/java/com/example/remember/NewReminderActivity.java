@@ -96,7 +96,7 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
     }
 
     private void updateLabel() {
-        String format = "dd.MMM.yy HH:mm";
+        String format = "dd.MM.yyyy HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         editDate.setText(sdf.format(calendar.getTime()));
     }

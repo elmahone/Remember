@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //region Database details
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = "rememberDB";
@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_ID = "id";
     //endregion
 
-    //region REMINDER Table - column nmaes
+    //region REMINDER Table - column names
     public static final String KEY_TITLE = "title";
     public static final String KEY_DESC = "description";
     public static final String KEY_CAT_ID = "category_id";
@@ -37,7 +37,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //region CATEGORY Table - column names
     public static final String KEY_CAT_NAME = "category_name";
-    public static final String KEY_CAT_COLOR = "category_color";
+    public static final String KEY_BG_COLOR = "background_color";
+    public static final String KEY_ICON_COLOR = "icon_color";
+    public static final String KEY_ICON = "icon";
     //endregion
 
     //region Table Create Statements
@@ -48,10 +50,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_TIME + " INTEGER" + ")";
 
     // Category table create statement
-    private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE " + TABLE_CATEGORY
-            + "(" + KEY_ID + " INTEGER PRIMARY KEY, "
+    private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE " + TABLE_CATEGORY + "("
+            + KEY_ID + " INTEGER PRIMARY KEY, "
             + KEY_CAT_NAME + " TEXT, "
-            + KEY_CAT_COLOR + " TEXT)";
+            + KEY_BG_COLOR + " TEXT, "
+            + KEY_ICON_COLOR + " TEXT, "
+            + KEY_ICON + " INTEGER)";
     //endregion
 
     public DatabaseHelper(Context context) {
@@ -68,26 +72,48 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_CAT_NAME, "Default");
-        values.put(KEY_CAT_COLOR, "#AEC6CF");
+        values.put(KEY_BG_COLOR, "#AEC6CF");
+        values.put(KEY_ICON_COLOR, "#000000");
+        values.put(KEY_ICON, R.drawable.ic_default);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 
         values = new ContentValues();
         values.put(KEY_CAT_NAME, "Exercise");
-        values.put(KEY_CAT_COLOR, "#FF4848");
+        values.put(KEY_BG_COLOR, "#FF4848");
+        values.put(KEY_ICON_COLOR, "#000000");
+        values.put(KEY_ICON, R.drawable.ic_exercise);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 
         values = new ContentValues();
         values.put(KEY_CAT_NAME, "Shopping");
-        values.put(KEY_CAT_COLOR, "#01F33E");
+        values.put(KEY_BG_COLOR, "#01F33E");
+        values.put(KEY_ICON_COLOR, "#000000");
+        values.put(KEY_ICON, R.drawable.ic_shopping);
+        db.insert(TABLE_CATEGORY, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_CAT_NAME, "Birthday");
+        values.put(KEY_BG_COLOR, "#DFE32D");
+        values.put(KEY_ICON_COLOR, "#000000");
+        values.put(KEY_ICON, R.drawable.ic_birthday);
+        db.insert(TABLE_CATEGORY, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_CAT_NAME, "Phone Call");
+        values.put(KEY_BG_COLOR, "#06DCFB");
+        values.put(KEY_ICON_COLOR, "#000000");
+        values.put(KEY_ICON, R.drawable.ic_phone);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 
         values = new ContentValues();
         values.put(KEY_TITLE, "Janus's birthday");
         values.put(KEY_DESC, "40 v");
-        values.put(KEY_CAT_ID, 1);
+        values.put(KEY_CAT_ID, 4);
 
         values.put(KEY_TIME, 1487766586947L);
         db.insert(TABLE_REMINDER, null, values);

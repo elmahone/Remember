@@ -3,7 +3,9 @@ package com.example.remember;
 public class Category {
     private int id;
     private String category;
-    private String color;
+    private String background_color;
+    private String icon_color;
+    private int icon;
 
     //region Constructors
 
@@ -11,16 +13,21 @@ public class Category {
 
     }
 
-    public Category(int id, String category, String color) {
+    public Category(int id, String category, String background_color, String icon_color, int icon) {
         this.id = id;
         this.category = category;
-        this.color = color;
+        this.background_color = background_color;
+        this.icon_color = icon_color;
+        this.icon = icon;
     }
 
-    public Category(String category, String color) {
+    public Category(String category, String background_color, String icon_color, int icon) {
         this.category = category;
-        this.color = color;
+        this.background_color = background_color;
+        this.icon_color = icon_color;
+        this.icon = icon;
     }
+
     //endregion
 
     //region Getters
@@ -33,11 +40,19 @@ public class Category {
         return category;
     }
 
-    public String getColor() {
-        return color;
+    public String getBackgroundColor() {
+        return background_color;
     }
 
-    //endregion
+    public String getIconColor() {
+        return icon_color;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+//endregion
 
     //region Setters
 
@@ -49,9 +64,17 @@ public class Category {
         this.category = category;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setBackgroundColor(String background_color) {
+        this.background_color = background_color;
     }
 
-    //endregion
+    public void setIconColor(String icon_color) {
+        this.icon_color = icon_color;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
+
+//endregion
 }

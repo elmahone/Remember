@@ -3,17 +3,15 @@ package com.example.remember;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.media.Image;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ReminderAdapter extends BaseAdapter {
@@ -60,34 +58,19 @@ public class ReminderAdapter extends BaseAdapter {
         TextView header = (TextView) view.findViewById(R.id.list_header);
         TextView date = (TextView) view.findViewById(R.id.list_date);
         TextView text = (TextView) view.findViewById(R.id.list_text);
+        LinearLayout cat_icon_bg = (LinearLayout) view.findViewById(R.id.list_icon_background);
         ImageView cat_icon = (ImageView) view.findViewById(R.id.list_icon_field);
 
-        switch (reminder.getCategory()) {
-            case 1: {
-                header.setText(reminder.getTitle());
-                date.setText(reminder.stringDate());
-                text.setText(reminder.getDescription());
-                cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
-                        new int[]{Color.parseColor(category.getColor())}));
-                break;
-            }
-            case 2: {
-                header.setText(reminder.getTitle());
-                date.setText(reminder.stringDate());
-                text.setText(reminder.getDescription());
-                cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
-                        new int[]{Color.parseColor(category.getColor())}));
-                break;
-            }
-            case 3: {
-                header.setText(reminder.getTitle());
-                date.setText(reminder.stringDate());
-                text.setText(reminder.getDescription());
-                cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
-                        new int[]{Color.parseColor(category.getColor())}));
-                break;
-            }
-        }
+        header.setText(reminder.getTitle());
+        date.setText(reminder.stringDate());
+        text.setText(reminder.getDescription());
+        cat_icon_bg.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                new int[]{Color.parseColor(category.getBackgroundColor())}));
+        cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                new int[]{Color.parseColor(category.getIconColor())}));
+        cat_icon.setBackground(ContextCompat.getDrawable(context, category.getIcon()));
+
+
         return view;
     }
 }

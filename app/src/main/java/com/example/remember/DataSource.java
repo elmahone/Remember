@@ -41,8 +41,6 @@ public class DataSource {
         values.put(KEY_DESC, reminder.getDescription());
         values.put(KEY_CAT_ID, reminder.getCategory());
         values.put(KEY_TIME, reminder.getTime());
-
-        // insert row
         long reminder_id = db.insert(TABLE_REMINDER, null, values);
 
         return reminder_id;
@@ -88,7 +86,6 @@ public class DataSource {
 
             } while (cursor.moveToNext());
         }
-
         return reminders;
     }
 
@@ -109,7 +106,6 @@ public class DataSource {
                 reminder.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESC)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(KEY_CAT_ID)));
                 reminder.setTime(cursor.getLong(cursor.getColumnIndex(KEY_TIME)));
-
 
                 reminders.add(reminder);
             } while (cursor.moveToNext());
@@ -145,7 +141,6 @@ public class DataSource {
         // updating row
         return db.update(TABLE_REMINDER, values, KEY_ID + " = ?", new String[]{String.valueOf(id)});
     }
-
     //endregion
 
     //region Category table CRUD functions
@@ -156,9 +151,9 @@ public class DataSource {
             open();
             ContentValues values = new ContentValues();
             values.put(KEY_CAT_NAME, category.getCategory());
-            values.put(KEY_CAT_COLOR, category.getColor());
-
-            // insert row
+            values.put(KEY_BG_COLOR, category.getBackgroundColor());
+            values.put(KEY_ICON_COLOR, category.getIconColor());
+            values.put(KEY_ICON, category.getIcon());
             long category_id = db.insert(TABLE_CATEGORY, null, values);
 
             return category_id;
@@ -179,7 +174,9 @@ public class DataSource {
         Category category = new Category();
         category.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
         category.setCategory(cursor.getString(cursor.getColumnIndex(KEY_CAT_NAME)));
-        category.setColor(cursor.getString(cursor.getColumnIndex(KEY_CAT_COLOR)));
+        category.setBackgroundColor(cursor.getString(cursor.getColumnIndex(KEY_BG_COLOR)));
+        category.setIconColor(cursor.getString(cursor.getColumnIndex(KEY_ICON_COLOR)));
+        category.setIcon(cursor.getInt(cursor.getColumnIndex(KEY_ICON)));
 
         return category;
     }
@@ -196,9 +193,11 @@ public class DataSource {
         if (cursor.moveToFirst()) {
             do {
                 Category category = new Category();
-                category.setId(cursor.getInt((cursor.getColumnIndex(KEY_ID))));
+                category.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
                 category.setCategory(cursor.getString(cursor.getColumnIndex(KEY_CAT_NAME)));
-                category.setColor(cursor.getString(cursor.getColumnIndex(KEY_CAT_COLOR)));
+                category.setBackgroundColor(cursor.getString(cursor.getColumnIndex(KEY_BG_COLOR)));
+                category.setIconColor(cursor.getString(cursor.getColumnIndex(KEY_ICON_COLOR)));
+                category.setIcon(cursor.getInt(cursor.getColumnIndex(KEY_ICON)));
 
                 // adding to tags list
                 categories.add(category);
@@ -213,9 +212,9 @@ public class DataSource {
             open();
             ContentValues values = new ContentValues();
             values.put(KEY_CAT_NAME, category.getCategory());
-            values.put(KEY_CAT_COLOR, category.getColor());
-
-            // updating row
+            values.put(KEY_BG_COLOR, category.getBackgroundColor());
+            values.put(KEY_ICON_COLOR, category.getIconColor());
+            values.put(KEY_ICON, category.getIcon());
             return db.update(TABLE_CATEGORY, values, KEY_ID + " = ?",
                     new String[]{String.valueOf(category.getId())});
         } else {
@@ -230,7 +229,6 @@ public class DataSource {
     }
     //endregion
 
-
     //Check if given value exists in database
     private boolean existsInDb(String table, String column, String value) {
         open();
@@ -244,6 +242,4 @@ public class DataSource {
         cursor.close();
         return true;
     }
-
-
 }
