@@ -3,11 +3,13 @@ package com.example.remember;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -58,7 +60,7 @@ public class ReminderAdapter extends BaseAdapter {
         TextView header = (TextView) view.findViewById(R.id.list_header);
         TextView date = (TextView) view.findViewById(R.id.list_date);
         TextView text = (TextView) view.findViewById(R.id.list_text);
-        TextView cat_icon = (TextView) view.findViewById(R.id.list_icon_field);
+        ImageView cat_icon = (ImageView) view.findViewById(R.id.list_icon_field);
 
         switch (reminder.getCategory()) {
             case 1: {

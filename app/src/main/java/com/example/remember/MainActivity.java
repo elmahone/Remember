@@ -1,5 +1,6 @@
 package com.example.remember;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     List<Reminder> reminders = new ArrayList<>();
     List<Category> categories = new ArrayList<>();
+    ReminderAdapter adapter;
     Button addButton;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +36,16 @@ public class MainActivity extends AppCompatActivity {
         categories = dataSource.getAllCategories();
 
         listView = (ListView) findViewById(R.id.reminder_list);
-        listView.setAdapter(new ReminderAdapter(this, reminders, categories));
+        adapter = new ReminderAdapter(this, reminders, categories);
+        listView.setAdapter(adapter);
         dataSource.close();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.v(TAG, "Add button clicked");
+                Intent intent = new Intent(MainActivity.this, NewReminderActivity.class);
+                startActivity(intent);
             }
         });
 
