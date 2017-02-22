@@ -1,5 +1,8 @@
 package com.example.remember;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class Reminder {
 
     private int id;
@@ -7,11 +10,7 @@ public class Reminder {
     private String description;
     private int category_id;
 
-    private int minute;
-    private int hour;
-    private int day;
-    private int month;
-    private int year;
+    private long time;
 
     //region Constructors
 
@@ -19,37 +18,25 @@ public class Reminder {
 
     }
 
-    public Reminder(int id, String title, String description, int category_id, int minute, int hour, int day, int month, int year) {
+    public Reminder(int id, String title, String description, int category_id, long time) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.category_id = category_id;
-        this.minute = minute;
-        this.hour = hour;
-        this.day = day;
-        this.month = month;
-        this.year = year;
+        this.time = time;
     }
 
-    public Reminder(String title, String description, int category_id, int minute, int hour, int day, int month, int year) {
+    public Reminder(String title, String description, int category_id, long time) {
         this.title = title;
         this.description = description;
         this.category_id = category_id;
-        this.minute = minute;
-        this.hour = hour;
-        this.day = day;
-        this.month = month;
-        this.year = year;
+        this.time = time;
     }
 
-    public Reminder(String title, int category_id, int minute, int hour, int day, int month, int year) {
+    public Reminder(String title, int category_id, long time) {
         this.title = title;
         this.category_id = category_id;
-        this.minute = minute;
-        this.hour = hour;
-        this.day = day;
-        this.month = month;
-        this.year = year;
+        this.time = time;
     }
     //endregion
 
@@ -71,24 +58,8 @@ public class Reminder {
         return category_id;
     }
 
-    public int getMinute() {
-        return minute;
-    }
-
-    public int getHour() {
-        return hour;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getYear() {
-        return year;
+    public long getTime() {
+        return time;
     }
     //endregion
 
@@ -110,34 +81,16 @@ public class Reminder {
         this.category_id = category_id;
     }
 
-    public void setMinute(int minute) {
-        this.minute = minute;
-    }
-
-    public void setHour(int hour) {
-        this.hour = hour;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
-    public void setMonth(int month) {
-        this.month = month;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+    public void setTime(long time) {
+        this.time = time;
     }
     //endregion
 
     //region Functions
     public String stringDate() {
-        String strDay = (day >= 10) ? "" + day : "0" + day;
-        String strMonth = (month >= 10) ? "" + month : "0" + month;
-        String strHour = (hour >= 10) ? "" + hour : "0" + hour;
-        String strMinute = (minute >= 10) ? "" + minute : "0" + minute;
-        return strDay + "." + strMonth + "." + year + " " + strHour + ":" + strMinute;
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time);
+        return new SimpleDateFormat("dd.MM.yyyy HH:mm").format(cal.getTime());
     }
     //endregion
 }

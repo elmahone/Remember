@@ -40,11 +40,7 @@ public class DataSource {
         values.put(KEY_TITLE, reminder.getTitle());
         values.put(KEY_DESC, reminder.getDescription());
         values.put(KEY_CAT_ID, reminder.getCategory());
-        values.put(KEY_MIN, reminder.getMinute());
-        values.put(KEY_HOUR, reminder.getHour());
-        values.put(KEY_DAY, reminder.getDay());
-        values.put(KEY_MONTH, reminder.getMonth());
-        values.put(KEY_YEAR, reminder.getYear());
+        values.put(KEY_TIME, reminder.getTime());
 
         // insert row
         long reminder_id = db.insert(TABLE_REMINDER, null, values);
@@ -68,13 +64,7 @@ public class DataSource {
         reminder.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
         reminder.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESC)));
         reminder.setCategory(cursor.getInt(cursor.getColumnIndex(KEY_CAT_ID)));
-
-        reminder.setMinute(cursor.getInt(cursor.getColumnIndex(KEY_MIN)));
-        reminder.setHour(cursor.getInt(cursor.getColumnIndex(KEY_HOUR)));
-        reminder.setDay(cursor.getInt(cursor.getColumnIndex(KEY_DAY)));
-        reminder.setMonth(cursor.getInt(cursor.getColumnIndex(KEY_MONTH)));
-        reminder.setYear(cursor.getInt(cursor.getColumnIndex(KEY_YEAR)));
-
+        reminder.setTime(cursor.getLong(cursor.getColumnIndex(KEY_TIME)));
         return reminder;
     }
 
@@ -93,14 +83,9 @@ public class DataSource {
                 reminder.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
                 reminder.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESC)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(KEY_CAT_ID)));
-
-                reminder.setMinute(cursor.getInt(cursor.getColumnIndex(KEY_MIN)));
-                reminder.setHour(cursor.getInt(cursor.getColumnIndex(KEY_HOUR)));
-                reminder.setDay(cursor.getInt(cursor.getColumnIndex(KEY_DAY)));
-                reminder.setMonth(cursor.getInt(cursor.getColumnIndex(KEY_MONTH)));
-                reminder.setYear(cursor.getInt(cursor.getColumnIndex(KEY_YEAR)));
-
+                reminder.setTime(cursor.getLong(cursor.getColumnIndex(KEY_TIME)));
                 reminders.add(reminder);
+
             } while (cursor.moveToNext());
         }
 
@@ -123,12 +108,8 @@ public class DataSource {
                 reminder.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
                 reminder.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESC)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(KEY_CAT_ID)));
+                reminder.setTime(cursor.getLong(cursor.getColumnIndex(KEY_TIME)));
 
-                reminder.setMinute(cursor.getInt(cursor.getColumnIndex(KEY_MIN)));
-                reminder.setHour(cursor.getInt(cursor.getColumnIndex(KEY_HOUR)));
-                reminder.setDay(cursor.getInt(cursor.getColumnIndex(KEY_DAY)));
-                reminder.setMonth(cursor.getInt(cursor.getColumnIndex(KEY_MONTH)));
-                reminder.setYear(cursor.getInt(cursor.getColumnIndex(KEY_YEAR)));
 
                 reminders.add(reminder);
             } while (cursor.moveToNext());
@@ -143,12 +124,7 @@ public class DataSource {
         values.put(KEY_TITLE, reminder.getTitle());
         values.put(KEY_DESC, reminder.getDescription());
         values.put(KEY_CAT_ID, reminder.getCategory());
-
-        values.put(KEY_MIN, reminder.getMinute());
-        values.put(KEY_HOUR, reminder.getHour());
-        values.put(KEY_DAY, reminder.getDay());
-        values.put(KEY_MONTH, reminder.getMonth());
-        values.put(KEY_YEAR, reminder.getYear());
+        values.put(KEY_TIME, reminder.getTime());
 
         return db.update(TABLE_REMINDER, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(reminder.getId())});

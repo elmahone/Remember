@@ -31,12 +31,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_TITLE = "title";
     public static final String KEY_DESC = "description";
     public static final String KEY_CAT_ID = "category_id";
+    public static final String KEY_TIME = "time";
 
-    public static final String KEY_MIN = "minute";
-    public static final String KEY_HOUR = "hour";
-    public static final String KEY_DAY = "day";
-    public static final String KEY_MONTH = "month";
-    public static final String KEY_YEAR = "year";
     //endregion
 
     //region CATEGORY Table - column names
@@ -49,9 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_REMINDER = "CREATE TABLE "
             + TABLE_REMINDER + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_TITLE + " TEXT, "
             + KEY_DESC + " TEXT, " + KEY_CAT_ID + " INTEGER, "
-            + KEY_MIN + " INTEGER, " + KEY_HOUR + " INTEGER, "
-            + KEY_DAY + " INTEGER, " + KEY_MONTH + " INTEGER, "
-            + KEY_YEAR + " INTEGER" + ")";
+            + KEY_TIME + " INTEGER" + ")";
 
     // Category table create statement
     private static final String CREATE_TABLE_CATEGORY = "CREATE TABLE " + TABLE_CATEGORY
@@ -94,11 +88,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TITLE, "Janus's birthday");
         values.put(KEY_DESC, "40 v");
         values.put(KEY_CAT_ID, 1);
-        values.put(KEY_MIN, 0);
-        values.put(KEY_HOUR, 12);
-        values.put(KEY_DAY, 2);
-        values.put(KEY_MONTH, 5);
-        values.put(KEY_YEAR, 2017);
+
+        values.put(KEY_TIME, 1487766586947L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
 
@@ -106,11 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TITLE, "Go buy pants");
         values.put(KEY_DESC, "");
         values.put(KEY_CAT_ID, 3);
-        values.put(KEY_MIN, 20);
-        values.put(KEY_HOUR, 16);
-        values.put(KEY_DAY, 7);
-        values.put(KEY_MONTH, 4);
-        values.put(KEY_YEAR, 2017);
+        values.put(KEY_TIME, 1487768586947L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
 
@@ -118,11 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TITLE, "Gym");
         values.put(KEY_DESC, "Leg day");
         values.put(KEY_CAT_ID, 2);
-        values.put(KEY_MIN, 0);
-        values.put(KEY_HOUR, 18);
-        values.put(KEY_DAY, 30);
-        values.put(KEY_MONTH, 3);
-        values.put(KEY_YEAR, 2017);
+        values.put(KEY_TIME, 1487868586947L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
 
@@ -130,11 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TITLE, "Look for jobs");
         values.put(KEY_DESC, "McDonalds, Burger King, etc.");
         values.put(KEY_CAT_ID, 1);
-        values.put(KEY_MIN, 0);
-        values.put(KEY_HOUR, 9);
-        values.put(KEY_DAY, 20);
-        values.put(KEY_MONTH, 5);
-        values.put(KEY_YEAR, 2017);
+        values.put(KEY_TIME, 1487758586947L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
     }
