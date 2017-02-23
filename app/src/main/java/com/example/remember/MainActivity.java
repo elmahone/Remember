@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,34 +18,46 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private DataSource dataSource;
-    ListView listView;
-    List<Reminder> reminders = new ArrayList<>();
-    List<Category> categories = new ArrayList<>();
-    ReminderAdapter adapter;
-    Button addButton;
-    Intent intent;
+    private ListView listView;
+    private Spinner spinner;
+
+    private List<Reminder> reminders = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
+    private List<Category> spinCat = new ArrayList<>();
+    private ReminderAdapter remAdapter;
+    private CategoryAdapter catAdapter;
+    private Button addButton;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        listView = (ListView) findViewById(R.id.reminder_list);
         addButton = (Button) findViewById(R.id.add_button);
+        spinner = (Spinner) findViewById(R.id.category_spinner);
+
         dataSource = new DataSource(this);
 
         reminders = dataSource.getAllReminders();
         categories = dataSource.getAllCategories();
+        spinCat = dataSource.getAllCategories();
 
-        listView = (ListView) findViewById(R.id.reminder_list);
-        adapter = new ReminderAdapter(this, reminders, categories);
-        listView.setAdapter(adapter);
+        remAdapter = new ReminderAdapter(this, reminders, categories);
+        listView.setAdapter(remAdapter);
+
+        spinCat.add(0, new Category("All", "#e2e2e2", "#00FFFFFF", 0));
+        catAdapter = new CategoryAdapter(this, spinCat);
+        spinner.setAdapter(catAdapter);
+
         dataSource.close();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.v(TAG, "Add button clicked");
-                Intent intent = new Intent(MainActivity.this, NewReminderActivity.class);
+                intent = new Intent(MainActivity.this, NewReminderActivity.class);
                 startActivity(intent);
             }
         });

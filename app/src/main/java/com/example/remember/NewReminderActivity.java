@@ -2,18 +2,20 @@ package com.example.remember;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.WindowDecorActionBar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
 
 
 import java.text.SimpleDateFormat;
@@ -25,8 +27,11 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
     private static final String TAG = "NewReminderActivity";
     private DataSource dataSource;
     private Calendar calendar = Calendar.getInstance();
-    private EditText editDate;
     private Spinner spinner;
+    private EditText editTitle;
+    private EditText editDate;
+    private EditText editDesc;
+    private Button save;
     private List<Category> categories;
     private CategoryAdapter adapter;
 
@@ -35,8 +40,13 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_reminder);
 
-        editDate = (EditText) findViewById(R.id.editDate);
+        //Get views
         spinner = (Spinner) findViewById(R.id.category_spinner);
+        editTitle = (EditText) findViewById(R.id.editTitle);
+        editDate = (EditText) findViewById(R.id.editDate);
+        editDesc = (EditText) findViewById(R.id.editDescription);
+        save = (Button) findViewById(R.id.save_reminder);
+
         dataSource = new DataSource(this);
         categories = dataSource.getAllCategories();
 
@@ -70,6 +80,7 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
         };
         //endregion
 
+
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,7 +92,28 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
         });
 
         spinner.setOnItemSelectedListener(this);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Category selectedCatecory = (Category) spinner.getSelectedItem();
+                String title = editTitle.getText().toString();
+                long date = calendar.getTimeInMillis();
+                String desc = editDesc.getText().toString();
+                Reminder newReminder = new Reminder(title, desc, selectedCatecory.getId(), date);
+                Log.v(TAG, "Date: " + date);
+                Log.v(TAG, "title: " + title);
+                Log.v(TAG, "categ: " + selectedCatecory.getCategory());
+                dataSource.createReminder(newReminder);
+                dataSource.close();
+                Toast.makeText(NewReminderActivity.this, "New Reminder Created!", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(NewReminderActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

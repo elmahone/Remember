@@ -96,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         values = new ContentValues();
         values.put(KEY_CAT_NAME, "Birthday");
-        values.put(KEY_BG_COLOR, "#DFE32D");
+        values.put(KEY_BG_COLOR, "#AD8BFE");
         values.put(KEY_ICON_COLOR, "#000000");
         values.put(KEY_ICON, R.drawable.ic_birthday);
         db.insert(TABLE_CATEGORY, null, values);
@@ -107,6 +107,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BG_COLOR, "#06DCFB");
         values.put(KEY_ICON_COLOR, "#000000");
         values.put(KEY_ICON, R.drawable.ic_phone);
+        db.insert(TABLE_CATEGORY, null, values);
+        values.clear();
+
+        values = new ContentValues();
+        values.put(KEY_CAT_NAME, "Important");
+        values.put(KEY_BG_COLOR, "#DFE32D");
+        values.put(KEY_ICON_COLOR, "#000000");
+        values.put(KEY_ICON, R.drawable.ic_important);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 

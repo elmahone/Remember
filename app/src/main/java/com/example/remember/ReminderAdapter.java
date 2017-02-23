@@ -55,21 +55,27 @@ public class ReminderAdapter extends BaseAdapter {
         }
         Reminder reminder = reminders.get(position);
         Category category = categories.get(reminder.getCategory() - 1);
+
         TextView header = (TextView) view.findViewById(R.id.list_header);
         TextView date = (TextView) view.findViewById(R.id.list_date);
         TextView text = (TextView) view.findViewById(R.id.list_text);
         LinearLayout cat_icon_bg = (LinearLayout) view.findViewById(R.id.list_icon_background);
         ImageView cat_icon = (ImageView) view.findViewById(R.id.list_icon_field);
 
+        //set title, date and description
         header.setText(reminder.getTitle());
         date.setText(reminder.stringDate());
-        text.setText(reminder.getDescription());
+        text.setText(category.getCategory());
+
+        //set icons background color
         cat_icon_bg.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
                 new int[]{Color.parseColor(category.getBackgroundColor())}));
+        //set icon and icon color if icon is in model
         cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
                 new int[]{Color.parseColor(category.getIconColor())}));
-        cat_icon.setBackground(ContextCompat.getDrawable(context, category.getIcon()));
-
+        if (category.getIcon() != 0) {
+            cat_icon.setBackground(ContextCompat.getDrawable(context, category.getIcon()));
+        }
 
         return view;
     }

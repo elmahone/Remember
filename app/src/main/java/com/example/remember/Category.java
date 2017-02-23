@@ -10,7 +10,6 @@ public class Category {
     //region Constructors
 
     public Category() {
-
     }
 
     public Category(int id, String category, String background_color, String icon_color, int icon) {

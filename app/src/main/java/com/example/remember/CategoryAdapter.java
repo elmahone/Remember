@@ -50,13 +50,17 @@ public class CategoryAdapter extends BaseAdapter {
         TextView name = (TextView) view.findViewById(R.id.category_name);
         LinearLayout cat_icon_bg = (LinearLayout) view.findViewById(R.id.category_icon_background);
         ImageView cat_icon = (ImageView) view.findViewById(R.id.category_icon_field);
-
+        //set name of category
         name.setText(category.getCategory());
+        //set icons background color
         cat_icon_bg.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
                 new int[]{Color.parseColor(category.getBackgroundColor())}));
+        //set icon and icon color if icon is in model
         cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
                 new int[]{Color.parseColor(category.getIconColor())}));
-        cat_icon.setBackground(ContextCompat.getDrawable(context, category.getIcon()));
+        if (category.getIcon() != 0) {
+            cat_icon.setBackground(ContextCompat.getDrawable(context, category.getIcon()));
+        }
 
         return view;
     }

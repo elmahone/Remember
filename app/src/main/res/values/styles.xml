@@ -6,11 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="editTextStyle">@style/EditText</item>
     </style>
 
     <style name="ListView" parent="Widget.AppCompat.ListView">
         <item name="android:divider">@android:color/transparent</item>
         <item name="android:dividerHeight">10dp</item>
+    </style>
+
+    <style name="EditText" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/custom_edit_text</item>
+        <item name="android:padding">5dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
