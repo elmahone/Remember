@@ -80,7 +80,6 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
         };
         //endregion
 
-
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,20 +95,27 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // Get values from views
                 Category selectedCatecory = (Category) spinner.getSelectedItem();
                 String title = editTitle.getText().toString();
+                String dateField = editDate.getText().toString();
                 long date = calendar.getTimeInMillis();
                 String desc = editDesc.getText().toString();
-                Reminder newReminder = new Reminder(title, desc, selectedCatecory.getId(), date);
-                Log.v(TAG, "Date: " + date);
-                Log.v(TAG, "title: " + title);
-                Log.v(TAG, "categ: " + selectedCatecory.getCategory());
-                dataSource.createReminder(newReminder);
-                dataSource.close();
-                Toast.makeText(NewReminderActivity.this, "New Reminder Created!", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(NewReminderActivity.this, MainActivity.class);
-                startActivity(intent);
+                if(!title.matches("") && !dateField.matches("") ) {
+                    Reminder newReminder = new Reminder(title, desc, selectedCatecory.getId(), date);
+                    Log.v(TAG, "Date: " + date);
+                    Log.v(TAG, "title: " + title);
+                    Log.v(TAG, "categ: " + selectedCatecory.getCategory());
+                    dataSource.createReminder(newReminder);
+                    dataSource.close();
+                    Toast.makeText(NewReminderActivity.this, "New Reminder Created!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(NewReminderActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(NewReminderActivity.this, "Reminder needs a title and a date.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

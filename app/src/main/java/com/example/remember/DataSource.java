@@ -89,11 +89,36 @@ public class DataSource {
         return reminders;
     }
 
-    //Fetch all reminders with given category
-    public List<Reminder> getAllRemindersWithCategory(long cat_id) {
+    //Fetch all future reminders
+    public List<Reminder> getAllFutureReminders(long current) {
         open();
         List<Reminder> reminders = new ArrayList<>();
-        String query = "SELECT * FROM " + TABLE_REMINDER + " WHERE " + KEY_CAT_ID + " = " + cat_id;
+        String query = "SELECT * FROM " + TABLE_REMINDER + " WHERE " + KEY_TIME + " >= " + current;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Reminder reminder = new Reminder();
+                reminder.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+                reminder.setTitle(cursor.getString(cursor.getColumnIndex(KEY_TITLE)));
+                reminder.setDescription(cursor.getString(cursor.getColumnIndex(KEY_DESC)));
+                reminder.setCategory(cursor.getInt(cursor.getColumnIndex(KEY_CAT_ID)));
+                reminder.setTime(cursor.getLong(cursor.getColumnIndex(KEY_TIME)));
+                reminders.add(reminder);
+
+            } while (cursor.moveToNext());
+        }
+        return reminders;
+    }
+
+    //Fetch all future reminders with given category
+    public List<Reminder> getAllFutureRemindersWithCategory(long cat_id, long current) {
+        open();
+        List<Reminder> reminders = new ArrayList<>();
+        String query = "SELECT * FROM " + TABLE_REMINDER
+                + " WHERE " + KEY_CAT_ID + " = " + cat_id
+                + " AND " + KEY_TIME + " >= " + current;
 
         Cursor cursor = db.rawQuery(query, null);
 

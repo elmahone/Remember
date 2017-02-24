@@ -12,24 +12,38 @@
         android:padding="10dp"
         android:id="@+id/linearLayout">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            >
+
+            <Button
+                android:id="@+id/add_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/ic_add"
+                android:backgroundTint="#1FCB4A"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
 
             <Spinner
                 android:id="@+id/category_spinner"
                 android:layout_width="wrap_content"
+                android:gravity="center_vertical"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/smoky_white" />
-        </LinearLayout>
+                android:backgroundTint="@color/smoky_white"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/add_button"
         android:id="@+id/reminder_list_container"
         tools:context="com.example.remember.MainActivity"
         android:layout_below="@+id/linearLayout">
@@ -42,13 +56,4 @@
             android:layout_margin="5dp" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/add_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="0dp"
-        android:background="@drawable/ic_add"
-        android:backgroundTint="@android:color/holo_orange_dark" />
 </RelativeLayout>

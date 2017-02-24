@@ -12,7 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //region Database details
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
 
     // Database Name
     private static final String DATABASE_NAME = "rememberDB";
@@ -70,6 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_CATEGORY);
         db.execSQL(CREATE_TABLE_REMINDER);
 
+        //region Create default categories
         ContentValues values = new ContentValues();
         values.put(KEY_CAT_NAME, "Default");
         values.put(KEY_BG_COLOR, "#AEC6CF");
@@ -117,7 +118,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_ICON, R.drawable.ic_important);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
+        //endregion
 
+        //region Create test reminders
         values = new ContentValues();
         values.put(KEY_TITLE, "Janus's birthday");
         values.put(KEY_DESC, "40 v");
@@ -131,7 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TITLE, "Go buy pants");
         values.put(KEY_DESC, "");
         values.put(KEY_CAT_ID, 3);
-        values.put(KEY_TIME, 1487768586947L);
+        values.put(KEY_TIME, 1488946937958L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
 
@@ -139,7 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TITLE, "Gym");
         values.put(KEY_DESC, "Leg day");
         values.put(KEY_CAT_ID, 2);
-        values.put(KEY_TIME, 1487868586947L);
+        values.put(KEY_TIME, 1489346937958L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
 
@@ -147,9 +150,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TITLE, "Look for jobs");
         values.put(KEY_DESC, "McDonalds, Burger King, etc.");
         values.put(KEY_CAT_ID, 1);
-        values.put(KEY_TIME, 1487758586947L);
+        values.put(KEY_TIME, 1487999937958L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
+        //endregion
     }
 
     @Override
