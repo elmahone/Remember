@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private Button addButton;
     private Spinner spinner;
     private List<Reminder> reminders = new ArrayList<>();
+    private List<Icon> icons = new ArrayList<>();
     private List<Category> categories = new ArrayList<>();
     private List<Category> spinCat = new ArrayList<>();
     private ReminderAdapter remAdapter;
@@ -69,13 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if (i == 0) {
                     reminders = dataSource.getAllFutureReminders(currentTime);
-                    remAdapter = new ReminderAdapter(context, reminders, categories);
-                    listView.setAdapter(remAdapter);
                 } else {
                     catId = spinCat.get(i).getId();
                     reminders = dataSource.getAllFutureRemindersWithCategory(catId, currentTime);
-                    remAdapter = new ReminderAdapter(context, reminders, categories);
-                    listView.setAdapter(remAdapter);
                 }
                 setUpListView(reminders, categories);
             }
@@ -87,17 +84,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_main_menu, menu);
-        super.onCreateOptionsMenu(menu);
-        return true;
-    }
-
     //region Setup functions
     private void setUpSpinner() {
-        catAdapter = new CategoryAdapter(context, spinCat);
+        catAdapter = new CategoryAdapter(context, spinCat, icons);
         spinner.setAdapter(catAdapter);
     }
 
@@ -110,15 +99,16 @@ public class MainActivity extends AppCompatActivity {
     private void setUpData() {
         dataSource = new DataSource(context);
         reminders = dataSource.getAllFutureReminders(currentTime);
+        icons = dataSource.getAllIcons();
         categories = dataSource.getAllCategories();
         spinCat = dataSource.getAllCategories();
         spinCat.add(0, new Category("All", "#e2e2e2", "#00FFFFFF", 0));
-
+        Log.v(TAG, icons.size() + "");
         setUpListView(reminders, categories);
     }
 
     private void setUpListView(List<Reminder> rem, List<Category> cat) {
-        remAdapter = new ReminderAdapter(context, rem, cat);
+        remAdapter = new ReminderAdapter(context, rem, cat, icons);
         listView.setAdapter(remAdapter);
     }
     //endregion

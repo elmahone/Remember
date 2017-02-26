@@ -19,12 +19,14 @@ public class ReminderAdapter extends BaseAdapter {
     private Context context;
     private List<Reminder> reminders;
     private List<Category> categories;
+    private List<Icon> icons;
     private static LayoutInflater inflater = null;
 
-    public ReminderAdapter(Context context, List<Reminder> reminders, List<Category> categories) {
+    public ReminderAdapter(Context context, List<Reminder> reminders, List<Category> categories, List<Icon> icons) {
         this.context = context;
         this.reminders = reminders;
         this.categories = categories;
+        this.icons = icons;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -74,7 +76,8 @@ public class ReminderAdapter extends BaseAdapter {
         cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
                 new int[]{Color.parseColor(category.getIconColor())}));
         if (category.getIcon() != 0) {
-            cat_icon.setBackground(ContextCompat.getDrawable(context, category.getIcon()));
+            Icon icon = icons.get(category.getIcon() - 1);
+            cat_icon.setBackground(ContextCompat.getDrawable(context, icon.getIcon()));
         }
 
         return view;

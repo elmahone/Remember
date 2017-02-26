@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +19,13 @@ public class CategoryAdapter extends BaseAdapter {
     private static final String TAG = "CategoryAdapter";
     private Context context;
     private List<Category> categories;
+    private List<Icon> icons;
     private static LayoutInflater inflater = null;
 
-    public CategoryAdapter(Context context, List<Category> categories) {
+    public CategoryAdapter(Context context, List<Category> categories, List<Icon> icons) {
         this.context = context;
         this.categories = categories;
+        this.icons = icons;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -47,9 +50,11 @@ public class CategoryAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.spinner_row, null);
         }
         Category category = categories.get(position);
+
         TextView name = (TextView) view.findViewById(R.id.category_name);
         LinearLayout cat_icon_bg = (LinearLayout) view.findViewById(R.id.category_icon_background);
         ImageView cat_icon = (ImageView) view.findViewById(R.id.category_icon_field);
+
         //set name of category
         name.setText(category.getCategory());
         //set icons background color
@@ -59,9 +64,9 @@ public class CategoryAdapter extends BaseAdapter {
         cat_icon.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
                 new int[]{Color.parseColor(category.getIconColor())}));
         if (category.getIcon() != 0) {
-            cat_icon.setBackground(ContextCompat.getDrawable(context, category.getIcon()));
+            Icon icon = icons.get(category.getIcon() - 1);
+            cat_icon.setBackground(ContextCompat.getDrawable(context, icon.getIcon()));
         }
-
         return view;
     }
 }

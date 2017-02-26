@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_category"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.remember.NewCategoryActivity">
+
+    <RelativeLayout
+        android:id="@+id/top_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_black">
+
+        <RelativeLayout
+            android:id="@+id/icon_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/editCategory"
+            android:layout_marginBottom="13dp"
+            android:layout_marginEnd="36dp">
+
+            <RelativeLayout
+                android:id="@+id/icon_background"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/smoky_white">
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/color_buttons_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/icon_container"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/editCategory"
+            android:layout_marginBottom="13dp"
+            android:layout_marginStart="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/changeBgColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/border_no_bg"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/bg_color_button"
+                android:textColor="@color/smoky_white" />
+
+            <Button
+                android:id="@+id/changeIconColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_no_bg"
+                android:text="@string/icon_color_button"
+                android:textColor="@color/smoky_white" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/editCategory"
+            style="@android:style/Widget.EditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:hint="@string/new_cat_hint"
+            android:padding="10dp"
+            android:textColor="@color/smoky_white"
+            android:textColorHint="#b9cccccc"
+            android:textSize="23sp" />
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/icon_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/top_container"
+        android:background="@drawable/grid_bg"
+        android:padding="10dp"
+        android:textAlignment="center">
+
+    </GridView>
+
+    <Button
+        android:id="@+id/save_category"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_check"
+        android:backgroundTint="#1FCB4A"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"/>
+
+
+</RelativeLayout>

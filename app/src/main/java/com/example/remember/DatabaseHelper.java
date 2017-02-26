@@ -21,6 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //region Table Names
     public static final String TABLE_REMINDER = "reminders";
     public static final String TABLE_CATEGORY = "categories";
+    public static final String TABLE_ICON = "icons";
     //endregion
 
     //region Common column names
@@ -39,6 +40,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_CAT_NAME = "category_name";
     public static final String KEY_BG_COLOR = "background_color";
     public static final String KEY_ICON_COLOR = "icon_color";
+    public static final String KEY_ICON_ID = "icon_id";
+    //endregion
+
+    //region ICON table - column names
     public static final String KEY_ICON = "icon";
     //endregion
 
@@ -55,6 +60,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_CAT_NAME + " TEXT, "
             + KEY_BG_COLOR + " TEXT, "
             + KEY_ICON_COLOR + " TEXT, "
+            + KEY_ICON_ID + " INTEGER)";
+
+    private static final String CREATE_TABLE_ICON = "CREATE TABLE " + TABLE_ICON + "("
+            + KEY_ID + " INTEGER PRIMARY KEY, "
             + KEY_ICON + " INTEGER)";
     //endregion
 
@@ -69,13 +78,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.v(TAG, CREATE_TABLE_REMINDER);
         db.execSQL(CREATE_TABLE_CATEGORY);
         db.execSQL(CREATE_TABLE_REMINDER);
+        db.execSQL(CREATE_TABLE_ICON);
+
+        //region Create default icons
+        createIcon(db, R.drawable.ic_default);
+        createIcon(db, R.drawable.ic_exercise);
+        createIcon(db, R.drawable.ic_shopping);
+        createIcon(db, R.drawable.ic_birthday);
+        createIcon(db, R.drawable.ic_phone);
+        createIcon(db, R.drawable.ic_important);
+        createIcon(db, R.drawable.ic_bar);
+        createIcon(db, R.drawable.ic_bike);
+        createIcon(db, R.drawable.ic_cafe);
+        createIcon(db, R.drawable.ic_cut);
+        createIcon(db, R.drawable.ic_flight);
+        createIcon(db, R.drawable.ic_group);
+        createIcon(db, R.drawable.ic_hospital);
+        createIcon(db, R.drawable.ic_location);
+        createIcon(db, R.drawable.ic_mail);
+        createIcon(db, R.drawable.ic_money);
+        createIcon(db, R.drawable.ic_movies);
+        //endregion
 
         //region Create default categories
         ContentValues values = new ContentValues();
         values.put(KEY_CAT_NAME, "Default");
         values.put(KEY_BG_COLOR, "#AEC6CF");
         values.put(KEY_ICON_COLOR, "#000000");
-        values.put(KEY_ICON, R.drawable.ic_default);
+        values.put(KEY_ICON_ID, 1);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 
@@ -83,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_CAT_NAME, "Exercise");
         values.put(KEY_BG_COLOR, "#FF4848");
         values.put(KEY_ICON_COLOR, "#000000");
-        values.put(KEY_ICON, R.drawable.ic_exercise);
+        values.put(KEY_ICON_ID, 2);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 
@@ -91,7 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_CAT_NAME, "Shopping");
         values.put(KEY_BG_COLOR, "#01F33E");
         values.put(KEY_ICON_COLOR, "#000000");
-        values.put(KEY_ICON, R.drawable.ic_shopping);
+        values.put(KEY_ICON_ID, 3);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 
@@ -99,7 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_CAT_NAME, "Birthday");
         values.put(KEY_BG_COLOR, "#AD8BFE");
         values.put(KEY_ICON_COLOR, "#000000");
-        values.put(KEY_ICON, R.drawable.ic_birthday);
+        values.put(KEY_ICON_ID, 4);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 
@@ -107,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_CAT_NAME, "Phone Call");
         values.put(KEY_BG_COLOR, "#06DCFB");
         values.put(KEY_ICON_COLOR, "#000000");
-        values.put(KEY_ICON, R.drawable.ic_phone);
+        values.put(KEY_ICON_ID, 5);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
 
@@ -115,7 +145,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_CAT_NAME, "Important");
         values.put(KEY_BG_COLOR, "#DFE32D");
         values.put(KEY_ICON_COLOR, "#000000");
-        values.put(KEY_ICON, R.drawable.ic_important);
+        values.put(KEY_ICON_ID, 6);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
         //endregion
@@ -156,11 +186,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //endregion
     }
 
+    private void createIcon(SQLiteDatabase db, int icon) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_ICON, icon);
+        db.insert(TABLE_ICON, null, values);
+        values.clear();
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // on upgrade drop older tables
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ICON);
 
         // create new tables
         onCreate(db);

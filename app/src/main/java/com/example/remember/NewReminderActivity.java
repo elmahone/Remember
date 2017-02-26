@@ -32,7 +32,9 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
     private EditText editDate;
     private EditText editDesc;
     private Button save;
+    private Button addCategory;
     private List<Category> categories;
+    private List<Icon> icons;
     private CategoryAdapter adapter;
 
     @Override
@@ -40,20 +42,23 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_reminder);
 
-        //Get views
+        //region Find views
         spinner = (Spinner) findViewById(R.id.category_spinner);
         editTitle = (EditText) findViewById(R.id.editTitle);
         editDate = (EditText) findViewById(R.id.editDate);
         editDesc = (EditText) findViewById(R.id.editDescription);
         save = (Button) findViewById(R.id.save_reminder);
+        addCategory = (Button) findViewById(R.id.add_category);
+        //endregion
 
         dataSource = new DataSource(this);
         categories = dataSource.getAllCategories();
+        icons = dataSource.getAllIcons();
 
-        adapter = new CategoryAdapter(this, categories);
+        adapter = new CategoryAdapter(this, categories, icons);
         spinner.setAdapter(adapter);
 
-        //region Set Date and Time listeners
+        //region DatePicker & TimePicker listeners
         final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -80,6 +85,9 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
         };
         //endregion
 
+        //region Click Listeners
+
+        // Date view listener
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +100,16 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
 
         spinner.setOnItemSelectedListener(this);
 
+        // Add category button listener
+        addCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(NewReminderActivity.this, NewCategoryActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Save button listener
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +121,7 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
                 long date = calendar.getTimeInMillis();
                 String desc = editDesc.getText().toString();
 
-                if(!title.matches("") && !dateField.matches("") ) {
+                if (!title.matches("") && !dateField.matches("")) {
                     Reminder newReminder = new Reminder(title, desc, selectedCatecory.getId(), date);
                     Log.v(TAG, "Date: " + date);
                     Log.v(TAG, "title: " + title);
@@ -112,25 +130,25 @@ public class NewReminderActivity extends AppCompatActivity implements OnItemSele
                     dataSource.close();
                     Toast.makeText(NewReminderActivity.this, "New Reminder Created!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(NewReminderActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                     startActivity(intent);
                 } else {
                     Toast.makeText(NewReminderActivity.this, "Reminder needs a title and a date.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        //endregion
     }
 
-
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String name = categories.get(i).getCategory();
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+        String name = categories.get(position).getCategory();
         Log.v(TAG, name + " Selected");
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         Log.v(TAG, "Nothing Selected");
-
     }
 
     private void updateLabel() {

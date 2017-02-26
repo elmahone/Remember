@@ -168,6 +168,26 @@ public class DataSource {
     }
     //endregion
 
+    //Fetch all reminders
+    public List<Icon> getAllIcons() {
+        open();
+        List<Icon> icons = new ArrayList<>();
+        String query = "SELECT * FROM " + TABLE_ICON;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Icon icon = new Icon();
+                icon.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+                icon.setIcon(cursor.getInt(cursor.getColumnIndex(KEY_ICON)));
+                icons.add(icon);
+
+            } while (cursor.moveToNext());
+        }
+        return icons;
+    }
+
     //region Category table CRUD functions
 
     //Create a category
@@ -178,7 +198,7 @@ public class DataSource {
             values.put(KEY_CAT_NAME, category.getCategory());
             values.put(KEY_BG_COLOR, category.getBackgroundColor());
             values.put(KEY_ICON_COLOR, category.getIconColor());
-            values.put(KEY_ICON, category.getIcon());
+            values.put(KEY_ICON_ID, category.getIcon());
             long category_id = db.insert(TABLE_CATEGORY, null, values);
 
             return category_id;
@@ -201,7 +221,7 @@ public class DataSource {
         category.setCategory(cursor.getString(cursor.getColumnIndex(KEY_CAT_NAME)));
         category.setBackgroundColor(cursor.getString(cursor.getColumnIndex(KEY_BG_COLOR)));
         category.setIconColor(cursor.getString(cursor.getColumnIndex(KEY_ICON_COLOR)));
-        category.setIcon(cursor.getInt(cursor.getColumnIndex(KEY_ICON)));
+        category.setIcon(cursor.getInt(cursor.getColumnIndex(KEY_ICON_ID)));
 
         return category;
     }
@@ -222,7 +242,7 @@ public class DataSource {
                 category.setCategory(cursor.getString(cursor.getColumnIndex(KEY_CAT_NAME)));
                 category.setBackgroundColor(cursor.getString(cursor.getColumnIndex(KEY_BG_COLOR)));
                 category.setIconColor(cursor.getString(cursor.getColumnIndex(KEY_ICON_COLOR)));
-                category.setIcon(cursor.getInt(cursor.getColumnIndex(KEY_ICON)));
+                category.setIcon(cursor.getInt(cursor.getColumnIndex(KEY_ICON_ID)));
 
                 // adding to tags list
                 categories.add(category);
@@ -239,7 +259,7 @@ public class DataSource {
             values.put(KEY_CAT_NAME, category.getCategory());
             values.put(KEY_BG_COLOR, category.getBackgroundColor());
             values.put(KEY_ICON_COLOR, category.getIconColor());
-            values.put(KEY_ICON, category.getIcon());
+            values.put(KEY_ICON_ID, category.getIcon());
             return db.update(TABLE_CATEGORY, values, KEY_ID + " = ?",
                     new String[]{String.valueOf(category.getId())});
         } else {

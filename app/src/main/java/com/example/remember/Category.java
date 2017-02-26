@@ -71,8 +71,8 @@ public class Category {
         this.icon_color = icon_color;
     }
 
-    public void setIcon(int icon) {
-        this.icon = icon;
+    public void setIcon(int icon_id) {
+        this.icon = icon_id;
     }
 
 //endregion
