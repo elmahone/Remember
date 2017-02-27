@@ -18,7 +18,8 @@
         <activity android:name=".NewReminderActivity" />
         <activity
             android:name=".NewCategoryActivity"
-            android:noHistory="true"></activity>
+            android:noHistory="true"
+            android:windowSoftInputMode="stateHidden"></activity>
     </application>
 
 </manifest>
