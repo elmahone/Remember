@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public final static String REMINDER_DETAILS = "com.example.remember.REMINDER_DETAILS";
     private DataSource dataSource;
     private ListView listView;
     private Button addButton;
@@ -58,7 +60,11 @@ public class MainActivity extends AppCompatActivity {
         // Listener for list item clicks
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Reminder r = (Reminder) listView.getItemAtPosition(position);
+                intent = new Intent(context, ReminderDetailsActivity.class);
+                intent.putExtra(REMINDER_DETAILS, r);
+                startActivity(intent);
 
             }
         });

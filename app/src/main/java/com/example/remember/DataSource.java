@@ -168,7 +168,7 @@ public class DataSource {
     }
     //endregion
 
-    //Fetch all reminders
+    //Fetch all icons
     public List<Icon> getAllIcons() {
         open();
         List<Icon> icons = new ArrayList<>();
@@ -186,6 +186,22 @@ public class DataSource {
             } while (cursor.moveToNext());
         }
         return icons;
+    }
+
+    //Fetch an icon
+    public Icon getIcon(long id) {
+        open();
+        String query = "SELECT * FROM " + TABLE_ICON + " WHERE " + KEY_ID + " = " + id;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        Icon icon = new Icon();
+        icon.setId(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+        icon.setIcon(cursor.getInt(cursor.getColumnIndex(KEY_ICON)));
+
+        return icon;
     }
 
     //region Category table CRUD functions

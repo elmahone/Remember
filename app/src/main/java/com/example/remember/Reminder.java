@@ -1,9 +1,10 @@
 package com.example.remember;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Reminder {
+public class Reminder implements Serializable {
 
     private int id;
     private String title;

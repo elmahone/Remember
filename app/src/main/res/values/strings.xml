@@ -11,6 +11,11 @@
     <string name="desc_hint">Description</string>
     <string name="new_cat_hint">New category</string>
 
+    <!-- Menu Buttons -->
+    <string name="menu_edit">Edit</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_off">Close app</string>
+
     <!-- Buttons -->
     <string name="bg_color_button">Background color</string>
     <string name="icon_color_button">Icon color</string>

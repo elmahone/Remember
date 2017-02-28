@@ -46,13 +46,6 @@
                     android:layout_height="50dp"
                     android:background="@drawable/ic_add"
                     android:backgroundTint="#1FCB4A" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/new_category_label"
-                    android:textColor="@color/smoky_white" />
-
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -75,27 +68,20 @@
             android:inputType="text"
             android:textSize="20sp" />
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/editDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/editDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:focusable="false"
-                android:hint="@string/date_hint"
-                android:textSize="20sp" />
-        </LinearLayout>
+            android:layout_marginBottom="10dp"
+            android:focusable="false"
+            android:hint="@string/date_hint"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/editDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/desc_hint"
-            android:inputType="text"
             android:textSize="20sp" />
     </LinearLayout>
 
