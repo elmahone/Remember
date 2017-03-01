@@ -5,6 +5,7 @@ public class Icon {
     int icon;
 
     //region Constructors
+
     public Icon() {
 
     }
@@ -20,15 +21,18 @@ public class Icon {
     //endregion
 
     //region Getters
+
     public int getIcon() {
         return icon;
     }
+
     public int getId() {
         return id;
     }
     //endregion
 
     //region Setters
+
     public void setIcon(int icon) {
         this.icon = icon;
     }
@@ -36,6 +40,5 @@ public class Icon {
     public void setId(int id) {
         this.id = id;
     }
-
     //endregion
 }

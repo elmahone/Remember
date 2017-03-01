@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.remember.Category;
-import com.example.remember.Icon;
-import com.example.remember.Reminder;
+import com.example.remember.model.Category;
+import com.example.remember.model.Icon;
+import com.example.remember.model.Reminder;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,10 +15,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.example.remember.Category;
-import com.example.remember.Icon;
+import com.example.remember.model.Category;
+import com.example.remember.model.Icon;
 import com.example.remember.R;
-import com.example.remember.Reminder;
+import com.example.remember.model.Reminder;
 import com.example.remember.adapter.CategoryAdapter;
 import com.example.remember.adapter.ReminderAdapter;
 import com.example.remember.database.DataSource;

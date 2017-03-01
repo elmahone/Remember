@@ -15,10 +15,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.remember.Category;
-import com.example.remember.Icon;
+import com.example.remember.model.Category;
+import com.example.remember.model.Icon;
 import com.example.remember.R;
-import com.example.remember.Reminder;
+import com.example.remember.model.Reminder;
 import com.example.remember.database.DataSource;
 
 
@@ -50,7 +50,6 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         category = dataSource.getCategory(reminder.getCategory());
         icon = dataSource.getIcon(category.getIcon());
         fillViews();
-
     }
 
     @Override
@@ -103,6 +102,5 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         reminderTitle.setText(reminder.getTitle());
         reminderDate.setText(reminder.stringDate());
         reminderDesc.setText(reminder.getDescription());
-
     }
 }

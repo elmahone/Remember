@@ -22,10 +22,10 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
 
-import com.example.remember.Category;
-import com.example.remember.Icon;
+import com.example.remember.model.Category;
+import com.example.remember.model.Icon;
 import com.example.remember.R;
-import com.example.remember.Reminder;
+import com.example.remember.model.Reminder;
 import com.example.remember.adapter.CategoryAdapter;
 import com.example.remember.database.DataSource;
 
@@ -180,13 +180,12 @@ public class NewReminderActivity extends AppCompatActivity {
             dataSource.close();
             Toast.makeText(NewReminderActivity.this, "New Reminder Created!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(NewReminderActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         } else {
             Toast.makeText(NewReminderActivity.this, "Reminder needs a title and a date.", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     private void updateLabel() {
         String format = "dd.MM.yyyy HH:mm";

@@ -12,10 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.remember.Category;
-import com.example.remember.Icon;
+import com.example.remember.model.Category;
+import com.example.remember.model.Icon;
 import com.example.remember.R;
-import com.example.remember.Reminder;
+import com.example.remember.model.Reminder;
 
 import java.util.List;
 

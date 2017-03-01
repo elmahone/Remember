@@ -88,6 +88,7 @@ public class Reminder implements Serializable {
     //endregion
 
     //region Functions
+
     public String stringDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);

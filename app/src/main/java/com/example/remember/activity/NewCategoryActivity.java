@@ -21,8 +21,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.remember.Category;
-import com.example.remember.Icon;
+import com.example.remember.model.Category;
+import com.example.remember.model.Icon;
 import com.example.remember.R;
 import com.example.remember.adapter.IconAdapter;
 import com.example.remember.database.DataSource;

@@ -28,7 +28,6 @@ public class Category implements Serializable {
         this.icon_color = icon_color;
         this.icon = icon;
     }
-
     //endregion
 
     //region Getters
@@ -52,8 +51,7 @@ public class Category implements Serializable {
     public int getIcon() {
         return icon;
     }
-
-//endregion
+    //endregion
 
     //region Setters
 
@@ -76,6 +74,5 @@ public class Category implements Serializable {
     public void setIcon(int icon_id) {
         this.icon = icon_id;
     }
-
-//endregion
+    //endregion
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#ededed"
     android:orientation="vertical"
-    tools:context="com.example.remember.NewReminderActivity">
+    tools:context="com.example.remember.activity.NewReminderActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
