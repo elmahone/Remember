@@ -1,4 +1,4 @@
-package com.example.remember;
+package com.example.remember.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import com.example.remember.Icon;
 
 import java.util.List;
 

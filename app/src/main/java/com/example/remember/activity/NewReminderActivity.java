@@ -1,4 +1,4 @@
-package com.example.remember;
+package com.example.remember.activity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.WindowDecorActionBar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +21,13 @@ import android.widget.TimePicker;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
+
+import com.example.remember.Category;
+import com.example.remember.Icon;
+import com.example.remember.R;
+import com.example.remember.Reminder;
+import com.example.remember.adapter.CategoryAdapter;
+import com.example.remember.database.DataSource;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

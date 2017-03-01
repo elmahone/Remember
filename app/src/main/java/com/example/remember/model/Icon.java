@@ -1,4 +1,4 @@
-package com.example.remember;
+package com.example.remember.model;
 
 public class Icon {
     int id;

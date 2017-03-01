@@ -1,4 +1,4 @@
-package com.example.remember;
+package com.example.remember.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +9,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import java.io.Serializable;
+import com.example.remember.Category;
+import com.example.remember.Icon;
+import com.example.remember.R;
+import com.example.remember.Reminder;
+import com.example.remember.adapter.CategoryAdapter;
+import com.example.remember.adapter.ReminderAdapter;
+import com.example.remember.database.DataSource;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

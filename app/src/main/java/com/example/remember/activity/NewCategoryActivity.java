@@ -1,4 +1,4 @@
-package com.example.remember;
+package com.example.remember.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +21,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.remember.Category;
+import com.example.remember.Icon;
+import com.example.remember.R;
+import com.example.remember.adapter.IconAdapter;
+import com.example.remember.database.DataSource;
 import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 import com.pes.androidmaterialcolorpickerdialog.OnColorSelected;
 

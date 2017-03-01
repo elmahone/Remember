@@ -1,4 +1,4 @@
-package com.example.remember;
+package com.example.remember.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +9,17 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.remember.Category;
+import com.example.remember.Icon;
+import com.example.remember.R;
+import com.example.remember.Reminder;
+import com.example.remember.database.DataSource;
 
 
 public class ReminderDetailsActivity extends AppCompatActivity {
