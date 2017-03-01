@@ -42,32 +42,35 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:layout_toRightOf="@+id/icon_container"
-            android:text="PLACEHOLDER" />
+            android:textSize="22sp"
+            android:layout_toRightOf="@+id/icon_container" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/reminder_container"
         android:layout_width="match_parent"
-        android:layout_below="@+id/category_container"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/category_container">
+
         <TextView
             android:id="@+id/reminder_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"/>
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/reminder_date"
-            android:layout_below="@+id/reminder_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"/>
+            android:layout_below="@+id/reminder_title"
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/reminder_description"
-            android:layout_below="@+id/reminder_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"/>
+            android:layout_below="@+id/reminder_date"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 </RelativeLayout>

@@ -17,15 +17,15 @@
         </activity>
         <activity
             android:name=".NewReminderActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ReminderDetailsActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".NewCategoryActivity"
             android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".NewReminderActivity"
             android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".ReminderDetailsActivity"
-            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

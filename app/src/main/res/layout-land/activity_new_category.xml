@@ -106,13 +106,4 @@
         </GridView>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/save_category"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="5dp"
-        android:background="@drawable/ic_check"
-        android:backgroundTint="#1FCB4A" />
 </RelativeLayout>

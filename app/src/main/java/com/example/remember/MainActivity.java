@@ -2,11 +2,15 @@ package com.example.remember;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     public final static String REMINDER_DETAILS = "com.example.remember.REMINDER_DETAILS";
     private DataSource dataSource;
     private ListView listView;
-    private Button addButton;
     private Spinner spinner;
     private List<Reminder> reminders = new ArrayList<>();
     private List<Icon> icons = new ArrayList<>();
@@ -47,15 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         dataSource.close();
 
-        // Listener for 'add new reminder' button
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.v(TAG, "Add button clicked");
-                intent = new Intent(context, NewReminderActivity.class);
-                startActivity(intent);
-            }
-        });
 
         // Listener for list item clicks
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -90,6 +84,36 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        Drawable drawable = menu.findItem(R.id.action_add).getIcon();
+        if (drawable != null) {
+            drawable.mutate();
+            drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                addReminder();
+                return true;
+
+            case R.id.action_settings:
+                return true;
+
+            case R.id.action_off:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     //region Setup functions
     private void setUpSpinner() {
         catAdapter = new CategoryAdapter(context, spinCat, icons);
@@ -98,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpViews() {
         listView = (ListView) findViewById(R.id.reminder_list);
-        addButton = (Button) findViewById(R.id.add_button);
         spinner = (Spinner) findViewById(R.id.category_spinner);
     }
 
@@ -116,6 +139,14 @@ public class MainActivity extends AppCompatActivity {
     private void setUpListView(List<Reminder> rem, List<Category> cat) {
         remAdapter = new ReminderAdapter(context, rem, cat, icons);
         listView.setAdapter(remAdapter);
+    }
+    //endregion
+
+    //region Menu buttons
+    private void addReminder() {
+        Log.v(TAG, "Add button clicked");
+        intent = new Intent(context, NewReminderActivity.class);
+        startActivity(intent);
     }
     //endregion
 }

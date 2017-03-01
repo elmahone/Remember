@@ -7,17 +7,15 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
-import org.w3c.dom.Text;
 
 public class ReminderDetailsActivity extends AppCompatActivity {
     private static final String TAG = "ReminderDetailsActivity";
@@ -28,7 +26,6 @@ public class ReminderDetailsActivity extends AppCompatActivity {
     Icon icon;
     Intent intent;
 
-    Toolbar myChildToolbar;
     RelativeLayout iconBackground;
     ImageView iconView;
     TextView categoryName;
@@ -40,11 +37,8 @@ public class ReminderDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_details);
-        findViews();
-        setActionBar(myChildToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
 
+        findViews();
         dataSource = new DataSource(context);
         intent = getIntent();
         reminder = (Reminder) intent.getSerializableExtra(MainActivity.REMINDER_DETAILS);
@@ -67,8 +61,23 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                return true;
+
+            case R.id.action_settings:
+                return true;
+
+            case R.id.action_off:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void findViews() {
-        myChildToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         iconBackground = (RelativeLayout) findViewById(R.id.icon_background);
         iconView = (ImageView) findViewById(R.id.icon);
 
