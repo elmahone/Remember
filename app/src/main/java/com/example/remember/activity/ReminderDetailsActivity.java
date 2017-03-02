@@ -1,5 +1,6 @@
 package com.example.remember.activity;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -13,8 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import com.example.remember.fragment.ReminderDetailsFragment;
+import com.example.remember.fragment.ReminderEditFragment;
 import com.example.remember.model.Category;
 import com.example.remember.model.Icon;
 import com.example.remember.R;
@@ -33,23 +35,30 @@ public class ReminderDetailsActivity extends AppCompatActivity {
 
     RelativeLayout iconBackground;
     ImageView iconView;
-    TextView categoryName;
-    TextView reminderTitle;
-    TextView reminderDate;
-    TextView reminderDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_details);
 
-        findViews();
+        iconBackground = (RelativeLayout) findViewById(R.id.icon_background);
+        iconView = (ImageView) findViewById(R.id.icon);
+
         dataSource = new DataSource(context);
         intent = getIntent();
         reminder = (Reminder) intent.getSerializableExtra(MainActivity.REMINDER_DETAILS);
         category = dataSource.getCategory(reminder.getCategory());
         icon = dataSource.getIcon(category.getIcon());
-        fillViews();
+
+        iconBackground.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                new int[]{Color.parseColor(category.getBackgroundColor())}));
+        iconView.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
+                new int[]{Color.parseColor(category.getIconColor())}));
+        iconView.setBackground(ContextCompat.getDrawable(context, icon.getIcon()));
+
+        if(savedInstanceState == null) {
+            showDetailsFragment();
+        }
     }
 
     @Override
@@ -61,7 +70,6 @@ public class ReminderDetailsActivity extends AppCompatActivity {
             drawable.mutate();
             drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         }
-
         return true;
     }
 
@@ -69,6 +77,7 @@ public class ReminderDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_edit:
+                showEditFragment();
                 return true;
 
             case R.id.action_settings:
@@ -81,26 +90,32 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void findViews() {
-        iconBackground = (RelativeLayout) findViewById(R.id.icon_background);
-        iconView = (ImageView) findViewById(R.id.icon);
+    private void showDetailsFragment() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        ReminderDetailsFragment detailsFragment = new ReminderDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("reminder", reminder);
+        detailsFragment.setArguments(bundle);
 
-        categoryName = (TextView) findViewById(R.id.category_name);
-        reminderTitle = (TextView) findViewById(R.id.reminder_title);
-        reminderDate = (TextView) findViewById(R.id.reminder_date);
-        reminderDesc = (TextView) findViewById(R.id.reminder_description);
+        fragmentTransaction.replace(R.id.fragment_content, detailsFragment, "details_fragment");
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
     }
 
-    private void fillViews() {
-        iconBackground.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
-                new int[]{Color.parseColor(category.getBackgroundColor())}));
-        iconView.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
-                new int[]{Color.parseColor(category.getIconColor())}));
-        iconView.setBackground(ContextCompat.getDrawable(context, icon.getIcon()));
+    private void showEditFragment() {
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        ReminderEditFragment editFragment = new ReminderEditFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("reminder", reminder);
+        editFragment.setArguments(bundle);
 
-        categoryName.setText(category.getCategory());
-        reminderTitle.setText(reminder.getTitle());
-        reminderDate.setText(reminder.stringDate());
-        reminderDesc.setText(reminder.getDescription());
+        fragmentTransaction.replace(R.id.fragment_content, editFragment, "details_fragment");
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        fragmentTransaction.commit();
     }
+
+
 }

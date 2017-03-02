@@ -1,6 +1,8 @@
 package com.example.remember.model;
 
-public class Icon {
+import java.io.Serializable;
+
+public class Icon implements Serializable{
     int id;
     int icon;
 
