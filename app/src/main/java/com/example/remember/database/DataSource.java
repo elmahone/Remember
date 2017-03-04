@@ -41,6 +41,7 @@ public class DataSource {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.KEY_TITLE, reminder.getTitle());
         values.put(DatabaseHelper.KEY_DESC, reminder.getDescription());
+        values.put(DatabaseHelper.KEY_LIST, reminder.getListString());
         values.put(DatabaseHelper.KEY_CAT_ID, reminder.getCategory());
         values.put(DatabaseHelper.KEY_TIME, reminder.getTime());
         long reminder_id = db.insert(DatabaseHelper.TABLE_REMINDER, null, values);
@@ -63,6 +64,7 @@ public class DataSource {
         reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
         reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
         reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+        reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
         reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
         reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
         return reminder;
@@ -82,6 +84,7 @@ public class DataSource {
                 reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
                 reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
                 reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+                reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
                 reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
                 reminders.add(reminder);
@@ -105,6 +108,7 @@ public class DataSource {
                 reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
                 reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
                 reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+                reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
                 reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
                 reminders.add(reminder);
@@ -126,11 +130,13 @@ public class DataSource {
 
         if (cursor.moveToFirst()) {
             do {
+                String list = cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST));
                 Reminder reminder = new Reminder();
 
                 reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
                 reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
                 reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+                reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
                 reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
 

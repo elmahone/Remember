@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_add"
-        android:title="@string/menu_add"
+        android:title="@string/menu_new_category"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_save"

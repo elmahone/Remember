@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.remember.fragment.ReminderDetailsFragment;
 import com.example.remember.fragment.ReminderEditFragment;
@@ -33,16 +35,11 @@ public class ReminderDetailsActivity extends AppCompatActivity {
     Icon icon;
     Intent intent;
 
-    RelativeLayout iconBackground;
-    ImageView iconView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_details);
-
-        iconBackground = (RelativeLayout) findViewById(R.id.icon_background);
-        iconView = (ImageView) findViewById(R.id.icon);
 
         dataSource = new DataSource(context);
         intent = getIntent();
@@ -50,15 +47,7 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         category = dataSource.getCategory(reminder.getCategory());
         icon = dataSource.getIcon(category.getIcon());
 
-        iconBackground.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
-                new int[]{Color.parseColor(category.getBackgroundColor())}));
-        iconView.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
-                new int[]{Color.parseColor(category.getIconColor())}));
-        iconView.setBackground(ContextCompat.getDrawable(context, icon.getIcon()));
-
-        if(savedInstanceState == null) {
-            showDetailsFragment();
-        }
+        showDetailsFragment();
     }
 
     @Override
@@ -95,11 +84,11 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         ReminderDetailsFragment detailsFragment = new ReminderDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("reminder", reminder);
+        bundle.putSerializable("category", category);
         detailsFragment.setArguments(bundle);
 
-        fragmentTransaction.replace(R.id.fragment_content, detailsFragment, "details_fragment");
+        fragmentTransaction.replace(R.id.fragment_content, detailsFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
     }
@@ -109,13 +98,13 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         ReminderEditFragment editFragment = new ReminderEditFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("reminder", reminder);
+        bundle.putSerializable("category", category);
         editFragment.setArguments(bundle);
 
-        fragmentTransaction.replace(R.id.fragment_content, editFragment, "details_fragment");
+        fragmentTransaction.replace(R.id.fragment_content, editFragment);
         fragmentTransaction.addToBackStack(null);
+
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
-
-
 }

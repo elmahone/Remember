@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //region Database details
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "rememberDB";
@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //region REMINDER Table - column names
     public static final String KEY_TITLE = "title";
     public static final String KEY_DESC = "description";
+    public static final String KEY_LIST = "list";
     public static final String KEY_CAT_ID = "category_id";
     public static final String KEY_TIME = "time";
 
@@ -53,7 +54,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Reminder table create statement
     private static final String CREATE_TABLE_REMINDER = "CREATE TABLE "
             + TABLE_REMINDER + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_TITLE + " TEXT, "
-            + KEY_DESC + " TEXT, " + KEY_CAT_ID + " INTEGER, "
+            + KEY_DESC + " TEXT, "
+            + KEY_LIST + " TEXT, "
+            + KEY_CAT_ID + " INTEGER, "
             + KEY_TIME + " INTEGER" + ")";
 
     // Category table create statement

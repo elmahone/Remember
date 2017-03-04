@@ -1,8 +1,14 @@
 package com.example.remember.model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class Reminder implements Serializable {
 
@@ -10,6 +16,7 @@ public class Reminder implements Serializable {
     private String title;
     private String description;
     private int category_id;
+    private List<String> list;
 
     private long time;
 
@@ -30,6 +37,13 @@ public class Reminder implements Serializable {
     public Reminder(String title, String description, int category_id, long time) {
         this.title = title;
         this.description = description;
+        this.category_id = category_id;
+        this.time = time;
+    }
+
+    public Reminder(String title, List<String> list, int category_id, long time) {
+        this.title = title;
+        this.list = list;
         this.category_id = category_id;
         this.time = time;
     }
@@ -62,6 +76,26 @@ public class Reminder implements Serializable {
     public long getTime() {
         return time;
     }
+
+    public List<String> getList() {
+        return list;
+    }
+
+    public String getListString() {
+        if (list != null) {
+            JSONObject json = new JSONObject();
+            try {
+                json.put("arrayList", new JSONArray(list));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            String strList = json.toString();
+            return strList;
+        } else {
+            return null;
+        }
+    }
+
     //endregion
 
     //region Setters
@@ -85,6 +119,33 @@ public class Reminder implements Serializable {
     public void setTime(long time) {
         this.time = time;
     }
+
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+
+    public void setList(String strList) {
+        if(strList != null) {
+            JSONObject json = null;
+            try {
+                json = new JSONObject(strList);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            JSONArray jsonArray = json.optJSONArray("arrayList");
+            List<String> list = new ArrayList<>();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    list.add(jsonArray.getString(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            this.list = list;
+        }
+    }
+
     //endregion
 
     //region Functions

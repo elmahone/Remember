@@ -79,7 +79,7 @@
             android:layout_centerHorizontal="true"
             android:hint="@string/new_cat_hint"
             android:imeOptions="actionDone"
-            android:inputType="text"
+            android:inputType="textCapSentences"
             android:padding="10dp"
             android:textAlignment="center"
             android:textColor="@color/smoky_white"

@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/default_category_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edit_reminder_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/title_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textCapSentences"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/edit_reminder_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:focusable="false"
+        android:hint="@string/date_hint"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/edit_reminder_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/desc_hint"
+        android:textSize="20sp" />
+</LinearLayout>

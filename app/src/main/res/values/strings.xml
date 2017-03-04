@@ -12,7 +12,8 @@
     <string name="new_cat_hint">New category</string>
 
     <!-- Menu Buttons -->
-    <string name="menu_add">Add</string>
+    <string name="menu_new_category">New Category</string>
+    <string name="menu_new_reminder">Add Reminder</string>
     <string name="menu_edit">Edit</string>
     <string name="menu_save">Save</string>
     <string name="menu_settings">Settings</string>
@@ -21,5 +22,7 @@
     <!-- Buttons -->
     <string name="bg_color_button">Background color</string>
     <string name="icon_color_button">Icon color</string>
+    <string name="add_button">Add</string>
+
 
 </resources>

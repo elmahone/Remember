@@ -1,6 +1,7 @@
 package com.example.remember.activity;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,6 +22,8 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
 
+import com.example.remember.fragment.CategoryDefaultFragment;
+import com.example.remember.fragment.CategoryShoppingFragment;
 import com.example.remember.model.Category;
 import com.example.remember.model.Icon;
 import com.example.remember.R;
@@ -39,10 +41,6 @@ public class NewReminderActivity extends AppCompatActivity {
     private DataSource dataSource;
     private Calendar calendar = Calendar.getInstance();
     private Spinner spinner;
-    private EditText editTitle;
-    private EditText editDate;
-    private EditText editDesc;
-    private Button addCategory;
     private List<Category> categories;
     private List<Icon> icons;
     private CategoryAdapter adapter;
@@ -51,12 +49,8 @@ public class NewReminderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_reminder);
-        //region Find views
+
         spinner = (Spinner) findViewById(R.id.category_spinner);
-        editTitle = (EditText) findViewById(R.id.editTitle);
-        editDate = (EditText) findViewById(R.id.editDate);
-        editDesc = (EditText) findViewById(R.id.editDescription);
-        //endregion
 
         dataSource = new DataSource(this);
         categories = dataSource.getAllCategories();
@@ -64,51 +58,30 @@ public class NewReminderActivity extends AppCompatActivity {
 
         adapter = new CategoryAdapter(this, categories, icons);
         spinner.setAdapter(adapter);
-
-        //region DatePicker & TimePicker listeners
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  int dayOfMonth) {
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
-        };
-
-        final TimePickerDialog.OnTimeSetListener time = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE, minute);
-
-                new DatePickerDialog(NewReminderActivity.this, date,
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
-
-            }
-        };
-        //endregion
-
-        //region Click Listeners
-
-        // Date view listener
-        editDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new TimePickerDialog(NewReminderActivity.this, time,
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE),
-                        true).show();
-            }
-        });
-
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 String name = categories.get(position).getCategory();
+                int catId = categories.get(position).getId();
+
+                switch (name) {
+                    case "Birthday":
+                        showBirthdayFragment(catId);
+                        break;
+                    case "Phone Call":
+                        showPhoneCallFragment(catId);
+                        break;
+                    case "Important":
+                        showImportantFragment(catId);
+                        break;
+                    case "Shopping":
+                        showShoppingFragment(catId);
+                        break;
+                    default:
+                        showDefaultFragment(catId);
+                        break;
+
+                }
                 Log.v(TAG, name + " Selected");
             }
 
@@ -117,9 +90,6 @@ public class NewReminderActivity extends AppCompatActivity {
                 Log.v(TAG, "Nothing Selected");
             }
         });
-
-
-        //endregion
     }
 
     @Override
@@ -144,9 +114,6 @@ public class NewReminderActivity extends AppCompatActivity {
             case R.id.action_add:
                 addCategory();
                 return true;
-            case R.id.action_save:
-                saveReminder();
-                return true;
 
             case R.id.action_settings:
                 return true;
@@ -163,33 +130,36 @@ public class NewReminderActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void saveReminder() {
-        // Get values from views
-        Category selectedCatecory = (Category) spinner.getSelectedItem();
-        String title = editTitle.getText().toString();
-        String dateField = editDate.getText().toString();
-        long date = calendar.getTimeInMillis();
-        String desc = editDesc.getText().toString();
-
-        if (!title.matches("") && !dateField.matches("")) {
-            Reminder newReminder = new Reminder(title, desc, selectedCatecory.getId(), date);
-            Log.v(TAG, "Date: " + date);
-            Log.v(TAG, "title: " + title);
-            Log.v(TAG, "categ: " + selectedCatecory.getCategory());
-            dataSource.createReminder(newReminder);
-            dataSource.close();
-            Toast.makeText(NewReminderActivity.this, "New Reminder Created!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(NewReminderActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        } else {
-            Toast.makeText(NewReminderActivity.this, "Reminder needs a title and a date.", Toast.LENGTH_SHORT).show();
-        }
+    //region showFragment functions
+    private void showBirthdayFragment(int catId) {
     }
 
-    private void updateLabel() {
-        String format = "dd.MM.yyyy HH:mm";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-        editDate.setText(sdf.format(calendar.getTime()));
+    private void showPhoneCallFragment(int catId) {
     }
+
+    private void showImportantFragment(int catId) {
+    }
+
+    private void showShoppingFragment(int catId) {
+        CategoryShoppingFragment fragment = new CategoryShoppingFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("category", catId);
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_content, fragment);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();
+    }
+
+    private void showDefaultFragment(int catId) {
+        CategoryDefaultFragment fragment = new CategoryDefaultFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("category", catId);
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_content, fragment);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();
+    }
+    //endregion
 }
