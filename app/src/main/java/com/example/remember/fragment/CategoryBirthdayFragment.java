@@ -2,18 +2,17 @@ package com.example.remember.fragment;
 
 
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.remember.R;
@@ -25,25 +24,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class CategoryDefaultFragment extends Fragment {
-
+public class CategoryBirthdayFragment extends Fragment {
+    InputMethodManager inputManager;
     DataSource dataSource;
     Calendar calendar = Calendar.getInstance();
+    Calendar thisYear = Calendar.getInstance();
+    Calendar today = Calendar.getInstance();
     int catId;
     EditText title;
     EditText date;
     EditText desc;
 
-    public CategoryDefaultFragment() {
+
+    public CategoryBirthdayFragment() {
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category_default, container, false);
+        return inflater.inflate(R.layout.fragment_category_birthday, container, false);
     }
 
     @Override
@@ -62,19 +61,11 @@ public class CategoryDefaultFragment extends Fragment {
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateLabel();
-            }
-        };
-
-        final TimePickerDialog.OnTimeSetListener timePicker = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE, minute);
-
-                new DatePickerDialog(getActivity(), datePicker,
-                        calendar.get(Calendar.YEAR),
-                        calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                if (calendar.get(Calendar.YEAR) == thisYear.get(Calendar.YEAR)) {
+                    Toast.makeText(getActivity(), "This year", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), getAge(), Toast.LENGTH_SHORT).show();
+                }
             }
         };
         //endregion
@@ -83,14 +74,16 @@ public class CategoryDefaultFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new TimePickerDialog(getActivity(), timePicker,
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE),
-                        true).show();
+                closeKeyboard();
+                new DatePickerDialog(getActivity(), datePicker,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
     }
 
+    // Override menu save button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -102,21 +95,24 @@ public class CategoryDefaultFragment extends Fragment {
         }
     }
 
+    // Find views from layout
     private void findViews() {
         title = (EditText) getView().findViewById(R.id.edit_reminder_title);
         date = (EditText) getView().findViewById(R.id.edit_reminder_date);
         desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
     }
 
+    // Save reminder to database
     private void saveReminder() {
         String t = title.getText().toString();
         String da = date.getText().toString();
         String de = desc.getText().toString();
         if (!t.matches("") && !da.matches("")) {
-            Reminder reminder = new Reminder(t, de, catId, calendar.getTimeInMillis());
+            Reminder reminder = new Reminder(t, de, calendar.getTimeInMillis(), catId, thisYear.getTimeInMillis());
             dataSource.createReminder(reminder);
             dataSource.close();
 
+            // Go back to MainActivity after saving
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -126,10 +122,45 @@ public class CategoryDefaultFragment extends Fragment {
         }
     }
 
+    // Update date text field with calendar date
+    // Set default birthday description if field is empty
     private void updateLabel() {
-        String format = "dd.MM.yyyy HH:mm";
+        String format = "MMMM dd. yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+        String t = title.getText().toString();
         date.setText(sdf.format(calendar.getTime()));
+        if (!getAge().matches("0")) {
+            desc.setText(t + " turns " + getAge());
+        }
     }
+
+    // Close keyboard
+    private void closeKeyboard() {
+        if (getActivity().getCurrentFocus() != null) {
+            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    // Count age from calendar date
+    private String getAge() {
+        thisYear.set(today.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0);
+
+        //if date is passed set to next year
+        if (today.getTimeInMillis() > thisYear.getTimeInMillis()) {
+            thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0);
+        }
+        int age = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+        if (thisYear.get(Calendar.DAY_OF_YEAR) < calendar.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+
+        return ageS;
+    }
+
 
 }

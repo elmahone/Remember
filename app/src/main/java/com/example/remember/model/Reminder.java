@@ -18,6 +18,7 @@ public class Reminder implements Serializable {
     private int category_id;
     private List<String> list;
 
+    private long birthday;
     private long time;
 
     //region Constructors
@@ -37,6 +38,14 @@ public class Reminder implements Serializable {
     public Reminder(String title, String description, int category_id, long time) {
         this.title = title;
         this.description = description;
+        this.category_id = category_id;
+        this.time = time;
+    }
+
+    public Reminder(String title, String description, long birthday, int category_id, long time) {
+        this.title = title;
+        this.description = description;
+        this.birthday = birthday;
         this.category_id = category_id;
         this.time = time;
     }
@@ -71,6 +80,10 @@ public class Reminder implements Serializable {
 
     public int getCategory() {
         return category_id;
+    }
+
+    public long getBirthday() {
+        return birthday;
     }
 
     public long getTime() {
@@ -116,6 +129,10 @@ public class Reminder implements Serializable {
         this.category_id = category_id;
     }
 
+    public void setBirthday(long birthday) {
+        this.birthday = birthday;
+    }
+
     public void setTime(long time) {
         this.time = time;
     }
@@ -149,6 +166,12 @@ public class Reminder implements Serializable {
     //endregion
 
     //region Functions
+
+    public String stringBirthDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(birthday);
+        return new SimpleDateFormat("MMMM dd. yyyy").format(cal.getTime());
+    }
 
     public String stringDate() {
         Calendar cal = Calendar.getInstance();

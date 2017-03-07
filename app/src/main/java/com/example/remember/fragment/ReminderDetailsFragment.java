@@ -29,10 +29,7 @@ public class ReminderDetailsFragment extends Fragment {
 
     //shopping list layout
     List<String> values = new ArrayList<>();
-    Button addRow;
-    EditText newListItem;
     ListView shoppingList;
-    String newItem;
     ShoppingListAdapter adapter;
 
     public ReminderDetailsFragment() {
@@ -51,7 +48,7 @@ public class ReminderDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         switch (category.getCategory()) {
             case "Birthday":
-                return inflater.inflate(R.layout.fragment_reminder_details, container, false);
+                return inflater.inflate(R.layout.fragment_category_birthday_details, container, false);
             case "Phone Call":
                 return inflater.inflate(R.layout.fragment_reminder_details, container, false);
             case "Important":
@@ -70,11 +67,13 @@ public class ReminderDetailsFragment extends Fragment {
         fillViews();
     }
 
+    // Find views depending on what category is selected
     private void findViews() {
         reminderTitle = (TextView) getView().findViewById(R.id.reminder_title);
         reminderDate = (TextView) getView().findViewById(R.id.reminder_date);
         switch (category.getCategory()) {
             case "Birthday":
+                reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
                 break;
             case "Phone Call":
                 break;
@@ -89,11 +88,14 @@ public class ReminderDetailsFragment extends Fragment {
         }
     }
 
+    // Fill text fields with data saved to database
     private void fillViews() {
         reminderTitle.setText(reminder.getTitle());
         reminderDate.setText(reminder.stringDate());
         switch (category.getCategory()) {
             case "Birthday":
+                reminderDesc.setText(reminder.getDescription());
+                reminderDate.setText(reminder.stringBirthDate());
                 break;
             case "Phone Call":
                 break;

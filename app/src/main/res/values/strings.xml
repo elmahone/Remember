@@ -8,6 +8,8 @@
     <!-- Hints -->
     <string name="title_hint">Title</string>
     <string name="date_hint">Time and date</string>
+    <string name="birthday_hint">Birthday</string>
+    <string name="name_hint">Name</string>
     <string name="desc_hint">Description</string>
     <string name="new_cat_hint">New category</string>
 
@@ -23,6 +25,7 @@
     <string name="bg_color_button">Background color</string>
     <string name="icon_color_button">Icon color</string>
     <string name="add_button">Add</string>
+
 
 
 </resources>

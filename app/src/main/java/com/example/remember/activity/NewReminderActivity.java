@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Toast;
 
 
+import com.example.remember.fragment.CategoryBirthdayFragment;
 import com.example.remember.fragment.CategoryDefaultFragment;
 import com.example.remember.fragment.CategoryShoppingFragment;
 import com.example.remember.model.Category;
@@ -80,7 +81,6 @@ public class NewReminderActivity extends AppCompatActivity {
                     default:
                         showDefaultFragment(catId);
                         break;
-
                 }
                 Log.v(TAG, name + " Selected");
             }
@@ -132,6 +132,15 @@ public class NewReminderActivity extends AppCompatActivity {
 
     //region showFragment functions
     private void showBirthdayFragment(int catId) {
+        CategoryBirthdayFragment fragment = new CategoryBirthdayFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("category", catId);
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_content, fragment);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();
+
     }
 
     private void showPhoneCallFragment(int catId) {

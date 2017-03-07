@@ -43,6 +43,8 @@ public class ReminderEditFragment extends Fragment {
     InputMethodManager inputManager;
     DataSource dataSource;
     Calendar calendar = Calendar.getInstance();
+    Calendar thisYear = Calendar.getInstance();
+    Calendar today = Calendar.getInstance();
 
     Reminder reminder;
     Category category;
@@ -80,7 +82,7 @@ public class ReminderEditFragment extends Fragment {
         setHasOptionsMenu(true);
         switch (category.getCategory()) {
             case "Birthday":
-                return inflater.inflate(R.layout.fragment_category_default, container, false);
+                return inflater.inflate(R.layout.fragment_category_birthday, container, false);
             case "Phone Call":
                 return inflater.inflate(R.layout.fragment_category_default, container, false);
             case "Important":
@@ -92,14 +94,19 @@ public class ReminderEditFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataSource = new DataSource(getActivity());
 
         findViews();
-        calendar.setTimeInMillis(reminder.getTime());
+        // Set default times from database
+        if (category.getCategory().matches("Birthday")) {
+            calendar.setTimeInMillis(reminder.getBirthday());
+            thisYear.setTimeInMillis(reminder.getTime());
+        } else {
+            calendar.setTimeInMillis(reminder.getTime());
+        }
         fillViews();
 
         //region DatePicker & TimePicker listeners
@@ -133,13 +140,23 @@ public class ReminderEditFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new TimePickerDialog(getActivity(), timePicker,
-                        calendar.get(Calendar.HOUR_OF_DAY),
-                        calendar.get(Calendar.MINUTE),
-                        true).show();
+                closeKeyboard();
+                // If category is birthday don't show timePicker
+                if (category.getCategory().matches("Birthday")) {
+                    new DatePickerDialog(getActivity(), datePicker,
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH)).show();
+                } else {
+                    new TimePickerDialog(getActivity(), timePicker,
+                            calendar.get(Calendar.HOUR_OF_DAY),
+                            calendar.get(Calendar.MINUTE),
+                            true).show();
+                }
             }
         });
 
+        // Add a new row to shopping list
         if (category.getCategory().matches("Shopping")) {
             addRow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -173,6 +190,7 @@ public class ReminderEditFragment extends Fragment {
     }
 
 
+    // Override save menu button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -184,21 +202,13 @@ public class ReminderEditFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
+    // Find views depending on what category is selected
     private void findViews() {
         title = (EditText) getView().findViewById(R.id.edit_reminder_title);
         date = (EditText) getView().findViewById(R.id.edit_reminder_date);
         switch (category.getCategory()) {
             case "Birthday":
+                desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
                 break;
             case "Phone Call":
                 break;
@@ -215,11 +225,14 @@ public class ReminderEditFragment extends Fragment {
         }
     }
 
+    // Fill text fields with data saved to database
     private void fillViews() {
         title.setText(reminder.getTitle());
         date.setText(reminder.stringDate());
         switch (category.getCategory()) {
             case "Birthday":
+                desc.setText(reminder.getDescription());
+                date.setText(reminder.stringBirthDate());
                 break;
             case "Phone Call":
                 break;
@@ -236,12 +249,16 @@ public class ReminderEditFragment extends Fragment {
         }
     }
 
+    // Save edited fields to database
     private void saveChanges() {
         if (!title.getText().toString().matches("")) {
+
             reminder.setTitle(title.getText().toString());
-            reminder.setTime(calendar.getTimeInMillis());
             switch (category.getCategory()) {
                 case "Birthday":
+                    reminder.setDescription(desc.getText().toString());
+                    reminder.setBirthday(calendar.getTimeInMillis());
+                    reminder.setTime(thisYear.getTimeInMillis());
                     break;
                 case "Phone Call":
                     break;
@@ -249,14 +266,17 @@ public class ReminderEditFragment extends Fragment {
                     break;
                 case "Shopping":
                     reminder.setList(adapter.getItems());
+                    reminder.setTime(calendar.getTimeInMillis());
                     break;
                 default:
                     reminder.setDescription(desc.getText().toString());
+                    reminder.setTime(calendar.getTimeInMillis());
                     break;
             }
             dataSource.updateReminder(reminder);
             dataSource.close();
             Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
+            // Send back to activity when saved
             Intent intent = new Intent(getActivity(), getActivity().getClass());
             intent.putExtra(MainActivity.REMINDER_DETAILS, reminder);
             startActivity(intent);
@@ -265,17 +285,49 @@ public class ReminderEditFragment extends Fragment {
         }
     }
 
+    // Update date text field with calendar date
+    // Set default birthday description if field is empty
     private void updateLabel() {
-        String format = "dd.MM.yyyy HH:mm";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-        date.setText(sdf.format(calendar.getTime()));
+        if (category.getCategory().matches("Birthday")) {
+            String format = "MMMM dd. yyyy";
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+            String t = title.getText().toString();
+            date.setText(sdf.format(calendar.getTime()));
+            if (!getAge().matches("0") && desc.getText().toString().matches("")) {
+                desc.setText(t + " turns " + getAge());
+            }
+        } else {
+            String format = "dd.MM.yyyy HH:mm";
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+            date.setText(sdf.format(calendar.getTime()));
+        }
     }
 
+    // Close keyboard
     private void closeKeyboard() {
         if (getActivity().getCurrentFocus() != null) {
             inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    // Count age from calendar date
+    private String getAge() {
+        thisYear.set(today.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0);
+
+        // if date has passed set to next year
+        if (today.getTimeInMillis() > thisYear.getTimeInMillis()) {
+            thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0);
+        }
+
+        int age = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
+        if (thisYear.get(Calendar.DAY_OF_YEAR) < calendar.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+
+        Integer ageInt = new Integer(age);
+        String ageS = ageInt.toString();
+        return ageS;
     }
 }

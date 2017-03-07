@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //region Database details
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     // Database Name
     private static final String DATABASE_NAME = "rememberDB";
@@ -34,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_TITLE = "title";
     public static final String KEY_DESC = "description";
     public static final String KEY_LIST = "list";
+    public static final String KEY_BIRTHDAY = "birthday";
     public static final String KEY_CAT_ID = "category_id";
     public static final String KEY_TIME = "time";
 
@@ -56,6 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_REMINDER + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_TITLE + " TEXT, "
             + KEY_DESC + " TEXT, "
             + KEY_LIST + " TEXT, "
+            + KEY_BIRTHDAY + " INTEGER, "
             + KEY_CAT_ID + " INTEGER, "
             + KEY_TIME + " INTEGER" + ")";
 
@@ -156,18 +158,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //endregion
 
         //region Create test reminders
+        /*
         values = new ContentValues();
         values.put(KEY_TITLE, "Janus's birthday");
         values.put(KEY_DESC, "40 v");
         values.put(KEY_CAT_ID, 4);
 
-        values.put(KEY_TIME, 1487766586947L);
+        values.put(KEY_TIME, 1488946937958L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
 
         values = new ContentValues();
         values.put(KEY_TITLE, "Go buy pants");
-        values.put(KEY_DESC, "");
         values.put(KEY_CAT_ID, 3);
         values.put(KEY_TIME, 1488946937958L);
         db.insert(TABLE_REMINDER, null, values);
@@ -188,6 +190,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TIME, 1487999937958L);
         db.insert(TABLE_REMINDER, null, values);
         values.clear();
+        */
         //endregion
     }
 
