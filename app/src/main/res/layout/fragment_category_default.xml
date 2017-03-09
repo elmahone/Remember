@@ -4,15 +4,24 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_hint" />
+
     <EditText
         android:id="@+id/edit_reminder_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="@string/title_hint"
         android:imeOptions="actionDone"
         android:inputType="textCapSentences"
         android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/date_hint" />
 
     <EditText
         android:id="@+id/edit_reminder_date"
@@ -20,13 +29,16 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:focusable="false"
-        android:hint="@string/date_hint"
         android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/desc_hint" />
 
     <EditText
         android:id="@+id/edit_reminder_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/desc_hint"
         android:textSize="20sp" />
 </LinearLayout>
