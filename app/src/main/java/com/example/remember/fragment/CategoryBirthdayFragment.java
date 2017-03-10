@@ -1,7 +1,9 @@
 package com.example.remember.fragment;
 
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.remember.AlarmReceiver;
 import com.example.remember.R;
 import com.example.remember.activity.MainActivity;
 import com.example.remember.database.DataSource;
@@ -27,14 +30,13 @@ import java.util.Locale;
 public class CategoryBirthdayFragment extends Fragment {
     InputMethodManager inputManager;
     DataSource dataSource;
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar;
     Calendar thisYear = Calendar.getInstance();
     Calendar today = Calendar.getInstance();
     int catId;
     EditText title;
     EditText date;
     EditText desc;
-
 
     public CategoryBirthdayFragment() {
     }
@@ -74,6 +76,7 @@ public class CategoryBirthdayFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                calendar = Calendar.getInstance();
                 closeKeyboard();
                 new DatePickerDialog(getActivity(), datePicker,
                         calendar.get(Calendar.YEAR),
@@ -109,8 +112,9 @@ public class CategoryBirthdayFragment extends Fragment {
         String de = desc.getText().toString();
         if (!t.matches("") && !da.matches("")) {
             Reminder reminder = new Reminder(t, de, calendar.getTimeInMillis(), catId, thisYear.getTimeInMillis());
-            dataSource.createReminder(reminder);
+            int id = (int) dataSource.createReminder(reminder);
             dataSource.close();
+            setAlarm(thisYear, reminder, id);
 
             // Go back to MainActivity after saving
             Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -145,22 +149,27 @@ public class CategoryBirthdayFragment extends Fragment {
 
     // Count age from calendar date
     private String getAge() {
-        thisYear.set(today.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0);
+        thisYear.set(today.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 
         //if date is passed set to next year
         if (today.getTimeInMillis() > thisYear.getTimeInMillis()) {
-            thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0);
+            thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
         }
         int age = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
         if (thisYear.get(Calendar.DAY_OF_YEAR) < calendar.get(Calendar.DAY_OF_YEAR)) {
             age--;
         }
-
-        Integer ageInt = new Integer(age);
-        String ageS = ageInt.toString();
-
-        return ageS;
+        Integer ageInt = age;
+        return ageInt.toString();
     }
 
+    private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
+        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
 
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+        intent.putExtra("reminder", reminder);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
+    }
 }

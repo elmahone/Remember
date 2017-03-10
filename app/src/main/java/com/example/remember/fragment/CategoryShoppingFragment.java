@@ -1,7 +1,9 @@
 package com.example.remember.fragment;
 
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.remember.AlarmReceiver;
 import com.example.remember.R;
 import com.example.remember.activity.MainActivity;
 import com.example.remember.adapter.ShoppingListAdapter;
@@ -38,7 +41,7 @@ public class CategoryShoppingFragment extends Fragment {
     DataSource dataSource;
     int catId;
     InputMethodManager inputManager;
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar;
     ShoppingListAdapter adapter;
 
     List<String> values = new ArrayList<>();
@@ -86,6 +89,8 @@ public class CategoryShoppingFragment extends Fragment {
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                 calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
 
                 new DatePickerDialog(getActivity(), datePicker,
                         calendar.get(Calendar.YEAR),
@@ -100,6 +105,7 @@ public class CategoryShoppingFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                calendar = Calendar.getInstance();
                 closeKeyboard();
                 new TimePickerDialog(getActivity(), timePicker,
                         calendar.get(Calendar.HOUR_OF_DAY),
@@ -150,10 +156,11 @@ public class CategoryShoppingFragment extends Fragment {
         String t = title.getText().toString();
         String da = date.getText().toString();
         List<String> shopping = adapter.getItems();
-        if (!t.matches("")) {
+        if (!t.matches("") && !da.matches("")) {
             Reminder reminder = new Reminder(t, shopping, catId, calendar.getTimeInMillis());
-            dataSource.createReminder(reminder);
+            int id = (int) dataSource.createReminder(reminder);
             dataSource.close();
+            setAlarm(calendar, reminder, id);
 
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -176,6 +183,16 @@ public class CategoryShoppingFragment extends Fragment {
         String format = "dd.MM.yyyy HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         date.setText(sdf.format(calendar.getTime()));
+    }
+
+    private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
+        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+        intent.putExtra("reminder", reminder);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
     }
 
 

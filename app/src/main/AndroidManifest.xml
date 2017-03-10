@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.remember">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -30,6 +32,7 @@
             android:noHistory="true"
             android:parentActivityName=".activity.NewReminderActivity"
             android:windowSoftInputMode="stateHidden" />
+        <receiver android:name=".AlarmReceiver" android:process=":remote" />
     </application>
 
 </manifest>

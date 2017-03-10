@@ -1,8 +1,11 @@
 package com.example.remember.fragment;
 
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -16,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.remember.AlarmReceiver;
 import com.example.remember.R;
 import com.example.remember.activity.MainActivity;
 import com.example.remember.database.DataSource;
@@ -28,7 +32,7 @@ import java.util.Locale;
 public class CategoryDefaultFragment extends Fragment {
 
     DataSource dataSource;
-    Calendar calendar = Calendar.getInstance();
+    Calendar calendar;
     int catId;
     EditText title;
     EditText date;
@@ -70,6 +74,8 @@ public class CategoryDefaultFragment extends Fragment {
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                 calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
 
                 new DatePickerDialog(getActivity(), datePicker,
                         calendar.get(Calendar.YEAR),
@@ -83,6 +89,7 @@ public class CategoryDefaultFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                calendar = Calendar.getInstance();
                 new TimePickerDialog(getActivity(), timePicker,
                         calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
@@ -114,8 +121,9 @@ public class CategoryDefaultFragment extends Fragment {
         String de = desc.getText().toString();
         if (!t.matches("") && !da.matches("")) {
             Reminder reminder = new Reminder(t, de, catId, calendar.getTimeInMillis());
-            dataSource.createReminder(reminder);
+            int id = (int) dataSource.createReminder(reminder);
             dataSource.close();
+            setAlarm(calendar, reminder, id);
 
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -130,6 +138,17 @@ public class CategoryDefaultFragment extends Fragment {
         String format = "dd.MM.yyyy HH:mm";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         date.setText(sdf.format(calendar.getTime()));
+    }
+
+    private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
+        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+        intent.putExtra("reminder", reminder);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
+
     }
 
 }

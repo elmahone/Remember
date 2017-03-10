@@ -1,6 +1,8 @@
 package com.example.remember.fragment;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.remember.AlarmReceiver;
 import com.example.remember.R;
 import com.example.remember.activity.MainActivity;
 import com.example.remember.adapter.ShoppingListAdapter;
@@ -49,7 +52,6 @@ public class ReminderEditFragment extends Fragment {
     Reminder reminder;
     Category category;
     List<String> values = new ArrayList<>();
-
 
     EditText title;
     EditText date;
@@ -126,6 +128,8 @@ public class ReminderEditFragment extends Fragment {
             public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                 calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
 
                 new DatePickerDialog(getActivity(), datePicker,
                         calendar.get(Calendar.YEAR),
@@ -259,6 +263,7 @@ public class ReminderEditFragment extends Fragment {
                     reminder.setDescription(desc.getText().toString());
                     reminder.setBirthday(calendar.getTimeInMillis());
                     reminder.setTime(thisYear.getTimeInMillis());
+                    setAlarm(thisYear, reminder);
                     break;
                 case "Phone Call":
                     break;
@@ -267,10 +272,12 @@ public class ReminderEditFragment extends Fragment {
                 case "Shopping":
                     reminder.setList(adapter.getItems());
                     reminder.setTime(calendar.getTimeInMillis());
+                    setAlarm(calendar, reminder);
                     break;
                 default:
                     reminder.setDescription(desc.getText().toString());
                     reminder.setTime(calendar.getTimeInMillis());
+                    setAlarm(calendar, reminder);
                     break;
             }
             dataSource.updateReminder(reminder);
@@ -314,11 +321,11 @@ public class ReminderEditFragment extends Fragment {
 
     // Count age from calendar date
     private String getAge() {
-        thisYear.set(today.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0);
+        thisYear.set(today.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 
         // if date has passed set to next year
         if (today.getTimeInMillis() > thisYear.getTimeInMillis()) {
-            thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0);
+            thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
         }
 
         int age = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
@@ -326,8 +333,17 @@ public class ReminderEditFragment extends Fragment {
             age--;
         }
 
-        Integer ageInt = new Integer(age);
-        String ageS = ageInt.toString();
-        return ageS;
+        Integer ageInt = age;
+        return ageInt.toString();
+    }
+
+    private void setAlarm(Calendar targetCal, Reminder reminder) {
+        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+        intent.putExtra("reminder", reminder);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), reminder.getId(), intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
     }
 }

@@ -76,7 +76,8 @@ public class DataSource {
     public List<Reminder> getAllReminders() {
         open();
         List<Reminder> reminders = new ArrayList<>();
-        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER;
+        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER
+                + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -101,7 +102,8 @@ public class DataSource {
     public List<Reminder> getAllFutureReminders(long current) {
         open();
         List<Reminder> reminders = new ArrayList<>();
-        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER + " WHERE " + DatabaseHelper.KEY_TIME + " >= " + current;
+        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER + " WHERE " + DatabaseHelper.KEY_TIME + " >= " + current
+                + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -128,7 +130,8 @@ public class DataSource {
         List<Reminder> reminders = new ArrayList<>();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER
                 + " WHERE " + DatabaseHelper.KEY_CAT_ID + " = " + cat_id
-                + " AND " + DatabaseHelper.KEY_TIME + " >= " + current;
+                + " AND " + DatabaseHelper.KEY_TIME + " >= " + current
+                + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
 
         Cursor cursor = db.rawQuery(query, null);
 

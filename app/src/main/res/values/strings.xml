@@ -8,6 +8,7 @@
     <!-- Hints -->
     <string name="title_hint">Title</string>
     <string name="date_hint">Time and date</string>
+    <string name="list_hint">List</string>
     <string name="birthday_hint">Birthday</string>
     <string name="name_hint">Name</string>
     <string name="desc_hint">Description</string>

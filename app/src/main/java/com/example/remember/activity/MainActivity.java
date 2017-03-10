@@ -49,12 +49,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (getIntent().hasExtra("alarm")) {
+            Reminder r = (Reminder) getIntent().getSerializableExtra(REMINDER_DETAILS);
+            Intent i = new Intent(this, ReminderDetailsActivity.class);
+            i.putExtra(REMINDER_DETAILS, r);
+            startActivity(i);
+        }
+
         setUpViews();
         setUpData();
         setUpSpinner();
 
         dataSource.close();
-
 
         // Listener for list item clicks
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(context, ReminderDetailsActivity.class);
                 intent.putExtra(REMINDER_DETAILS, r);
                 startActivity(intent);
-
             }
         });
 
