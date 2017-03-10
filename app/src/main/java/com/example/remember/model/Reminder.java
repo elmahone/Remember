@@ -170,7 +170,7 @@ public class Reminder implements Serializable {
     public String stringBirthDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(birthday);
-        return new SimpleDateFormat("MMMM dd. yyyy").format(cal.getTime());
+        return new SimpleDateFormat("MMMM dd. yyyy HH:mm").format(cal.getTime());
     }
 
     public String stringDate() {

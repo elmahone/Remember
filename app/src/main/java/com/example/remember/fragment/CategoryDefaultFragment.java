@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -30,23 +31,24 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class CategoryDefaultFragment extends Fragment {
+    private DataSource dataSource;
+    private int catId;
 
-    DataSource dataSource;
-    Calendar calendar;
-    int catId;
-    EditText title;
-    EditText date;
-    EditText desc;
+    private Calendar calendar = Calendar.getInstance();
+
+    private InputMethodManager inputManager;
+
+    private EditText title;
+    private EditText date;
+    private EditText desc;
 
     public CategoryDefaultFragment() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_category_default, container, false);
     }
 
@@ -89,7 +91,7 @@ public class CategoryDefaultFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar = Calendar.getInstance();
+                closeKeyboard();
                 new TimePickerDialog(getActivity(), timePicker,
                         calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
@@ -109,12 +111,21 @@ public class CategoryDefaultFragment extends Fragment {
         }
     }
 
+    // Find views from layout
     private void findViews() {
         title = (EditText) getView().findViewById(R.id.edit_reminder_title);
         date = (EditText) getView().findViewById(R.id.edit_reminder_date);
         desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
     }
 
+    // Update date text field with date gotten from calendar
+    private void updateLabel() {
+        String format = "dd.MM.yyyy HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+        date.setText(sdf.format(calendar.getTime()));
+    }
+
+    // Save new reminder to database
     private void saveReminder() {
         String t = title.getText().toString();
         String da = date.getText().toString();
@@ -134,12 +145,7 @@ public class CategoryDefaultFragment extends Fragment {
         }
     }
 
-    private void updateLabel() {
-        String format = "dd.MM.yyyy HH:mm";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-        date.setText(sdf.format(calendar.getTime()));
-    }
-
+    // Set alarm to notify on time gotten from calendar
     private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
         Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
 
@@ -149,6 +155,15 @@ public class CategoryDefaultFragment extends Fragment {
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
 
+    }
+
+    // Close keyboard
+    private void closeKeyboard() {
+        if (getActivity().getCurrentFocus() != null) {
+            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 }

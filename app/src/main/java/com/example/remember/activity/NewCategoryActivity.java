@@ -33,30 +33,34 @@ import java.util.List;
 
 public class NewCategoryActivity extends AppCompatActivity {
     private static final String TAG = "NewCategoryActivity";
-    private Context context = NewCategoryActivity.this;
+
     private DataSource dataSource;
     private IconAdapter adapter;
-    private List<Icon> icons;
-    private ColorPicker cp;
 
-    private RelativeLayout background;
-    private Button backgroundColor;
-    private EditText editCategory;
-    private ImageView iconView;
-    private Button iconColor;
-    private GridView grid;
-
+    private Context context = NewCategoryActivity.this;
+    private ColorPicker cp1;
+    private ColorPicker cp2;
     private int selectedIconPosition;
+
     private String selectedIconColor = "#FF000000";
     private String selectedIconBg = "#FFFFFFFF";
     private int selectedIcon;
+    private List<Icon> icons;
+    private RelativeLayout background;
+
+    private Button backgroundColor;
+    private Button iconColor;
+    private GridView grid;
+    private ImageView iconView;
+    private EditText editCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_category);
 
-        cp = new ColorPicker(NewCategoryActivity.this, 128, 128, 128);
+        cp1 = new ColorPicker(NewCategoryActivity.this, 128, 128, 128);
+        cp2 = new ColorPicker(NewCategoryActivity.this, 128, 128, 128);
 
         //region Find views
         background = (RelativeLayout) findViewById(R.id.icon_background);
@@ -79,8 +83,8 @@ public class NewCategoryActivity extends AppCompatActivity {
         backgroundColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cp.show();
-                cp.setOnColorSelected(new OnColorSelected() {
+                cp1.show();
+                cp1.setOnColorSelected(new OnColorSelected() {
                     @Override
                     public void returnColor(int col) {
                         Log.d("hex", Integer.toHexString(col));
@@ -89,7 +93,7 @@ public class NewCategoryActivity extends AppCompatActivity {
                         background.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
                                 new int[]{Color.parseColor(color)}));
                         selectedIconBg = color;
-                        cp.dismiss();
+                        cp1.dismiss();
                     }
                 });
             }
@@ -98,8 +102,8 @@ public class NewCategoryActivity extends AppCompatActivity {
         iconColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cp.show();
-                cp.setOnColorSelected(new OnColorSelected() {
+                cp2.show();
+                cp2.setOnColorSelected(new OnColorSelected() {
                     @Override
                     public void returnColor(int col) {
                         Log.d("hex", Integer.toHexString(col));
@@ -107,7 +111,7 @@ public class NewCategoryActivity extends AppCompatActivity {
                         iconView.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},
                                 new int[]{Color.parseColor(color)}));
                         selectedIconColor = color;
-                        cp.dismiss();
+                        cp2.dismiss();
 
                     }
                 });
@@ -147,9 +151,11 @@ public class NewCategoryActivity extends AppCompatActivity {
                 saveCategory();
                 return true;
             case R.id.action_settings:
+                //todo settings
                 return true;
 
             case R.id.action_off:
+                //todo quit
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -180,6 +186,5 @@ public class NewCategoryActivity extends AppCompatActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(i);
         }
-
     }
 }

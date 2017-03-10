@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="John"
         android:imeOptions="actionDone"
         android:inputType="textCapSentences"
         android:textSize="20sp" />
@@ -43,6 +42,5 @@
         android:id="@+id/edit_reminder_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Johns 40th birthday"
         android:textSize="20sp" />
 </LinearLayout>

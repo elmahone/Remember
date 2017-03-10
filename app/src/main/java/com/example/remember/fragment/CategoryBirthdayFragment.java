@@ -28,15 +28,18 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class CategoryBirthdayFragment extends Fragment {
-    InputMethodManager inputManager;
-    DataSource dataSource;
-    Calendar calendar;
-    Calendar thisYear = Calendar.getInstance();
-    Calendar today = Calendar.getInstance();
-    int catId;
-    EditText title;
-    EditText date;
-    EditText desc;
+    private DataSource dataSource;
+    private int catId;
+
+    private Calendar calendar = Calendar.getInstance();
+    private Calendar thisYear = Calendar.getInstance();
+    private Calendar today = Calendar.getInstance();
+
+    private InputMethodManager inputManager;
+
+    private EditText title;
+    private EditText date;
+    private EditText desc;
 
     public CategoryBirthdayFragment() {
     }
@@ -76,7 +79,6 @@ public class CategoryBirthdayFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar = Calendar.getInstance();
                 closeKeyboard();
                 new DatePickerDialog(getActivity(), datePicker,
                         calendar.get(Calendar.YEAR),
@@ -105,7 +107,19 @@ public class CategoryBirthdayFragment extends Fragment {
         desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
     }
 
-    // Save reminder to database
+    // Update date text field with date gotten from calendar
+    // Set default birthday description if field is empty
+    private void updateLabel() {
+        String format = "MMMM dd. yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+        String t = title.getText().toString();
+        date.setText(sdf.format(calendar.getTime()));
+        if (!getAge().matches("0")) {
+            desc.setText(t + " turns " + getAge());
+        }
+    }
+
+    // Save new reminder to database
     private void saveReminder() {
         String t = title.getText().toString();
         String da = date.getText().toString();
@@ -126,16 +140,15 @@ public class CategoryBirthdayFragment extends Fragment {
         }
     }
 
-    // Update date text field with calendar date
-    // Set default birthday description if field is empty
-    private void updateLabel() {
-        String format = "MMMM dd. yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-        String t = title.getText().toString();
-        date.setText(sdf.format(calendar.getTime()));
-        if (!getAge().matches("0")) {
-            desc.setText(t + " turns " + getAge());
-        }
+    // Set alarm to notify on time gotten from calendar
+    private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
+        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+        intent.putExtra("reminder", reminder);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
     }
 
     // Close keyboard
@@ -156,20 +169,11 @@ public class CategoryBirthdayFragment extends Fragment {
             thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
         }
         int age = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
-        if (thisYear.get(Calendar.DAY_OF_YEAR) < calendar.get(Calendar.DAY_OF_YEAR)) {
+ /*       if (thisYear.get(Calendar.MONTH) < calendar.get(Calendar.MONTH) && thisYear.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)) {
             age--;
         }
+        */
         Integer ageInt = age;
         return ageInt.toString();
-    }
-
-    private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
-        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-        intent.putExtra("reminder", reminder);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
     }
 }

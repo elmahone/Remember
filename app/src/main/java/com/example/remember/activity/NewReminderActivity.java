@@ -1,8 +1,6 @@
 package com.example.remember.activity;
 
-import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -14,13 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Toast;
-
 
 import com.example.remember.fragment.CategoryBirthdayFragment;
 import com.example.remember.fragment.CategoryDefaultFragment;
@@ -28,23 +21,21 @@ import com.example.remember.fragment.CategoryShoppingFragment;
 import com.example.remember.model.Category;
 import com.example.remember.model.Icon;
 import com.example.remember.R;
-import com.example.remember.model.Reminder;
 import com.example.remember.adapter.CategoryAdapter;
 import com.example.remember.database.DataSource;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class NewReminderActivity extends AppCompatActivity {
     private static final String TAG = "NewReminderActivity";
+
     private DataSource dataSource;
-    private Calendar calendar = Calendar.getInstance();
-    private Spinner spinner;
+    private CategoryAdapter adapter;
+
     private List<Category> categories;
     private List<Icon> icons;
-    private CategoryAdapter adapter;
+
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +95,6 @@ public class NewReminderActivity extends AppCompatActivity {
             save.mutate();
             save.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
         }
-
         return true;
     }
 
@@ -116,9 +106,11 @@ public class NewReminderActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_settings:
+                //todo settings
                 return true;
 
             case R.id.action_off:
+                //todo quit
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

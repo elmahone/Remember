@@ -30,22 +30,24 @@ import com.example.remember.database.DataSource;
 
 public class ReminderDetailsActivity extends AppCompatActivity {
     private static final String TAG = "ReminderDetailsActivity";
-    DataSource dataSource;
-    Context context = ReminderDetailsActivity.this;
-    Reminder reminder;
-    Category category;
-    Icon icon;
-    Intent intent;
 
+    private DataSource dataSource;
+    private Category category;
+    private Reminder reminder;
+    private Icon icon;
+
+    private Context context = ReminderDetailsActivity.this;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_details);
 
-        dataSource = new DataSource(context);
         intent = getIntent();
         reminder = (Reminder) intent.getSerializableExtra(MainActivity.REMINDER_DETAILS);
+
+        dataSource = new DataSource(context);
         category = dataSource.getCategory(reminder.getCategory());
         icon = dataSource.getIcon(category.getIcon());
 

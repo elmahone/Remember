@@ -19,18 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReminderDetailsFragment extends Fragment {
-    Reminder reminder;
-    Category category;
+    private Reminder reminder;
+    private Category category;
+    private ShoppingListAdapter adapter;
 
-    //default layout
-    TextView reminderTitle;
-    TextView reminderDate;
-    TextView reminderDesc;
+    private List<String> values = new ArrayList<>();
 
-    //shopping list layout
-    List<String> values = new ArrayList<>();
-    ListView shoppingList;
-    ShoppingListAdapter adapter;
+    private ListView shoppingList;
+    private TextView reminderTitle;
+    private TextView reminderDate;
+    private TextView reminderDesc;
 
     public ReminderDetailsFragment() {
     }

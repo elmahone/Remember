@@ -9,14 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,19 +36,22 @@ import java.util.List;
 import java.util.Locale;
 
 public class CategoryShoppingFragment extends Fragment {
-    DataSource dataSource;
-    int catId;
-    InputMethodManager inputManager;
-    Calendar calendar;
-    ShoppingListAdapter adapter;
+    private DataSource dataSource;
+    private int catId;
+    private ShoppingListAdapter adapter;
 
-    List<String> values = new ArrayList<>();
-    EditText title;
-    Button addRow;
-    EditText date;
-    EditText newListItem;
-    ListView shoppingList;
-    String newItem;
+    private Calendar calendar = Calendar.getInstance();
+
+    private InputMethodManager inputManager;
+
+    private List<String> values = new ArrayList<>();
+    private String newItem;
+
+    private Button addRow;
+    private ListView shoppingList;
+    private EditText date;
+    private EditText newListItem;
+    private EditText title;
 
     public CategoryShoppingFragment() {
     }
@@ -105,7 +106,6 @@ public class CategoryShoppingFragment extends Fragment {
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar = Calendar.getInstance();
                 closeKeyboard();
                 new TimePickerDialog(getActivity(), timePicker,
                         calendar.get(Calendar.HOUR_OF_DAY),
@@ -142,6 +142,7 @@ public class CategoryShoppingFragment extends Fragment {
         }
     }
 
+    // Find views from layout
     private void findViews() {
         title = (EditText) getView().findViewById(R.id.edit_reminder_title);
         date = (EditText) getView().findViewById(R.id.edit_reminder_date);
@@ -150,14 +151,24 @@ public class CategoryShoppingFragment extends Fragment {
         addRow = (Button) getView().findViewById(R.id.add_new_list_item);
     }
 
-    // Shopping list doesn't require date?
+    // Update date text field with date gotten from calendar
+    private void updateLabel() {
+        String format = "dd.MM.yyyy HH:mm";
+        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+        date.setText(sdf.format(calendar.getTime()));
+    }
 
+    // Save new reminder to database
     private void saveReminder() {
         String t = title.getText().toString();
         String da = date.getText().toString();
         List<String> shopping = adapter.getItems();
-        if (!t.matches("") && !da.matches("")) {
+        if (!t.matches("")) {
             Reminder reminder = new Reminder(t, shopping, catId, calendar.getTimeInMillis());
+            reminder.setTitle(t);
+            reminder.setList(shopping);
+            reminder.setCategory(catId);
+
             int id = (int) dataSource.createReminder(reminder);
             dataSource.close();
             setAlarm(calendar, reminder, id);
@@ -171,20 +182,7 @@ public class CategoryShoppingFragment extends Fragment {
         }
     }
 
-    private void closeKeyboard() {
-        if (getActivity().getCurrentFocus() != null) {
-            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
-
-    private void updateLabel() {
-        String format = "dd.MM.yyyy HH:mm";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-        date.setText(sdf.format(calendar.getTime()));
-    }
-
+    // Set alarm to notify on time gotten from calendar
     private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
         Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
 
@@ -193,6 +191,15 @@ public class CategoryShoppingFragment extends Fragment {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
+    }
+
+    // Close keyboard
+    private void closeKeyboard() {
+        if (getActivity().getCurrentFocus() != null) {
+            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
 

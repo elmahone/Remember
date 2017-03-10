@@ -43,28 +43,26 @@ import java.util.List;
 import java.util.Locale;
 
 public class ReminderEditFragment extends Fragment {
-    InputMethodManager inputManager;
-    DataSource dataSource;
-    Calendar calendar = Calendar.getInstance();
-    Calendar thisYear = Calendar.getInstance();
-    Calendar today = Calendar.getInstance();
+    private DataSource dataSource;
+    private Category category;
+    private Reminder reminder;
+    private ShoppingListAdapter adapter;
 
-    Reminder reminder;
-    Category category;
-    List<String> values = new ArrayList<>();
+    private Calendar calendar = Calendar.getInstance();
+    private Calendar thisYear = Calendar.getInstance();
+    private Calendar today = Calendar.getInstance();
 
-    EditText title;
-    EditText date;
+    private InputMethodManager inputManager;
 
-    //Default
-    EditText desc;
+    private List<String> values = new ArrayList<>();
+    private String newItem;
 
-    //Shopping
-    ShoppingListAdapter adapter;
-    Button addRow;
-    ListView shoppingList;
-    EditText newListItem;
-    String newItem;
+    private Button addRow;
+    private ListView shoppingList;
+    private EditText title;
+    private EditText date;
+    private EditText desc;
+    private EditText newListItem;
 
     public ReminderEditFragment() {
     }
@@ -253,6 +251,24 @@ public class ReminderEditFragment extends Fragment {
         }
     }
 
+    // Update date text field with calendar date
+    // Set default birthday description if field is empty
+    private void updateLabel() {
+        if (category.getCategory().matches("Birthday")) {
+            String format = "MMMM dd. yyyy";
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+            String t = title.getText().toString();
+            date.setText(sdf.format(calendar.getTime()));
+            if (!getAge().matches("0") && desc.getText().toString().matches("")) {
+                desc.setText(t + " turns " + getAge());
+            }
+        } else {
+            String format = "dd.MM.yyyy HH:mm";
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
+            date.setText(sdf.format(calendar.getTime()));
+        }
+    }
+
     // Save edited fields to database
     private void saveChanges() {
         if (!title.getText().toString().matches("")) {
@@ -292,22 +308,15 @@ public class ReminderEditFragment extends Fragment {
         }
     }
 
-    // Update date text field with calendar date
-    // Set default birthday description if field is empty
-    private void updateLabel() {
-        if (category.getCategory().matches("Birthday")) {
-            String format = "MMMM dd. yyyy";
-            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-            String t = title.getText().toString();
-            date.setText(sdf.format(calendar.getTime()));
-            if (!getAge().matches("0") && desc.getText().toString().matches("")) {
-                desc.setText(t + " turns " + getAge());
-            }
-        } else {
-            String format = "dd.MM.yyyy HH:mm";
-            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-            date.setText(sdf.format(calendar.getTime()));
-        }
+    // Cancel previous alarm and set new alarm to notify on time gotten from calendar
+    private void setAlarm(Calendar targetCal, Reminder reminder) {
+        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+        intent.putExtra("reminder", reminder);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), reminder.getId(), intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
     }
 
     // Close keyboard
@@ -329,21 +338,8 @@ public class ReminderEditFragment extends Fragment {
         }
 
         int age = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
-        if (thisYear.get(Calendar.DAY_OF_YEAR) < calendar.get(Calendar.DAY_OF_YEAR)) {
-            age--;
-        }
 
         Integer ageInt = age;
         return ageInt.toString();
-    }
-
-    private void setAlarm(Calendar targetCal, Reminder reminder) {
-        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-        intent.putExtra("reminder", reminder);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), reminder.getId(), intent, 0);
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
     }
 }

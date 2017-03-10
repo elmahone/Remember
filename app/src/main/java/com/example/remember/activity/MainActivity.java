@@ -7,7 +7,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,19 +29,23 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     public final static String REMINDER_DETAILS = "com.example.remember.REMINDER_DETAILS";
+
+    private CategoryAdapter catAdapter;
+    private ReminderAdapter remAdapter;
     private DataSource dataSource;
+    private int catId;
+
+    private long currentTime = new Date().getTime();
+    private Context context = MainActivity.this;
+    private Intent intent;
+
+    private List<Category> categories = new ArrayList<>();
+    private List<Reminder> reminders = new ArrayList<>();
+    private List<Category> spinCat = new ArrayList<>();
+    private List<Icon> icons = new ArrayList<>();
+
     private ListView listView;
     private Spinner spinner;
-    private List<Reminder> reminders = new ArrayList<>();
-    private List<Icon> icons = new ArrayList<>();
-    private List<Category> categories = new ArrayList<>();
-    private List<Category> spinCat = new ArrayList<>();
-    private ReminderAdapter remAdapter;
-    private CategoryAdapter catAdapter;
-    private Intent intent;
-    private Context context = MainActivity.this;
-    private int catId;
-    private long currentTime = new Date().getTime();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,9 +118,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_settings:
+                //todo settings
                 return true;
 
             case R.id.action_off:
+                //todo quit
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -142,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         categories = dataSource.getAllCategories();
         spinCat = dataSource.getAllCategories();
         spinCat.add(0, new Category("All", "#e2e2e2", "#00FFFFFF", 0));
-        Log.v(TAG, icons.size() + "");
         setUpListView(reminders, categories);
     }
 
@@ -154,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
 
     //region Menu buttons
     private void addReminder() {
-        Log.v(TAG, "Add button clicked");
         intent = new Intent(context, NewReminderActivity.class);
         startActivity(intent);
     }
