@@ -1,20 +1,27 @@
 package com.example.remember.fragment;
 
+
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -28,33 +35,38 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class CategoryImportantFragment extends Fragment {
+import static android.app.Activity.RESULT_OK;
+
+public class CategoryPhoneFragment extends Fragment {
     private DataSource dataSource;
     private int catId;
 
     private Calendar calendar = Calendar.getInstance();
+    public final int PICK_CONTACT = 1;
 
     private InputMethodManager inputManager;
 
+    private Button contactsBtn;
     private EditText title;
     private EditText date;
-    private EditText desc;
+    private EditText phoneNum;
 
-    public CategoryImportantFragment() {
+    public CategoryPhoneFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_category_important, container, false);
+        return inflater.inflate(R.layout.fragment_category_phone, container, false);
     }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataSource = new DataSource(getActivity());
         catId = getArguments().getInt("category");
+
         findViews();
 
         //region DatePicker & TimePicker listeners
@@ -85,7 +97,7 @@ public class CategoryImportantFragment extends Fragment {
         };
         //endregion
 
-        // Date click listener
+        //region Click listeners
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +108,34 @@ public class CategoryImportantFragment extends Fragment {
                         true).show();
             }
         });
+
+        contactsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(i, PICK_CONTACT);
+            }
+        });
+        //endregion
+    }
+
+    // Receive selected contacts information
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
+            Uri contactUri = data.getData();
+            Cursor cursor = getActivity().getContentResolver().query(contactUri, null, null, null, null);
+            cursor.moveToFirst();
+            int columnNum = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            int columnName = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            String phone = cursor.getString(columnNum);
+            String contact = cursor.getString(columnName);
+
+            if (title.getText().toString().matches("")) {
+                title.setText("Call " + contact);
+            }
+            phoneNum.setText(phone);
+        }
     }
 
     @Override
@@ -113,7 +153,8 @@ public class CategoryImportantFragment extends Fragment {
     private void findViews() {
         title = (EditText) getView().findViewById(R.id.edit_reminder_title);
         date = (EditText) getView().findViewById(R.id.edit_reminder_date);
-        desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
+        phoneNum = (EditText) getView().findViewById(R.id.edit_reminder_phone);
+        contactsBtn = (Button) getView().findViewById(R.id.contacts_button);
     }
 
     // Update date text field with date gotten from calendar
@@ -127,9 +168,9 @@ public class CategoryImportantFragment extends Fragment {
     private void saveReminder() {
         String t = title.getText().toString();
         String da = date.getText().toString();
-        String de = desc.getText().toString();
+        String phone = phoneNum.getText().toString();
         if (!t.matches("") && !da.matches("")) {
-            Reminder reminder = new Reminder(t, de, catId, calendar.getTimeInMillis());
+            Reminder reminder = new Reminder(t, phone, catId, calendar.getTimeInMillis());
             int id = (int) dataSource.createReminder(reminder);
             dataSource.close();
             setAlarm(calendar, reminder, id);
@@ -149,7 +190,6 @@ public class CategoryImportantFragment extends Fragment {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
-
     }
 
     // Close keyboard

@@ -18,6 +18,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.example.remember.fragment.CategoryBirthdayFragment;
 import com.example.remember.fragment.CategoryDefaultFragment;
 import com.example.remember.fragment.CategoryImportantFragment;
+import com.example.remember.fragment.CategoryPhoneFragment;
 import com.example.remember.fragment.CategoryShoppingFragment;
 import com.example.remember.model.Category;
 import com.example.remember.model.Icon;
@@ -137,6 +138,14 @@ public class NewReminderActivity extends AppCompatActivity {
     }
 
     private void showPhoneCallFragment(int catId) {
+        CategoryPhoneFragment fragment = new CategoryPhoneFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("category", catId);
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_content, fragment);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        transaction.commit();
     }
 
     private void showImportantFragment(int catId) {

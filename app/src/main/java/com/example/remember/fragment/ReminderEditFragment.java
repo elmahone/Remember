@@ -7,11 +7,14 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +45,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ReminderEditFragment extends Fragment {
     private DataSource dataSource;
     private Category category;
@@ -54,14 +59,17 @@ public class ReminderEditFragment extends Fragment {
 
     private InputMethodManager inputManager;
 
+    public final int PICK_CONTACT = 1;
     private List<String> values = new ArrayList<>();
     private String newItem;
 
     private Button addRow;
+    private Button contactsBtn;
     private ListView shoppingList;
     private EditText title;
     private EditText date;
     private EditText desc;
+    private EditText phone;
     private EditText newListItem;
 
     public ReminderEditFragment() {
@@ -84,9 +92,9 @@ public class ReminderEditFragment extends Fragment {
             case "Birthday":
                 return inflater.inflate(R.layout.fragment_category_birthday, container, false);
             case "Phone Call":
-                return inflater.inflate(R.layout.fragment_category_default, container, false);
+                return inflater.inflate(R.layout.fragment_category_phone, container, false);
             case "Important":
-                return inflater.inflate(R.layout.fragment_category_default, container, false);
+                return inflater.inflate(R.layout.fragment_category_important, container, false);
             case "Shopping":
                 return inflater.inflate(R.layout.fragment_category_shopping, container, false);
             default:
@@ -138,7 +146,7 @@ public class ReminderEditFragment extends Fragment {
         };
         //endregion
 
-        // Date click listener
+        //region Click listeners
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,8 +182,37 @@ public class ReminderEditFragment extends Fragment {
                 }
             });
         }
+
+        if (contactsBtn != null) {
+            contactsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                    startActivityForResult(i, PICK_CONTACT);
+                }
+            });
+        }
+        //endregion
+
     }
 
+    // Receive selected contacts information
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
+            Uri contactUri = data.getData();
+            Cursor cursor = getActivity().getContentResolver().query(contactUri, null, null, null, null);
+            cursor.moveToFirst();
+            int columnNum = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            int columnName = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            String phoneNum = cursor.getString(columnNum);
+            String contact = cursor.getString(columnName);
+            if (title.getText().toString().matches("")) {
+                title.setText("Call " + contact);
+            }
+            phone.setText(phoneNum);
+        }
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -212,6 +249,8 @@ public class ReminderEditFragment extends Fragment {
                 desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
                 break;
             case "Phone Call":
+                phone = (EditText) getView().findViewById(R.id.edit_reminder_phone);
+                contactsBtn = (Button) getView().findViewById(R.id.contacts_button);
                 break;
             case "Important":
                 desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
@@ -237,6 +276,7 @@ public class ReminderEditFragment extends Fragment {
                 date.setText(reminder.stringBirthDate());
                 break;
             case "Phone Call":
+                phone.setText(reminder.getDescription());
                 break;
             case "Important":
                 desc.setText(reminder.getDescription());
@@ -283,6 +323,9 @@ public class ReminderEditFragment extends Fragment {
                     setAlarm(thisYear, reminder);
                     break;
                 case "Phone Call":
+                    reminder.setDescription(phone.getText().toString());
+                    reminder.setTime(calendar.getTimeInMillis());
+                    setAlarm(calendar, reminder);
                     break;
                 case "Important":
                     reminder.setDescription(desc.getText().toString());
