@@ -14,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataSource {
-    private static final String TAG = "DatabaseHelper";
+    private static final String TAG = "DatabaseSource";
 
-    private SQLiteDatabase db;
     private DatabaseHelper helper;
+    private SQLiteDatabase db;
 
     public DataSource(Context context) {
         helper = new DatabaseHelper(context);

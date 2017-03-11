@@ -179,8 +179,6 @@ public class NewCategoryActivity extends AppCompatActivity {
             dataSource.createCategory(category);
             dataSource.close();
 
-            Toast.makeText(context, "Category " + catName + " created!", Toast.LENGTH_SHORT).show();
-
             // Go back to new reminder activity
             Intent i = new Intent(context, NewReminderActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);

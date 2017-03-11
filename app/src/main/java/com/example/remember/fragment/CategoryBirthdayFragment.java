@@ -66,11 +66,6 @@ public class CategoryBirthdayFragment extends Fragment {
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateLabel();
-                if (calendar.get(Calendar.YEAR) == thisYear.get(Calendar.YEAR)) {
-                    Toast.makeText(getActivity(), "This year", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), getAge(), Toast.LENGTH_SHORT).show();
-                }
             }
         };
         //endregion
@@ -134,7 +129,6 @@ public class CategoryBirthdayFragment extends Fragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getActivity(), "Reminder needs a title and a date", Toast.LENGTH_SHORT).show();
         }
@@ -142,8 +136,6 @@ public class CategoryBirthdayFragment extends Fragment {
 
     // Set alarm to notify on time gotten from calendar
     private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
-        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
-
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
         intent.putExtra("reminder", reminder);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);

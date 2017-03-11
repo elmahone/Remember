@@ -165,7 +165,6 @@ public class ReminderEditFragment extends Fragment {
                 public void onClick(View view) {
                     newItem = newListItem.getText().toString();
                     if (!newItem.matches("")) {
-                        Toast.makeText(getActivity(), newItem, Toast.LENGTH_SHORT).show();
                         adapter.addItem(newItem);
                         newListItem.setText("");
                         closeKeyboard();
@@ -298,7 +297,6 @@ public class ReminderEditFragment extends Fragment {
             }
             dataSource.updateReminder(reminder);
             dataSource.close();
-            Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
             // Send back to activity when saved
             Intent intent = new Intent(getActivity(), getActivity().getClass());
             intent.putExtra(MainActivity.REMINDER_DETAILS, reminder);
@@ -310,7 +308,6 @@ public class ReminderEditFragment extends Fragment {
 
     // Cancel previous alarm and set new alarm to notify on time gotten from calendar
     private void setAlarm(Calendar targetCal, Reminder reminder) {
-        Toast.makeText(getActivity(), "Alarm is set", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
         intent.putExtra("reminder", reminder);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), reminder.getId(), intent, 0);

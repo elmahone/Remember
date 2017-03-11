@@ -22,7 +22,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Reminder r = (Reminder) intent.getSerializableExtra("reminder");
-        Toast.makeText(context, r.getTitle() + " Received!", Toast.LENGTH_SHORT).show();
         showNotification(context, r);
 
         Intent launch_intent = new Intent(context, MainActivity.class);
