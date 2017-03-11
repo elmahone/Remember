@@ -76,6 +76,7 @@ public class ReminderDetailsFragment extends Fragment {
             case "Phone Call":
                 break;
             case "Important":
+                reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
                 break;
             case "Shopping":
                 shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
@@ -98,6 +99,7 @@ public class ReminderDetailsFragment extends Fragment {
             case "Phone Call":
                 break;
             case "Important":
+                reminderDesc.setText(reminder.getDescription());
                 break;
             case "Shopping":
                 values = reminder.getList();

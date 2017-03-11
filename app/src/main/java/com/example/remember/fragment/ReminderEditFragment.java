@@ -214,6 +214,7 @@ public class ReminderEditFragment extends Fragment {
             case "Phone Call":
                 break;
             case "Important":
+                desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
                 break;
             case "Shopping":
                 shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
@@ -238,6 +239,7 @@ public class ReminderEditFragment extends Fragment {
             case "Phone Call":
                 break;
             case "Important":
+                desc.setText(reminder.getDescription());
                 break;
             case "Shopping":
                 values = reminder.getList();
@@ -283,6 +285,9 @@ public class ReminderEditFragment extends Fragment {
                 case "Phone Call":
                     break;
                 case "Important":
+                    reminder.setDescription(desc.getText().toString());
+                    reminder.setTime(calendar.getTimeInMillis());
+                    setAlarm(calendar, reminder);
                     break;
                 case "Shopping":
                     reminder.setList(adapter.getItems());

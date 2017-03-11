@@ -89,7 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //region Create default icons
         createIcon(db, R.drawable.ic_default);
-        createIcon(db, R.drawable.ic_exercise);
+        createIcon(db, R.drawable.ic_movies);
         createIcon(db, R.drawable.ic_shopping);
         createIcon(db, R.drawable.ic_birthday);
         createIcon(db, R.drawable.ic_phone);
@@ -104,7 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createIcon(db, R.drawable.ic_location);
         createIcon(db, R.drawable.ic_mail);
         createIcon(db, R.drawable.ic_money);
-        createIcon(db, R.drawable.ic_movies);
+        createIcon(db, R.drawable.ic_exercise);
         //endregion
 
         //region Create default categories
@@ -117,7 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.clear();
 
         values = new ContentValues();
-        values.put(KEY_CAT_NAME, "Exercise");
+        values.put(KEY_CAT_NAME, "Movie");
         values.put(KEY_BG_COLOR, "#FF4848");
         values.put(KEY_ICON_COLOR, "#000000");
         values.put(KEY_ICON_ID, 2);

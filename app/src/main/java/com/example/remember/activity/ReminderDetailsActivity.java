@@ -111,6 +111,4 @@ public class ReminderDetailsActivity extends AppCompatActivity {
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
     }
-
-
 }

@@ -5,6 +5,8 @@
     <string name="category_label">Select Category</string>
     <string name="new_category_label">New Category</string>
 
+    <string name="important_msg">Important reminders are shown under each category</string>
+
     <!-- Hints -->
     <string name="title_hint">Title</string>
     <string name="date_hint">Time and date</string>
@@ -26,7 +28,5 @@
     <string name="bg_color_button">Background color</string>
     <string name="icon_color_button">Icon color</string>
     <string name="add_button">Add</string>
-
-
 
 </resources>

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataSource {
-    private static final String TAG = "DatabaseSource";
+    private static final String TAG = "DataSource";
 
     private DatabaseHelper helper;
     private SQLiteDatabase db;
@@ -130,6 +130,7 @@ public class DataSource {
         List<Reminder> reminders = new ArrayList<>();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER
                 + " WHERE " + DatabaseHelper.KEY_CAT_ID + " = " + cat_id
+                + " OR " + DatabaseHelper.KEY_CAT_ID + " = 6"
                 + " AND " + DatabaseHelper.KEY_TIME + " >= " + current
                 + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
 
