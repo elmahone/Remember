@@ -72,7 +72,11 @@ public class ReminderAdapter extends BaseAdapter {
         //set title, date and description
         header.setText(reminder.getTitle());
         date.setText(reminder.stringDate());
-        text.setText(reminder.getDescription());
+        if (!category.getCategory().matches("Movie")) {
+            text.setText(reminder.getDescription());
+        } else {
+            text.setText("");
+        }
 
         //set icons background color
         cat_icon_bg.setBackgroundTintList(new ColorStateList(new int[][]{new int[]{}},

@@ -7,17 +7,18 @@
 
     <EditText
         android:id="@+id/new_list_item"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="17sp"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:imeOptions="actionDone"
-        android:inputType="textCapSentences" />
+        android:inputType="textCapSentences"
+        android:textSize="17sp" />
 
     <Button
         android:id="@+id/add_new_list_item"
+        android:layout_gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:text="Add" />
 </LinearLayout>

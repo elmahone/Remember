@@ -1,18 +1,23 @@
 package com.example.remember.fragment;
 
 import android.content.Intent;
+import android.graphics.Point;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.remember.R;
+import com.example.remember.activity.ShowImageActivity;
 import com.example.remember.adapter.ShoppingListAdapter;
 import com.example.remember.model.Category;
 import com.example.remember.model.Reminder;
@@ -28,6 +33,7 @@ public class ReminderDetailsFragment extends Fragment {
     private List<String> values = new ArrayList<>();
 
     private Button callButton;
+    private ImageView image;
     private ListView shoppingList;
     private TextView reminderTitle;
     private TextView reminderDate;
@@ -57,6 +63,8 @@ public class ReminderDetailsFragment extends Fragment {
                 return inflater.inflate(R.layout.fragment_category_important_details, container, false);
             case "Shopping":
                 return inflater.inflate(R.layout.fragment_category_shopping_details, container, false);
+            case "Movie":
+                return inflater.inflate(R.layout.fragment_category_movie_details, container, false);
             default:
                 return inflater.inflate(R.layout.fragment_reminder_details, container, false);
         }
@@ -75,6 +83,16 @@ public class ReminderDetailsFragment extends Fragment {
                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
                     callIntent.setData(Uri.parse("tel:" + reminder.getDescription()));
                     startActivity(callIntent);
+                }
+            });
+        }
+        if (image != null) {
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), ShowImageActivity.class);
+                    intent.putExtra("imageUri", reminder.getDescription());
+                    startActivity(intent);
                 }
             });
         }
@@ -97,6 +115,9 @@ public class ReminderDetailsFragment extends Fragment {
                 break;
             case "Shopping":
                 shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
+                break;
+            case "Movie":
+                image = (ImageView) getView().findViewById(R.id.imageView);
                 break;
             default:
                 reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
@@ -128,6 +149,15 @@ public class ReminderDetailsFragment extends Fragment {
                 values = reminder.getList();
                 adapter = new ShoppingListAdapter(getActivity(), values, false);
                 shoppingList.setAdapter(adapter);
+                break;
+            case "Movie":
+                Display display = getActivity().getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int height = size.y;
+                image.getLayoutParams().height = height;
+
+                image.setImageURI(Uri.parse(reminder.getDescription()));
                 break;
             default:
                 reminderDesc.setText(reminder.getDescription());

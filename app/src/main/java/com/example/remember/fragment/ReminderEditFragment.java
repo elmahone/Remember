@@ -9,12 +9,16 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +29,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -33,6 +38,7 @@ import android.widget.Toast;
 import com.example.remember.AlarmReceiver;
 import com.example.remember.R;
 import com.example.remember.activity.MainActivity;
+import com.example.remember.activity.ShowImageActivity;
 import com.example.remember.adapter.ShoppingListAdapter;
 import com.example.remember.database.DataSource;
 import com.example.remember.model.Category;
@@ -60,11 +66,16 @@ public class ReminderEditFragment extends Fragment {
     private InputMethodManager inputManager;
 
     public final int PICK_CONTACT = 1;
+    public final int PICK_IMAGE = 2;
+    private String selectedImagePath;
+    private Uri selectedImageUri;
     private List<String> values = new ArrayList<>();
     private String newItem;
 
     private Button addRow;
     private Button contactsBtn;
+    private Button imageBtn;
+    private ImageView image;
     private ListView shoppingList;
     private EditText title;
     private EditText date;
@@ -97,6 +108,8 @@ public class ReminderEditFragment extends Fragment {
                 return inflater.inflate(R.layout.fragment_category_important, container, false);
             case "Shopping":
                 return inflater.inflate(R.layout.fragment_category_shopping, container, false);
+            case "Movie":
+                return inflater.inflate(R.layout.fragment_category_movie, container, false);
             default:
                 return inflater.inflate(R.layout.fragment_category_default, container, false);
         }
@@ -192,6 +205,27 @@ public class ReminderEditFragment extends Fragment {
                 }
             });
         }
+
+        if (imageBtn != null) {
+            imageBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select picture"), PICK_IMAGE);
+                }
+            });
+
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), ShowImageActivity.class);
+                    intent.putExtra("imageUri", reminder.getDescription());
+                    startActivity(intent);
+                }
+            });
+        }
         //endregion
 
     }
@@ -211,6 +245,11 @@ public class ReminderEditFragment extends Fragment {
                 title.setText("Call " + contact);
             }
             phone.setText(phoneNum);
+        }
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            selectedImageUri = data.getData();
+            selectedImagePath = selectedImageUri + "";
+            image.setImageURI(selectedImageUri);
         }
     }
 
@@ -260,6 +299,10 @@ public class ReminderEditFragment extends Fragment {
                 addRow = (Button) getView().findViewById(R.id.add_new_list_item);
                 newListItem = (EditText) getView().findViewById(R.id.new_list_item);
                 break;
+            case "Movie":
+                imageBtn = (Button) getView().findViewById(R.id.image_button);
+                image = (ImageView) getView().findViewById(R.id.imageView);
+                break;
             default:
                 desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
                 break;
@@ -285,6 +328,16 @@ public class ReminderEditFragment extends Fragment {
                 values = reminder.getList();
                 adapter = new ShoppingListAdapter(getActivity(), values, true);
                 shoppingList.setAdapter(adapter);
+                break;
+            case "Movie":
+                selectedImagePath = reminder.getDescription();
+                Display display = getActivity().getWindowManager().getDefaultDisplay();
+                Point size = new Point();
+                display.getSize(size);
+                int height = size.y;
+                image.getLayoutParams().height = height;
+
+                image.setImageURI(Uri.parse(selectedImagePath));
                 break;
             default:
                 desc.setText(reminder.getDescription());
@@ -334,6 +387,11 @@ public class ReminderEditFragment extends Fragment {
                     break;
                 case "Shopping":
                     reminder.setList(adapter.getItems());
+                    reminder.setTime(calendar.getTimeInMillis());
+                    setAlarm(calendar, reminder);
+                    break;
+                case "Movie":
+                    reminder.setDescription(selectedImagePath);
                     reminder.setTime(calendar.getTimeInMillis());
                     setAlarm(calendar, reminder);
                     break;

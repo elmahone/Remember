@@ -3,6 +3,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/default_category_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -10,40 +11,37 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/name_hint" />
+            android:text="@string/title_hint" />
 
-        <EditText
-            android:id="@+id/edit_reminder_title"
+        <TextView
+            android:id="@+id/reminder_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:imeOptions="actionDone"
-            android:inputType="textCapSentences"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/birthday_hint" />
+            android:text="@string/date_hint" />
 
-        <EditText
-            android:id="@+id/edit_reminder_date"
+        <TextView
+            android:id="@+id/reminder_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:focusable="false"
-            android:hint="31.12.1987"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/desc_hint" />
+            android:layout_marginBottom="10dp"
+            android:text="@string/movie_hint" />
 
-        <EditText
-            android:id="@+id/edit_reminder_description"
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            android:layout_height="match_parent"
+            android:scaleType="fitStart" />
     </LinearLayout>
 </ScrollView>

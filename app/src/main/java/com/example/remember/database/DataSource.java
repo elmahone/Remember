@@ -130,6 +130,7 @@ public class DataSource {
         List<Reminder> reminders = new ArrayList<>();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER
                 + " WHERE " + DatabaseHelper.KEY_CAT_ID + " = " + cat_id
+                + " AND " + DatabaseHelper.KEY_TIME + " >= " + current
                 + " OR " + DatabaseHelper.KEY_CAT_ID + " = 6"
                 + " AND " + DatabaseHelper.KEY_TIME + " >= " + current
                 + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";

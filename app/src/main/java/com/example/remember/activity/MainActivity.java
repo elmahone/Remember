@@ -62,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
         setUpViews();
         setUpData();
         setUpSpinner();
-
+        //todo add filter spinner (today, tomorrow, this week, this month,...)
+        
         dataSource.close();
 
         // Listener for list item clicks

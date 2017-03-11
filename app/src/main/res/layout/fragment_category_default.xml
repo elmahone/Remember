@@ -1,45 +1,49 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/default_category_fragment"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/default_category_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_hint" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/edit_reminder_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:imeOptions="actionDone"
-        android:inputType="textCapSentences"
-        android:textSize="20sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_hint" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/date_hint" />
+        <EditText
+            android:id="@+id/edit_reminder_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:imeOptions="actionDone"
+            android:inputType="textCapSentences"
+            android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/edit_reminder_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:focusable="false"
-        android:textSize="20sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/date_hint" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/desc_hint" />
+        <EditText
+            android:id="@+id/edit_reminder_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:focusable="false"
+            android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/edit_reminder_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/desc_hint" />
 
-</LinearLayout>
+        <EditText
+            android:id="@+id/edit_reminder_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+    </LinearLayout>
+</ScrollView>

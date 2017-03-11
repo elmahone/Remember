@@ -3,7 +3,9 @@
     package="com.example.remember">
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -33,7 +35,14 @@
             android:noHistory="true"
             android:parentActivityName=".activity.NewReminderActivity"
             android:windowSoftInputMode="stateHidden" />
-        <receiver android:name=".AlarmReceiver" android:process=":remote" />
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:process=":remote" />
+
+        <activity
+            android:name=".activity.ShowImageActivity"
+            android:theme="@style/AppTheme.NoActionBar.Fullscreen" />
     </application>
 
 </manifest>

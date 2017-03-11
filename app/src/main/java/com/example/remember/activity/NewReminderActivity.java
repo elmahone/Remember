@@ -1,5 +1,6 @@
 package com.example.remember.activity;
 
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import com.example.remember.fragment.CategoryBirthdayFragment;
 import com.example.remember.fragment.CategoryDefaultFragment;
 import com.example.remember.fragment.CategoryImportantFragment;
+import com.example.remember.fragment.CategoryMovieFragment;
 import com.example.remember.fragment.CategoryPhoneFragment;
 import com.example.remember.fragment.CategoryShoppingFragment;
 import com.example.remember.model.Category;
@@ -60,19 +62,28 @@ public class NewReminderActivity extends AppCompatActivity {
 
                 switch (name) {
                     case "Birthday":
-                        showBirthdayFragment(catId);
+                        CategoryBirthdayFragment birthdayFragment = new CategoryBirthdayFragment();
+                        showFragment(catId, birthdayFragment);
                         break;
                     case "Phone Call":
-                        showPhoneCallFragment(catId);
+                        CategoryPhoneFragment phoneFragment = new CategoryPhoneFragment();
+                        showFragment(catId, phoneFragment);
                         break;
                     case "Important":
-                        showImportantFragment(catId);
+                        CategoryImportantFragment importantFragment = new CategoryImportantFragment();
+                        showFragment(catId, importantFragment);
                         break;
                     case "Shopping":
-                        showShoppingFragment(catId);
+                        CategoryShoppingFragment shoppingFragment = new CategoryShoppingFragment();
+                        showFragment(catId, shoppingFragment);
+                        break;
+                    case "Movie":
+                        CategoryMovieFragment movieFragment = new CategoryMovieFragment();
+                        showFragment(catId, movieFragment);
                         break;
                     default:
-                        showDefaultFragment(catId);
+                        CategoryDefaultFragment defaultFragment = new CategoryDefaultFragment();
+                        showFragment(catId, defaultFragment);
                         break;
                 }
                 Log.v(TAG, name + " Selected");
@@ -124,21 +135,8 @@ public class NewReminderActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //region showFragment functions
-    private void showBirthdayFragment(int catId) {
-        CategoryBirthdayFragment fragment = new CategoryBirthdayFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("category", catId);
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_content, fragment);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.commit();
 
-    }
-
-    private void showPhoneCallFragment(int catId) {
-        CategoryPhoneFragment fragment = new CategoryPhoneFragment();
+    private void showFragment(int catId, Fragment fragment) {
         Bundle bundle = new Bundle();
         bundle.putInt("category", catId);
         fragment.setArguments(bundle);
@@ -147,38 +145,4 @@ public class NewReminderActivity extends AppCompatActivity {
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
     }
-
-    private void showImportantFragment(int catId) {
-        CategoryImportantFragment fragment = new CategoryImportantFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("category", catId);
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_content, fragment);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.commit();
-    }
-
-    private void showShoppingFragment(int catId) {
-        CategoryShoppingFragment fragment = new CategoryShoppingFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("category", catId);
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_content, fragment);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.commit();
-    }
-
-    private void showDefaultFragment(int catId) {
-        CategoryDefaultFragment fragment = new CategoryDefaultFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("category", catId);
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_content, fragment);
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        transaction.commit();
-    }
-    //endregion
 }
