@@ -51,7 +51,7 @@ public class DataSource {
     }
 
     //Fetch a reminder
-    public Reminder getReminder(long rem_id) {
+    public Reminder getReminder(int rem_id) {
         open();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER + " WHERE "
                 + DatabaseHelper.KEY_ID + " = " + rem_id;

@@ -51,19 +51,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dataSource = new DataSource(context);
 
         if (getIntent().hasExtra("alarm")) {
-            Reminder r = (Reminder) getIntent().getSerializableExtra(REMINDER_DETAILS);
+            int remId = Integer.valueOf(getIntent().getStringExtra("remId"));
+
+            Reminder r = dataSource.getReminder(remId);
+            dataSource.close();
             Intent i = new Intent(this, ReminderDetailsActivity.class);
             i.putExtra(REMINDER_DETAILS, r);
             startActivity(i);
+
         }
 
         setUpViews();
         setUpData();
         setUpSpinner();
         //todo add filter spinner (today, tomorrow, this week, this month,...)
-        
+
         dataSource.close();
 
         // Listener for list item clicks
@@ -142,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpData() {
-        dataSource = new DataSource(context);
         reminders = dataSource.getAllFutureReminders(currentTime);
         icons = dataSource.getAllIcons();
         categories = dataSource.getAllCategories();

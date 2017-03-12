@@ -170,7 +170,7 @@ public class CategoryShoppingFragment extends Fragment {
 
             int id = (int) dataSource.createReminder(reminder);
             dataSource.close();
-            setAlarm(calendar, reminder, id);
+            setAlarm(calendar, id);
 
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -181,9 +181,9 @@ public class CategoryShoppingFragment extends Fragment {
     }
 
     // Set alarm to notify on time gotten from calendar
-    private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
+    private void setAlarm(Calendar targetCal, int id) {
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-        intent.putExtra("reminder", reminder);
+        intent.putExtra("reminder", id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);

@@ -373,35 +373,31 @@ public class ReminderEditFragment extends Fragment {
                     reminder.setDescription(desc.getText().toString());
                     reminder.setBirthday(calendar.getTimeInMillis());
                     reminder.setTime(thisYear.getTimeInMillis());
-                    setAlarm(thisYear, reminder);
+                    calendar = thisYear;
                     break;
                 case "Phone Call":
                     reminder.setDescription(phone.getText().toString());
                     reminder.setTime(calendar.getTimeInMillis());
-                    setAlarm(calendar, reminder);
                     break;
                 case "Important":
                     reminder.setDescription(desc.getText().toString());
                     reminder.setTime(calendar.getTimeInMillis());
-                    setAlarm(calendar, reminder);
                     break;
                 case "Shopping":
                     reminder.setList(adapter.getItems());
                     reminder.setTime(calendar.getTimeInMillis());
-                    setAlarm(calendar, reminder);
                     break;
                 case "Movie":
                     reminder.setDescription(selectedImagePath);
                     reminder.setTime(calendar.getTimeInMillis());
-                    setAlarm(calendar, reminder);
                     break;
                 default:
                     reminder.setDescription(desc.getText().toString());
                     reminder.setTime(calendar.getTimeInMillis());
-                    setAlarm(calendar, reminder);
                     break;
             }
             dataSource.updateReminder(reminder);
+            setAlarm(calendar, reminder.getId());
             dataSource.close();
             // Send back to activity when saved
             Intent intent = new Intent(getActivity(), getActivity().getClass());
@@ -413,12 +409,11 @@ public class ReminderEditFragment extends Fragment {
     }
 
     // Cancel previous alarm and set new alarm to notify on time gotten from calendar
-    private void setAlarm(Calendar targetCal, Reminder reminder) {
+    private void setAlarm(Calendar targetCal, int remId) {
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-        intent.putExtra("reminder", reminder);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), reminder.getId(), intent, 0);
+        intent.putExtra("reminder", remId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), remId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
     }
 
