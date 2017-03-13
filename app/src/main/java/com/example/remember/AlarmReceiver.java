@@ -5,25 +5,20 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v7.app.NotificationCompat;
-import android.widget.Toast;
 
 import com.example.remember.activity.MainActivity;
-import com.example.remember.activity.ReminderDetailsActivity;
 import com.example.remember.database.DataSource;
 import com.example.remember.model.Reminder;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    DataSource dataSource;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        dataSource = new DataSource(context);
+        DataSource dataSource = new DataSource(context);
         int remId = intent.getIntExtra("reminder", 0);
         Reminder r = dataSource.getReminder(remId);
         showNotification(context, r);

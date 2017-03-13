@@ -17,14 +17,14 @@ import java.util.List;
 public class DataSource {
     private static final String TAG = "DataSource";
 
-    private DatabaseHelper helper;
+    private final DatabaseHelper helper;
     private SQLiteDatabase db;
 
     public DataSource(Context context) {
         helper = new DatabaseHelper(context);
     }
 
-    public void open() {
+    private void open() {
         db = helper.getWritableDatabase();
     }
 
@@ -46,9 +46,8 @@ public class DataSource {
         values.put(DatabaseHelper.KEY_BIRTHDAY, reminder.getBirthday());
         values.put(DatabaseHelper.KEY_CAT_ID, reminder.getCategory());
         values.put(DatabaseHelper.KEY_TIME, reminder.getTime());
-        long reminder_id = db.insert(DatabaseHelper.TABLE_REMINDER, null, values);
 
-        return reminder_id;
+        return db.insert(DatabaseHelper.TABLE_REMINDER, null, values);
     }
 
     //Fetch a reminder
@@ -61,42 +60,19 @@ public class DataSource {
 
         if (cursor != null) {
             cursor.moveToFirst();
+            Reminder reminder = new Reminder();
+            reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
+            reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
+            reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+            reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
+            reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
+            reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
+            reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
+            cursor.close();
+            return reminder;
+        } else {
+            return null;
         }
-        Reminder reminder = new Reminder();
-        reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
-        reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
-        reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
-        reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
-        reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
-        reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
-        reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
-        return reminder;
-    }
-
-    //Fetch all reminders
-    public List<Reminder> getAllReminders() {
-        open();
-        List<Reminder> reminders = new ArrayList<>();
-        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER
-                + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                Reminder reminder = new Reminder();
-                reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
-                reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
-                reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
-                reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
-                reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
-                reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
-                reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
-                reminders.add(reminder);
-
-            } while (cursor.moveToNext());
-        }
-        return reminders;
     }
 
     //Fetch all future reminders
@@ -122,6 +98,7 @@ public class DataSource {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return reminders;
     }
 
@@ -148,6 +125,7 @@ public class DataSource {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return reminders;
     }
 
@@ -176,6 +154,7 @@ public class DataSource {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return reminders;
     }
 
@@ -203,10 +182,10 @@ public class DataSource {
                 reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
                 reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
-
                 reminders.add(reminder);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return reminders;
     }
 
@@ -234,10 +213,10 @@ public class DataSource {
                 reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
                 reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
-
                 reminders.add(reminder);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return reminders;
     }
 
@@ -267,15 +246,15 @@ public class DataSource {
                 reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
                 reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
                 reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
-
                 reminders.add(reminder);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return reminders;
     }
 
     //Update a reminder
-    public int updateReminder(Reminder reminder) {
+    public void updateReminder(Reminder reminder) {
         open();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.KEY_TITLE, reminder.getTitle());
@@ -285,7 +264,7 @@ public class DataSource {
         values.put(DatabaseHelper.KEY_CAT_ID, reminder.getCategory());
         values.put(DatabaseHelper.KEY_TIME, reminder.getTime());
 
-        return db.update(DatabaseHelper.TABLE_REMINDER, values, DatabaseHelper.KEY_ID + " = ?",
+        db.update(DatabaseHelper.TABLE_REMINDER, values, DatabaseHelper.KEY_ID + " = ?",
                 new String[]{String.valueOf(reminder.getId())});
     }
 
@@ -332,6 +311,7 @@ public class DataSource {
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return icons;
     }
 
@@ -343,34 +323,33 @@ public class DataSource {
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null) {
             cursor.moveToFirst();
+            Icon icon = new Icon();
+            icon.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
+            icon.setIcon(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ICON)));
+            cursor.close();
+            return icon;
+        } else {
+            return null;
         }
-        Icon icon = new Icon();
-        icon.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
-        icon.setIcon(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ICON)));
-
-        return icon;
     }
 
     //region Category table CRUD functions
 
     //Create a category
-    public long createCategory(Category category) {
-        if (!existsInDb(DatabaseHelper.TABLE_CATEGORY, DatabaseHelper.KEY_CAT_NAME, category.getCategory())) {
+    public void createCategory(Category category) {
+        if (notInDb(DatabaseHelper.TABLE_CATEGORY, DatabaseHelper.KEY_CAT_NAME, category.getCategory())) {
             open();
             ContentValues values = new ContentValues();
             values.put(DatabaseHelper.KEY_CAT_NAME, category.getCategory());
             values.put(DatabaseHelper.KEY_BG_COLOR, category.getBackgroundColor());
             values.put(DatabaseHelper.KEY_ICON_COLOR, category.getIconColor());
             values.put(DatabaseHelper.KEY_ICON_ID, category.getIcon());
-            long category_id = db.insert(DatabaseHelper.TABLE_CATEGORY, null, values);
-
-            return category_id;
-        } else {
-            return 0;
+            db.insert(DatabaseHelper.TABLE_CATEGORY, null, values);
         }
     }
 
     //Fetch a category
+
     public Category getCategory(long cat_id) {
         open();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_CATEGORY + " WHERE " + DatabaseHelper.KEY_ID + " = " + cat_id;
@@ -378,15 +357,17 @@ public class DataSource {
 
         if (cursor != null) {
             cursor.moveToFirst();
+            Category category = new Category();
+            category.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
+            category.setCategory(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_NAME)));
+            category.setBackgroundColor(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_BG_COLOR)));
+            category.setIconColor(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_ICON_COLOR)));
+            category.setIcon(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ICON_ID)));
+            cursor.close();
+            return category;
+        } else {
+            return null;
         }
-        Category category = new Category();
-        category.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
-        category.setCategory(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_NAME)));
-        category.setBackgroundColor(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_BG_COLOR)));
-        category.setIconColor(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_ICON_COLOR)));
-        category.setIcon(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ICON_ID)));
-
-        return category;
     }
 
     //Fetch all categories
@@ -406,17 +387,17 @@ public class DataSource {
                 category.setBackgroundColor(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_BG_COLOR)));
                 category.setIconColor(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_ICON_COLOR)));
                 category.setIcon(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ICON_ID)));
-
                 // adding to tags list
                 categories.add(category);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return categories;
     }
 
     //Update a category
     public int updateCategory(Category category) {
-        if (!existsInDb(DatabaseHelper.TABLE_CATEGORY, DatabaseHelper.KEY_CAT_NAME, category.getCategory())) {
+        if (notInDb(DatabaseHelper.TABLE_CATEGORY, DatabaseHelper.KEY_CAT_NAME, category.getCategory())) {
             open();
             ContentValues values = new ContentValues();
             values.put(DatabaseHelper.KEY_CAT_NAME, category.getCategory());
@@ -438,16 +419,16 @@ public class DataSource {
     //endregion
 
     //Check if given value exists in database
-    private boolean existsInDb(String table, String column, String value) {
+    private boolean notInDb(String table, String column, String value) {
         open();
         String query = "SELECT * FROM " + table + " WHERE " + column + " = '" + value + "'";
         Log.d(TAG, query);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() <= 0) {
             cursor.close();
-            return false;
+            return true;
         }
         cursor.close();
-        return true;
+        return false;
     }
 }

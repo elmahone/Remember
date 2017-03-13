@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -40,15 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     public final static String REMINDER_DETAILS = "com.example.remember.REMINDER_DETAILS";
 
-    private CategoryAdapter catAdapter;
     private ReminderAdapter remAdapter;
     private DataSource dataSource;
     private int catId;
 
-    private long currentTime = new Date().getTime();
-    private Context context = MainActivity.this;
+    private final long currentTime = new Date().getTime();
+    private final Context context = MainActivity.this;
     private Intent intent;
-    private boolean allCategories = true;
     private boolean allDates = true;
 
     private List<Category> categories = new ArrayList<>();
@@ -199,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
     //region Setup functions
     private void setUpSpinners() {
-        catAdapter = new CategoryAdapter(context, spinCat, icons);
+        CategoryAdapter catAdapter = new CategoryAdapter(context, spinCat, icons);
         catSpinner.setAdapter(catAdapter);
 
         String[] list = getResources().getStringArray(R.array.date_spinner);
@@ -233,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar endCal = Calendar.getInstance();
         Calendar startCal = Calendar.getInstance();
 
+        boolean allCategories = true;
         if (catSpinner.getSelectedItemPosition() == 0) {
             allCategories = true;
         } else {

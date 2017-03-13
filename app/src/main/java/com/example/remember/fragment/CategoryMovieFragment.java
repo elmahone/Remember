@@ -3,35 +3,24 @@ package com.example.remember.fragment;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -52,11 +41,9 @@ public class CategoryMovieFragment extends Fragment {
     private DataSource dataSource;
     private int catId;
 
-    private Calendar calendar = Calendar.getInstance();
-    public final int PICK_IMAGE = 1;
+    private final Calendar calendar = Calendar.getInstance();
+    private final int PICK_IMAGE = 1;
     private Uri selectedImageUri;
-
-    private InputMethodManager inputManager;
 
     private Button imageBtn;
     private EditText title;
@@ -83,8 +70,7 @@ public class CategoryMovieFragment extends Fragment {
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int height = size.y;
-        image.getLayoutParams().height = height;
+        image.getLayoutParams().height = size.y;
 
         //region DatePicker & TimePicker listeners
         final DatePickerDialog.OnDateSetListener datePicker = new DatePickerDialog.OnDateSetListener() {
@@ -170,10 +156,12 @@ public class CategoryMovieFragment extends Fragment {
 
     // Find views from layout
     private void findViews() {
-        title = (EditText) getView().findViewById(R.id.edit_reminder_title);
-        date = (EditText) getView().findViewById(R.id.edit_reminder_date);
-        imageBtn = (Button) getView().findViewById(R.id.image_button);
-        image = (ImageView) getView().findViewById(R.id.imageView);
+        if (getView() != null) {
+            title = (EditText) getView().findViewById(R.id.edit_reminder_title);
+            date = (EditText) getView().findViewById(R.id.edit_reminder_date);
+            imageBtn = (Button) getView().findViewById(R.id.image_button);
+            image = (ImageView) getView().findViewById(R.id.imageView);
+        }
     }
 
     // Update date text field with date gotten from calendar
@@ -213,7 +201,7 @@ public class CategoryMovieFragment extends Fragment {
     // Close keyboard
     private void closeKeyboard() {
         if (getActivity().getCurrentFocus() != null) {
-            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }

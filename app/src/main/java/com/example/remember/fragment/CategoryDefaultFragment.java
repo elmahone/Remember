@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,9 +33,7 @@ public class CategoryDefaultFragment extends Fragment {
     private DataSource dataSource;
     private int catId;
 
-    private Calendar calendar = Calendar.getInstance();
-
-    private InputMethodManager inputManager;
+    private final Calendar calendar = Calendar.getInstance();
 
     private EditText title;
     private EditText date;
@@ -112,9 +109,11 @@ public class CategoryDefaultFragment extends Fragment {
 
     // Find views from layout
     private void findViews() {
-        title = (EditText) getView().findViewById(R.id.edit_reminder_title);
-        date = (EditText) getView().findViewById(R.id.edit_reminder_date);
-        desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
+        if (getView() != null) {
+            title = (EditText) getView().findViewById(R.id.edit_reminder_title);
+            date = (EditText) getView().findViewById(R.id.edit_reminder_date);
+            desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
+        }
     }
 
     // Update date text field with date gotten from calendar
@@ -156,7 +155,7 @@ public class CategoryDefaultFragment extends Fragment {
     // Close keyboard
     private void closeKeyboard() {
         if (getActivity().getCurrentFocus() != null) {
-            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }

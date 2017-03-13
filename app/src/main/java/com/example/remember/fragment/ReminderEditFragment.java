@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -16,8 +15,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +28,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,7 +38,6 @@ import com.example.remember.activity.ShowImageActivity;
 import com.example.remember.adapter.ShoppingListAdapter;
 import com.example.remember.database.DataSource;
 import com.example.remember.model.Category;
-import com.example.remember.model.Icon;
 import com.example.remember.model.Reminder;
 
 import java.text.SimpleDateFormat;
@@ -60,16 +55,12 @@ public class ReminderEditFragment extends Fragment {
     private ShoppingListAdapter adapter;
 
     private Calendar calendar = Calendar.getInstance();
-    private Calendar thisYear = Calendar.getInstance();
-    private Calendar today = Calendar.getInstance();
+    private final Calendar thisYear = Calendar.getInstance();
+    private final Calendar today = Calendar.getInstance();
 
-    private InputMethodManager inputManager;
-
-    public final int PICK_CONTACT = 1;
-    public final int PICK_IMAGE = 2;
+    private final int PICK_CONTACT = 1;
+    private final int PICK_IMAGE = 2;
     private String selectedImagePath;
-    private Uri selectedImageUri;
-    private List<String> values = new ArrayList<>();
     private String newItem;
 
     private Button addRow;
@@ -236,18 +227,21 @@ public class ReminderEditFragment extends Fragment {
         if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
             Uri contactUri = data.getData();
             Cursor cursor = getActivity().getContentResolver().query(contactUri, null, null, null, null);
-            cursor.moveToFirst();
-            int columnNum = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-            int columnName = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-            String phoneNum = cursor.getString(columnNum);
-            String contact = cursor.getString(columnName);
-            if (title.getText().toString().matches("")) {
-                title.setText("Call " + contact);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                int columnNum = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                int columnName = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                String phoneNum = cursor.getString(columnNum);
+                String contact = cursor.getString(columnName);
+                cursor.close();
+                if (title.getText().toString().matches("")) {
+                    title.setText("Call " + contact);
+                }
+                phone.setText(phoneNum);
             }
-            phone.setText(phoneNum);
         }
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
-            selectedImageUri = data.getData();
+            Uri selectedImageUri = data.getData();
             selectedImagePath = selectedImageUri + "";
             image.setImageURI(selectedImageUri);
         }
@@ -281,31 +275,33 @@ public class ReminderEditFragment extends Fragment {
 
     // Find views depending on what category is selected
     private void findViews() {
-        title = (EditText) getView().findViewById(R.id.edit_reminder_title);
-        date = (EditText) getView().findViewById(R.id.edit_reminder_date);
-        switch (category.getCategory()) {
-            case "Birthday":
-                desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
-                break;
-            case "Phone Call":
-                phone = (EditText) getView().findViewById(R.id.edit_reminder_phone);
-                contactsBtn = (Button) getView().findViewById(R.id.contacts_button);
-                break;
-            case "Important":
-                desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
-                break;
-            case "Shopping":
-                shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
-                addRow = (Button) getView().findViewById(R.id.add_new_list_item);
-                newListItem = (EditText) getView().findViewById(R.id.new_list_item);
-                break;
-            case "Movie":
-                imageBtn = (Button) getView().findViewById(R.id.image_button);
-                image = (ImageView) getView().findViewById(R.id.imageView);
-                break;
-            default:
-                desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
-                break;
+        if (getView() != null) {
+            title = (EditText) getView().findViewById(R.id.edit_reminder_title);
+            date = (EditText) getView().findViewById(R.id.edit_reminder_date);
+            switch (category.getCategory()) {
+                case "Birthday":
+                    desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
+                    break;
+                case "Phone Call":
+                    phone = (EditText) getView().findViewById(R.id.edit_reminder_phone);
+                    contactsBtn = (Button) getView().findViewById(R.id.contacts_button);
+                    break;
+                case "Important":
+                    desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
+                    break;
+                case "Shopping":
+                    shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
+                    addRow = (Button) getView().findViewById(R.id.add_new_list_item);
+                    newListItem = (EditText) getView().findViewById(R.id.new_list_item);
+                    break;
+                case "Movie":
+                    imageBtn = (Button) getView().findViewById(R.id.image_button);
+                    image = (ImageView) getView().findViewById(R.id.imageView);
+                    break;
+                default:
+                    desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
+                    break;
+            }
         }
     }
 
@@ -325,7 +321,7 @@ public class ReminderEditFragment extends Fragment {
                 desc.setText(reminder.getDescription());
                 break;
             case "Shopping":
-                values = reminder.getList();
+                List<String> values = reminder.getList();
                 adapter = new ShoppingListAdapter(getActivity(), values, true);
                 shoppingList.setAdapter(adapter);
                 break;
@@ -334,8 +330,7 @@ public class ReminderEditFragment extends Fragment {
                 Display display = getActivity().getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
-                int height = size.y;
-                image.getLayoutParams().height = height;
+                image.getLayoutParams().height = size.y;
 
                 image.setImageURI(Uri.parse(selectedImagePath));
                 break;
@@ -420,7 +415,7 @@ public class ReminderEditFragment extends Fragment {
     // Close keyboard
     private void closeKeyboard() {
         if (getActivity().getCurrentFocus() != null) {
-            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
@@ -435,9 +430,7 @@ public class ReminderEditFragment extends Fragment {
             thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
         }
 
-        int age = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
-
-        Integer ageInt = age;
+        Integer ageInt = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
         return ageInt.toString();
     }
 }

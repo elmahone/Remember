@@ -2,14 +2,13 @@ package com.example.remember.model;
 
 import java.io.Serializable;
 
-public class Icon implements Serializable{
-    int id;
-    int icon;
+public class Icon implements Serializable {
+    private int id;
+    private int icon;
 
     //region Constructors
 
     public Icon() {
-
     }
 
     public Icon(int id, int icon) {

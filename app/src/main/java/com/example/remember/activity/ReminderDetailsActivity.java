@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import com.example.remember.fragment.ReminderDetailsFragment;
 import com.example.remember.fragment.ReminderEditFragment;
 import com.example.remember.model.Category;
-import com.example.remember.model.Icon;
 import com.example.remember.R;
 import com.example.remember.model.Reminder;
 import com.example.remember.database.DataSource;
@@ -23,25 +22,21 @@ import com.example.remember.database.DataSource;
 public class ReminderDetailsActivity extends AppCompatActivity {
     private static final String TAG = "ReminderDetailsActivity";
 
-    private DataSource dataSource;
     private Category category;
     private Reminder reminder;
-    private Icon icon;
 
-    private Context context = ReminderDetailsActivity.this;
-    private Intent intent;
+    private final Context context = ReminderDetailsActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder_details);
 
-        intent = getIntent();
+        Intent intent = getIntent();
         reminder = (Reminder) intent.getSerializableExtra(MainActivity.REMINDER_DETAILS);
 
-        dataSource = new DataSource(context);
+        DataSource dataSource = new DataSource(context);
         category = dataSource.getCategory(reminder.getCategory());
-        icon = dataSource.getIcon(category.getIcon());
 
         showDetailsFragment();
     }

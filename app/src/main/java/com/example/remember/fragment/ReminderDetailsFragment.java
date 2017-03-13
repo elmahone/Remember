@@ -2,7 +2,6 @@ package com.example.remember.fragment;
 
 import android.content.Intent;
 import android.graphics.Point;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,9 +26,6 @@ import java.util.List;
 public class ReminderDetailsFragment extends Fragment {
     private Reminder reminder;
     private Category category;
-    private ShoppingListAdapter adapter;
-
-    private List<String> values = new ArrayList<>();
 
     private Button callButton;
     private ImageView image;
@@ -100,28 +95,30 @@ public class ReminderDetailsFragment extends Fragment {
 
     // Find views depending on what category is selected
     private void findViews() {
-        reminderTitle = (TextView) getView().findViewById(R.id.reminder_title);
-        reminderDate = (TextView) getView().findViewById(R.id.reminder_date);
-        switch (category.getCategory()) {
-            case "Birthday":
-                reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
-                break;
-            case "Phone Call":
-                reminderPhone = (TextView) getView().findViewById(R.id.reminder_phone);
-                callButton = (Button) getView().findViewById(R.id.call_button);
-                break;
-            case "Important":
-                reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
-                break;
-            case "Shopping":
-                shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
-                break;
-            case "Movie":
-                image = (ImageView) getView().findViewById(R.id.imageView);
-                break;
-            default:
-                reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
-                break;
+        if (getView() != null) {
+            reminderTitle = (TextView) getView().findViewById(R.id.reminder_title);
+            reminderDate = (TextView) getView().findViewById(R.id.reminder_date);
+            switch (category.getCategory()) {
+                case "Birthday":
+                    reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
+                    break;
+                case "Phone Call":
+                    reminderPhone = (TextView) getView().findViewById(R.id.reminder_phone);
+                    callButton = (Button) getView().findViewById(R.id.call_button);
+                    break;
+                case "Important":
+                    reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
+                    break;
+                case "Shopping":
+                    shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
+                    break;
+                case "Movie":
+                    image = (ImageView) getView().findViewById(R.id.imageView);
+                    break;
+                default:
+                    reminderDesc = (TextView) getView().findViewById(R.id.reminder_description);
+                    break;
+            }
         }
     }
 
@@ -146,22 +143,22 @@ public class ReminderDetailsFragment extends Fragment {
                 reminderDesc.setText(reminder.getDescription());
                 break;
             case "Shopping":
-                values = reminder.getList();
-                adapter = new ShoppingListAdapter(getActivity(), values, false);
+                List<String> values = reminder.getList();
+                ShoppingListAdapter adapter = new ShoppingListAdapter(getActivity(), values, false);
                 shoppingList.setAdapter(adapter);
                 break;
             case "Movie":
                 Display display = getActivity().getWindowManager().getDefaultDisplay();
                 Point size = new Point();
                 display.getSize(size);
-                int height = size.y;
-                image.getLayoutParams().height = height;
+                image.getLayoutParams().height = size.y;
 
                 image.setImageURI(Uri.parse(reminder.getDescription()));
                 break;
             default:
                 reminderDesc.setText(reminder.getDescription());
                 break;
+
         }
     }
 }

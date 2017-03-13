@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.example.remember.R;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
 
     //region Database details
@@ -155,42 +155,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_ICON_ID, 6);
         db.insert(TABLE_CATEGORY, null, values);
         values.clear();
-        //endregion
-
-        //region Create test reminders
-        /*
-        values = new ContentValues();
-        values.put(KEY_TITLE, "Janus's birthday");
-        values.put(KEY_DESC, "40 v");
-        values.put(KEY_CAT_ID, 4);
-
-        values.put(KEY_TIME, 1488946937958L);
-        db.insert(TABLE_REMINDER, null, values);
-        values.clear();
-
-        values = new ContentValues();
-        values.put(KEY_TITLE, "Go buy pants");
-        values.put(KEY_CAT_ID, 3);
-        values.put(KEY_TIME, 1488946937958L);
-        db.insert(TABLE_REMINDER, null, values);
-        values.clear();
-
-        values = new ContentValues();
-        values.put(KEY_TITLE, "Gym");
-        values.put(KEY_DESC, "Leg day");
-        values.put(KEY_CAT_ID, 2);
-        values.put(KEY_TIME, 1489346937958L);
-        db.insert(TABLE_REMINDER, null, values);
-        values.clear();
-
-        values = new ContentValues();
-        values.put(KEY_TITLE, "Look for jobs");
-        values.put(KEY_DESC, "McDonalds, Burger King, etc.");
-        values.put(KEY_CAT_ID, 1);
-        values.put(KEY_TIME, 1487999937958L);
-        db.insert(TABLE_REMINDER, null, values);
-        values.clear();
-        */
         //endregion
     }
 

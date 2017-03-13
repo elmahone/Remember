@@ -12,16 +12,14 @@ import com.example.remember.ZoomLayout;
 
 public class ShowImageActivity extends AppCompatActivity {
     private ZoomLayout zoomLayout;
-    private ImageView imageView;
-    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_image);
         zoomLayout = (ZoomLayout) findViewById(R.id.activity_show_image);
-        imageView = (ImageView) findViewById(R.id.imageView);
-        imageUri = Uri.parse(getIntent().getStringExtra("imageUri"));
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        Uri imageUri = Uri.parse(getIntent().getStringExtra("imageUri"));
         imageView.setImageURI(imageUri);
         zoomLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override

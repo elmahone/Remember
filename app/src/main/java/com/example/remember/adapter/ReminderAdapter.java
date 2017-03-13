@@ -21,10 +21,10 @@ import java.util.List;
 
 public class ReminderAdapter extends BaseAdapter {
     private static final String TAG = "ReminderAdapter";
-    private Context context;
-    private List<Reminder> reminders;
-    private List<Category> categories;
-    private List<Icon> icons;
+    private final Context context;
+    private final List<Reminder> reminders;
+    private final List<Category> categories;
+    private final List<Icon> icons;
     private static LayoutInflater inflater = null;
 
     public ReminderAdapter(Context context, List<Reminder> reminders, List<Category> categories, List<Icon> icons) {
@@ -33,11 +33,6 @@ public class ReminderAdapter extends BaseAdapter {
         this.categories = categories;
         this.icons = icons;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    public void addItem(final Reminder reminder) {
-        reminders.add(reminder);
-        notifyDataSetChanged();
     }
 
     public void remove(int pos) {

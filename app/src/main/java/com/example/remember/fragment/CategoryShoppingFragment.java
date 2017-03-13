@@ -40,11 +40,9 @@ public class CategoryShoppingFragment extends Fragment {
     private int catId;
     private ShoppingListAdapter adapter;
 
-    private Calendar calendar = Calendar.getInstance();
+    private final Calendar calendar = Calendar.getInstance();
 
-    private InputMethodManager inputManager;
-
-    private List<String> values = new ArrayList<>();
+    private final List<String> values = new ArrayList<>();
     private String newItem;
 
     private Button addRow;
@@ -143,11 +141,13 @@ public class CategoryShoppingFragment extends Fragment {
 
     // Find views from layout
     private void findViews() {
-        title = (EditText) getView().findViewById(R.id.edit_reminder_title);
-        date = (EditText) getView().findViewById(R.id.edit_reminder_date);
-        newListItem = (EditText) getView().findViewById(R.id.new_list_item);
-        shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
-        addRow = (Button) getView().findViewById(R.id.add_new_list_item);
+        if (getView() != null) {
+            title = (EditText) getView().findViewById(R.id.edit_reminder_title);
+            date = (EditText) getView().findViewById(R.id.edit_reminder_date);
+            newListItem = (EditText) getView().findViewById(R.id.new_list_item);
+            shoppingList = (ListView) getView().findViewById(R.id.shopping_list);
+            addRow = (Button) getView().findViewById(R.id.add_new_list_item);
+        }
     }
 
     // Update date text field with date gotten from calendar
@@ -162,7 +162,7 @@ public class CategoryShoppingFragment extends Fragment {
         String t = title.getText().toString();
         String da = date.getText().toString();
         List<String> shopping = adapter.getItems();
-        if (!t.matches("")) {
+        if (!t.matches("") || !da.matches("")) {
             Reminder reminder = new Reminder(t, shopping, catId, calendar.getTimeInMillis());
             reminder.setTitle(t);
             reminder.setList(shopping);
@@ -192,7 +192,7 @@ public class CategoryShoppingFragment extends Fragment {
     // Close keyboard
     private void closeKeyboard() {
         if (getActivity().getCurrentFocus() != null) {
-            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }

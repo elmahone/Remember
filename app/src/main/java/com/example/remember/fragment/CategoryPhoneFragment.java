@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -41,10 +39,8 @@ public class CategoryPhoneFragment extends Fragment {
     private DataSource dataSource;
     private int catId;
 
-    private Calendar calendar = Calendar.getInstance();
-    public final int PICK_CONTACT = 1;
-
-    private InputMethodManager inputManager;
+    private final Calendar calendar = Calendar.getInstance();
+    private final int PICK_CONTACT = 1;
 
     private Button contactsBtn;
     private EditText title;
@@ -124,16 +120,20 @@ public class CategoryPhoneFragment extends Fragment {
         if (requestCode == PICK_CONTACT && resultCode == RESULT_OK) {
             Uri contactUri = data.getData();
             Cursor cursor = getActivity().getContentResolver().query(contactUri, null, null, null, null);
-            cursor.moveToFirst();
-            int columnNum = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-            int columnName = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-            String phone = cursor.getString(columnNum);
-            String contact = cursor.getString(columnName);
+            if (cursor != null) {
+                cursor.moveToFirst();
 
-            if (title.getText().toString().matches("")) {
-                title.setText("Call " + contact);
+                int columnNum = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                int columnName = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                String phone = cursor.getString(columnNum);
+                String contact = cursor.getString(columnName);
+                cursor.close();
+
+                if (title.getText().toString().matches("")) {
+                    title.setText("Call " + contact);
+                }
+                phoneNum.setText(phone);
             }
-            phoneNum.setText(phone);
         }
     }
 
@@ -150,10 +150,12 @@ public class CategoryPhoneFragment extends Fragment {
 
     // Find views from layout
     private void findViews() {
-        title = (EditText) getView().findViewById(R.id.edit_reminder_title);
-        date = (EditText) getView().findViewById(R.id.edit_reminder_date);
-        phoneNum = (EditText) getView().findViewById(R.id.edit_reminder_phone);
-        contactsBtn = (Button) getView().findViewById(R.id.contacts_button);
+        if (getView() != null) {
+            title = (EditText) getView().findViewById(R.id.edit_reminder_title);
+            date = (EditText) getView().findViewById(R.id.edit_reminder_date);
+            phoneNum = (EditText) getView().findViewById(R.id.edit_reminder_phone);
+            contactsBtn = (Button) getView().findViewById(R.id.contacts_button);
+        }
     }
 
     // Update date text field with date gotten from calendar
@@ -194,7 +196,7 @@ public class CategoryPhoneFragment extends Fragment {
     // Close keyboard
     private void closeKeyboard() {
         if (getActivity().getCurrentFocus() != null) {
-            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }

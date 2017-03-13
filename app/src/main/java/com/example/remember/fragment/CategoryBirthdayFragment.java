@@ -31,11 +31,9 @@ public class CategoryBirthdayFragment extends Fragment {
     private DataSource dataSource;
     private int catId;
 
-    private Calendar calendar = Calendar.getInstance();
-    private Calendar thisYear = Calendar.getInstance();
-    private Calendar today = Calendar.getInstance();
-
-    private InputMethodManager inputManager;
+    private final Calendar calendar = Calendar.getInstance();
+    private final Calendar thisYear = Calendar.getInstance();
+    private final Calendar today = Calendar.getInstance();
 
     private EditText title;
     private EditText date;
@@ -97,9 +95,11 @@ public class CategoryBirthdayFragment extends Fragment {
 
     // Find views from layout
     private void findViews() {
-        title = (EditText) getView().findViewById(R.id.edit_reminder_title);
-        date = (EditText) getView().findViewById(R.id.edit_reminder_date);
-        desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
+        if (getView() != null) {
+            title = (EditText) getView().findViewById(R.id.edit_reminder_title);
+            date = (EditText) getView().findViewById(R.id.edit_reminder_date);
+            desc = (EditText) getView().findViewById(R.id.edit_reminder_description);
+        }
     }
 
     // Update date text field with date gotten from calendar
@@ -146,7 +146,7 @@ public class CategoryBirthdayFragment extends Fragment {
     // Close keyboard
     private void closeKeyboard() {
         if (getActivity().getCurrentFocus() != null) {
-            inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
@@ -160,12 +160,11 @@ public class CategoryBirthdayFragment extends Fragment {
         if (today.getTimeInMillis() > thisYear.getTimeInMillis()) {
             thisYear.set(today.get(Calendar.YEAR) + 1, calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
         }
-        int age = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
- /*       if (thisYear.get(Calendar.MONTH) < calendar.get(Calendar.MONTH) && thisYear.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)) {
+        /*       if (thisYear.get(Calendar.MONTH) < calendar.get(Calendar.MONTH) && thisYear.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)) {
             age--;
         }
         */
-        Integer ageInt = age;
+        Integer ageInt = thisYear.get(Calendar.YEAR) - calendar.get(Calendar.YEAR);
         return ageInt.toString();
     }
 }

@@ -17,13 +17,12 @@ import java.util.List;
 
 public class ShoppingListAdapter extends BaseAdapter {
     private static final String TAG = "ReminderAdapter";
-    private Context context;
-    private List<String> items;
+    private final List<String> items;
     private static LayoutInflater inflater = null;
-    private boolean editable;
+    private final boolean editable;
 
     public ShoppingListAdapter(Context context, List<String> items, boolean editable) {
-        this.context = context;
+        Context context1 = context;
         this.items = items;
         this.editable = editable;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,7 +57,7 @@ public class ShoppingListAdapter extends BaseAdapter {
         if (view == null && editable) {
             view = inflater.inflate(R.layout.shopping_list_item2, null);
 
-        } else if (view == null && !editable) {
+        } else if (view == null) {
             view = inflater.inflate(R.layout.shopping_list_item, null);
 
         }

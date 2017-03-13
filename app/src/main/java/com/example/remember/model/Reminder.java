@@ -102,8 +102,7 @@ public class Reminder implements Serializable {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            String strList = json.toString();
-            return strList;
+            return json.toString();
         } else {
             return null;
         }
@@ -142,13 +141,14 @@ public class Reminder implements Serializable {
     }
 
     public void setList(String strList) {
-        if(strList != null) {
+        if (strList != null) {
             JSONObject json = null;
             try {
                 json = new JSONObject(strList);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            assert json != null;
             JSONArray jsonArray = json.optJSONArray("arrayList");
             List<String> list = new ArrayList<>();
 

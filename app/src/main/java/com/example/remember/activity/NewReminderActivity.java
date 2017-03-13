@@ -33,26 +33,20 @@ import java.util.List;
 public class NewReminderActivity extends AppCompatActivity {
     private static final String TAG = "NewReminderActivity";
 
-    private DataSource dataSource;
-    private CategoryAdapter adapter;
-
     private List<Category> categories;
-    private List<Icon> icons;
-
-    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_reminder);
 
-        spinner = (Spinner) findViewById(R.id.category_spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.category_spinner);
 
-        dataSource = new DataSource(this);
+        DataSource dataSource = new DataSource(this);
         categories = dataSource.getAllCategories();
-        icons = dataSource.getAllIcons();
+        List<Icon> icons = dataSource.getAllIcons();
 
-        adapter = new CategoryAdapter(this, categories, icons);
+        CategoryAdapter adapter = new CategoryAdapter(this, categories, icons);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -127,10 +121,7 @@ public class NewReminderActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_off:
-                Intent exitIntent = new Intent(this, MainActivity.class);
-                exitIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                exitIntent.putExtra("EXIT", true);
-                startActivity(exitIntent);
+                closeApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -154,10 +145,18 @@ public class NewReminderActivity extends AppCompatActivity {
     }
 
 
-    private void showHistory(){
+    private void showHistory() {
         Intent histIntent = new Intent(this, HistoryActivity.class);
         startActivity(histIntent);
     }
-    private void showSettings(){}
-    private void closeApp(){}
+
+    private void showSettings() {
+    }
+
+    private void closeApp() {
+        Intent exitIntent = new Intent(this, MainActivity.class);
+        exitIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        exitIntent.putExtra("EXIT", true);
+        startActivity(exitIntent);
+    }
 }

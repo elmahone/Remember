@@ -20,9 +20,9 @@ import java.util.List;
 
 public class CategoryAdapter extends BaseAdapter {
     private static final String TAG = "CategoryAdapter";
-    private Context context;
-    private List<Category> categories;
-    private List<Icon> icons;
+    private final Context context;
+    private final List<Category> categories;
+    private final List<Icon> icons;
     private static LayoutInflater inflater = null;
 
     public CategoryAdapter(Context context, List<Category> categories, List<Icon> icons) {

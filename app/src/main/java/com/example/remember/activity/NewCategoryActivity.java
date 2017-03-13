@@ -35,9 +35,8 @@ public class NewCategoryActivity extends AppCompatActivity {
     private static final String TAG = "NewCategoryActivity";
 
     private DataSource dataSource;
-    private IconAdapter adapter;
 
-    private Context context = NewCategoryActivity.this;
+    private final Context context = NewCategoryActivity.this;
     private ColorPicker cp1;
     private ColorPicker cp2;
     private int selectedIconPosition;
@@ -48,9 +47,6 @@ public class NewCategoryActivity extends AppCompatActivity {
     private List<Icon> icons;
     private RelativeLayout background;
 
-    private Button backgroundColor;
-    private Button iconColor;
-    private GridView grid;
     private ImageView iconView;
     private EditText editCategory;
 
@@ -64,16 +60,16 @@ public class NewCategoryActivity extends AppCompatActivity {
 
         //region Find views
         background = (RelativeLayout) findViewById(R.id.icon_background);
-        backgroundColor = (Button) findViewById(R.id.changeBgColor);
+        Button backgroundColor = (Button) findViewById(R.id.changeBgColor);
         editCategory = (EditText) findViewById(R.id.editCategory);
-        iconColor = (Button) findViewById(R.id.changeIconColor);
-        grid = (GridView) findViewById(R.id.icon_grid);
+        Button iconColor = (Button) findViewById(R.id.changeIconColor);
+        GridView grid = (GridView) findViewById(R.id.icon_grid);
         iconView = (ImageView) findViewById(R.id.icon);
         //endregion
 
         dataSource = new DataSource(context);
         icons = dataSource.getAllIcons();
-        adapter = new IconAdapter(context, icons);
+        IconAdapter adapter = new IconAdapter(context, icons);
         grid.setNumColumns(4);
         grid.setAdapter(adapter);
 
@@ -190,11 +186,16 @@ public class NewCategoryActivity extends AppCompatActivity {
             startActivity(i);
         }
     }
-    private void showHistory(){
+
+    private void showHistory() {
         Intent histIntent = new Intent(this, HistoryActivity.class);
-        startActivity(histIntent);}
-    private void showSettings(){}
-    private void closeApp(){
+        startActivity(histIntent);
+    }
+
+    private void showSettings() {
+    }
+
+    private void closeApp() {
         Intent exitIntent = new Intent(this, MainActivity.class);
         exitIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         exitIntent.putExtra("EXIT", true);

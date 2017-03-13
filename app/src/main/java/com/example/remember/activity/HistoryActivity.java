@@ -32,15 +32,14 @@ import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    public final static String REMINDER_DETAILS = "com.example.remember.REMINDER_DETAILS";
+    private final static String REMINDER_DETAILS = "com.example.remember.REMINDER_DETAILS";
 
-    private CategoryAdapter catAdapter;
     private ReminderAdapter remAdapter;
     private DataSource dataSource;
     private int catId;
 
-    private long currentTime = new Date().getTime();
-    private Context context = HistoryActivity.this;
+    private final long currentTime = new Date().getTime();
+    private final Context context = HistoryActivity.this;
     private Intent intent;
 
     private List<Category> categories = new ArrayList<>();
@@ -173,7 +172,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     //region Setup functions
     private void setUpSpinner() {
-        catAdapter = new CategoryAdapter(context, spinCat, icons);
+        CategoryAdapter catAdapter = new CategoryAdapter(context, spinCat, icons);
         catSpinner.setAdapter(catAdapter);
     }
 

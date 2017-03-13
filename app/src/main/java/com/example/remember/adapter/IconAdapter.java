@@ -1,7 +1,6 @@
 package com.example.remember.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,10 +14,8 @@ import java.util.List;
 
 public class IconAdapter extends BaseAdapter {
     private static final String TAG = "IconAdapter";
-    private Context context;
-    private List<Icon> icons;
-    private Icon icon;
-    private static LayoutInflater inflater = null;
+    private final Context context;
+    private final List<Icon> icons;
 
     public IconAdapter(Context context, List<Icon> icons) {
         this.context = context;
@@ -43,7 +40,7 @@ public class IconAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         ImageView iconView;
-        icon = icons.get(position);
+        Icon icon = icons.get(position);
         if (view == null) {
             // if it's not recycled, initialize some attributes
             iconView = new ImageView(context);
