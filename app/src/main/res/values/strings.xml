@@ -35,6 +35,14 @@
     <string name="call_button">Call number</string>
     <string name="gallery_button">Open gallery</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="date_spinner">
+        <item>All</item>
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>This week</item>
+        <item>Next week</item>
+        <item>This month</item>
+        <item>Next month</item>
+        <item>This year</item>
+    </string-array>
 </resources>

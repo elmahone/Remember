@@ -124,6 +124,34 @@ public class DataSource {
         return reminders;
     }
 
+    //Fetch all future reminders between dates
+    public List<Reminder> getAllFutureRemindersBetweenDates(long current, long end) {
+        open();
+        List<Reminder> reminders = new ArrayList<>();
+        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER
+                + " WHERE " + DatabaseHelper.KEY_TIME + " >= " + current
+                + " AND " + DatabaseHelper.KEY_TIME + " < " + end
+                + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Reminder reminder = new Reminder();
+                reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
+                reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
+                reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+                reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
+                reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
+                reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
+                reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
+                reminders.add(reminder);
+
+            } while (cursor.moveToNext());
+        }
+        return reminders;
+    }
+
     //Fetch all future reminders with given category
     public List<Reminder> getAllFutureRemindersWithCategory(long cat_id, long current) {
         open();
@@ -139,7 +167,39 @@ public class DataSource {
 
         if (cursor.moveToFirst()) {
             do {
-                String list = cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST));
+                Reminder reminder = new Reminder();
+
+                reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
+                reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
+                reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+                reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
+                reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
+                reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
+                reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
+
+                reminders.add(reminder);
+            } while (cursor.moveToNext());
+        }
+        return reminders;
+    }
+
+    //Fetch all future reminders between dates with given category
+    public List<Reminder> getAllFutureRemindersWithCategoryBetweenDates(long cat_id, long current, long end) {
+        open();
+        List<Reminder> reminders = new ArrayList<>();
+        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER
+                + " WHERE " + DatabaseHelper.KEY_CAT_ID + " = " + cat_id
+                + " AND " + DatabaseHelper.KEY_TIME + " >= " + current
+                + " AND " + DatabaseHelper.KEY_TIME + " < " + end
+                + " OR " + DatabaseHelper.KEY_CAT_ID + " = 6"
+                + " AND " + DatabaseHelper.KEY_TIME + " >= " + current
+                + " AND " + DatabaseHelper.KEY_TIME + " < " + end
+                + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
                 Reminder reminder = new Reminder();
 
                 reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));

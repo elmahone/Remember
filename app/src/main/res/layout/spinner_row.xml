@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinner_row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/light_black"
@@ -50,6 +51,6 @@
             android:paddingRight="10dp"
             android:text="Name"
             android:textColor="@color/smoky_white"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
     </LinearLayout>
 </LinearLayout>
