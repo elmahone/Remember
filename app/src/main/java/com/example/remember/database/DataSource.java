@@ -11,6 +11,7 @@ import com.example.remember.model.Icon;
 import com.example.remember.model.Reminder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DataSource {
@@ -124,6 +125,32 @@ public class DataSource {
         return reminders;
     }
 
+    //Fetch all past reminders
+    public List<Reminder> getAllPastReminders(long current) {
+        open();
+        List<Reminder> reminders = new ArrayList<>();
+        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER + " WHERE " + DatabaseHelper.KEY_TIME + " < " + current
+                + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Reminder reminder = new Reminder();
+                reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
+                reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
+                reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+                reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
+                reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
+                reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
+                reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
+                reminders.add(reminder);
+
+            } while (cursor.moveToNext());
+        }
+        return reminders;
+    }
+
     //Fetch all future reminders between dates
     public List<Reminder> getAllFutureRemindersBetweenDates(long current, long end) {
         open();
@@ -161,6 +188,37 @@ public class DataSource {
                 + " AND " + DatabaseHelper.KEY_TIME + " >= " + current
                 + " OR " + DatabaseHelper.KEY_CAT_ID + " = 6"
                 + " AND " + DatabaseHelper.KEY_TIME + " >= " + current
+                + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Reminder reminder = new Reminder();
+
+                reminder.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
+                reminder.setTitle(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_TITLE)));
+                reminder.setDescription(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_DESC)));
+                reminder.setList(cursor.getString(cursor.getColumnIndex(DatabaseHelper.KEY_LIST)));
+                reminder.setBirthday(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_BIRTHDAY)));
+                reminder.setCategory(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_CAT_ID)));
+                reminder.setTime(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.KEY_TIME)));
+
+                reminders.add(reminder);
+            } while (cursor.moveToNext());
+        }
+        return reminders;
+    }
+
+    //Fetch all future reminders with given category
+    public List<Reminder> getAllPastRemindersWithCategory(long cat_id, long current) {
+        open();
+        List<Reminder> reminders = new ArrayList<>();
+        String query = "SELECT * FROM " + DatabaseHelper.TABLE_REMINDER
+                + " WHERE " + DatabaseHelper.KEY_CAT_ID + " = " + cat_id
+                + " AND " + DatabaseHelper.KEY_TIME + " < " + current
+                + " OR " + DatabaseHelper.KEY_CAT_ID + " = 6"
+                + " AND " + DatabaseHelper.KEY_TIME + " < " + current
                 + " ORDER BY " + DatabaseHelper.KEY_TIME + " ASC";
 
         Cursor cursor = db.rawQuery(query, null);
@@ -229,6 +287,15 @@ public class DataSource {
 
         return db.update(DatabaseHelper.TABLE_REMINDER, values, DatabaseHelper.KEY_ID + " = ?",
                 new String[]{String.valueOf(reminder.getId())});
+    }
+
+    //Delete all past reminders
+    public void deletePastReminders() {
+        open();
+        List<Reminder> reminders = getAllPastReminders(Calendar.getInstance().getTimeInMillis());
+        for (Reminder re : reminders) {
+            db.delete(DatabaseHelper.TABLE_REMINDER, DatabaseHelper.KEY_ID + " = ?", new String[]{String.valueOf(re.getId())});
+        }
     }
 
     //Delete a reminder

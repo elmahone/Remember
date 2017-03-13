@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         dataSource = new DataSource(context);
 
+        // if close app button was pressed
+        if (getIntent().getBooleanExtra("EXIT", false)) {
+            finish();
+        }
+
+        // if alarm starts activity
         if (getIntent().hasExtra("alarm")) {
             int remId = Integer.valueOf(getIntent().getStringExtra("remId"));
 
@@ -87,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Spinner select listener
+        // Category Spinner select listener
         catSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -99,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        // Spinner select listener
+
+        // Date filter Spinner select listener
         dateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -133,12 +140,16 @@ public class MainActivity extends AppCompatActivity {
                 addReminder();
                 return true;
 
+            case R.id.action_history:
+                showHistory();
+                return true;
+
             case R.id.action_settings:
                 //todo settings
                 return true;
 
             case R.id.action_off:
-                //todo quit
+                closeApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -287,5 +298,21 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(context, NewReminderActivity.class);
         startActivity(intent);
     }
+
+    private void showHistory() {
+        Intent histIntent = new Intent(this, HistoryActivity.class);
+        startActivity(histIntent);
+    }
+
+    private void showSettings() {
+    }
+
+    private void closeApp() {
+        Intent exitIntent = new Intent(this, MainActivity.class);
+        exitIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        exitIntent.putExtra("EXIT", true);
+        startActivity(exitIntent);
+    }
+
     //endregion
 }

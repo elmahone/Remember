@@ -65,10 +65,15 @@ public class ReminderDetailsActivity extends AppCompatActivity {
                 showEditFragment();
                 return true;
 
+            case R.id.action_history:
+                showHistory();
+                return true;
+
             case R.id.action_settings:
                 return true;
 
             case R.id.action_off:
+                closeApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -102,5 +107,20 @@ public class ReminderDetailsActivity extends AppCompatActivity {
 
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         fragmentTransaction.commit();
+    }
+
+    private void showHistory() {
+        Intent histIntent = new Intent(this, HistoryActivity.class);
+        startActivity(histIntent);
+    }
+
+    private void showSettings() {
+    }
+
+    private void closeApp() {
+        Intent exitIntent = new Intent(this, MainActivity.class);
+        exitIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        exitIntent.putExtra("EXIT", true);
+        startActivity(exitIntent);
     }
 }

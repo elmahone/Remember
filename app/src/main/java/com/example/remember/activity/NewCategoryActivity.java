@@ -150,12 +150,17 @@ public class NewCategoryActivity extends AppCompatActivity {
             case R.id.action_save:
                 saveCategory();
                 return true;
+
+            case R.id.action_history:
+                showHistory();
+                return true;
+
             case R.id.action_settings:
                 //todo settings
                 return true;
 
             case R.id.action_off:
-                //todo quit
+                closeApp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -184,5 +189,15 @@ public class NewCategoryActivity extends AppCompatActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(i);
         }
+    }
+    private void showHistory(){
+        Intent histIntent = new Intent(this, HistoryActivity.class);
+        startActivity(histIntent);}
+    private void showSettings(){}
+    private void closeApp(){
+        Intent exitIntent = new Intent(this, MainActivity.class);
+        exitIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        exitIntent.putExtra("EXIT", true);
+        startActivity(exitIntent);
     }
 }

@@ -118,23 +118,24 @@ public class NewReminderActivity extends AppCompatActivity {
                 addCategory();
                 return true;
 
+            case R.id.action_history:
+                showHistory();
+                return true;
+
             case R.id.action_settings:
                 //todo settings
                 return true;
 
             case R.id.action_off:
-                //todo quit
+                Intent exitIntent = new Intent(this, MainActivity.class);
+                exitIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                exitIntent.putExtra("EXIT", true);
+                startActivity(exitIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    private void addCategory() {
-        Intent intent = new Intent(NewReminderActivity.this, NewCategoryActivity.class);
-        startActivity(intent);
-    }
-
 
     private void showFragment(int catId, Fragment fragment) {
         Bundle bundle = new Bundle();
@@ -145,4 +146,18 @@ public class NewReminderActivity extends AppCompatActivity {
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
     }
+
+
+    private void addCategory() {
+        Intent intent = new Intent(NewReminderActivity.this, NewCategoryActivity.class);
+        startActivity(intent);
+    }
+
+
+    private void showHistory(){
+        Intent histIntent = new Intent(this, HistoryActivity.class);
+        startActivity(histIntent);
+    }
+    private void showSettings(){}
+    private void closeApp(){}
 }
