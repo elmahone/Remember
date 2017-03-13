@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,6 +94,40 @@ public class HistoryActivity extends AppCompatActivity {
 
             }
         });
+
+        registerForContextMenu(listView);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Delete from history");
+        menu.add(0, v.getId(), 0, "Delete");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final int position = info.position;
+        final Reminder selRem = remAdapter.getItem(position);
+
+        if (item.getTitle() == "Delete") {
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Reminder")
+                    .setMessage("Are you sure?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dataSource.deleteReminder(selRem.getId());
+                            Toast.makeText(HistoryActivity.this, selRem.getTitle() + " deleted", Toast.LENGTH_SHORT).show();
+                            remAdapter.remove(position);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
+        } else {
+            return false;
+        }
+        return true;
     }
 
     @Override

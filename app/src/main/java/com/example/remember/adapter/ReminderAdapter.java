@@ -40,13 +40,18 @@ public class ReminderAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void remove(int pos) {
+        reminders.remove(pos);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return reminders.size();
     }
 
     @Override
-    public Object getItem(int position) {
+    public Reminder getItem(int position) {
         return reminders.get(position);
     }
 

@@ -1,12 +1,17 @@
 package com.example.remember.activity;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +21,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.remember.AlarmReceiver;
 import com.example.remember.adapter.DateSpinnerAdapter;
 import com.example.remember.model.Category;
 import com.example.remember.model.Icon;
@@ -118,6 +124,41 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        registerForContextMenu(listView);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Delete reminder");
+        menu.add(0, v.getId(), 0, "Delete");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final int position = info.position;
+        final Reminder selRem = remAdapter.getItem(position);
+
+        if (item.getTitle() == "Delete") {
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Reminder")
+                    .setMessage("Are you sure?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            cancelAlarm(selRem.getId());
+                            dataSource.deleteReminder(selRem.getId());
+                            Toast.makeText(context, selRem.getTitle() + " deleted", Toast.LENGTH_SHORT).show();
+                            remAdapter.remove(position);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
+        } else {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -292,6 +333,15 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(remAdapter);
     }
     //endregion
+
+    private void cancelAlarm(int id) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("reminder", id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
+    }
 
     //region Menu buttons
     private void addReminder() {

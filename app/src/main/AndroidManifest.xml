@@ -18,33 +18,36 @@
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.NewReminderActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_new_reminder"
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.ReminderDetailsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_details"
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.NewCategoryActivity"
+            android:label="@string/title_activity_new_category"
             android:noHistory="true"
             android:parentActivityName=".activity.NewReminderActivity"
             android:windowSoftInputMode="stateHidden" />
-
-        <receiver
-            android:name=".AlarmReceiver"
-            android:process=":remote" />
 
         <activity
             android:name=".activity.ShowImageActivity"
             android:theme="@style/AppTheme.NoActionBar.Fullscreen" />
         <activity
-            android:name=".activity.HistoryActivity"/>
+            android:name=".activity.HistoryActivity"
+            android:label="@string/title_activity_history" />
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:process=":remote" />
     </application>
 
 </manifest>

@@ -123,7 +123,7 @@ public class CategoryBirthdayFragment extends Fragment {
             Reminder reminder = new Reminder(t, de, calendar.getTimeInMillis(), catId, thisYear.getTimeInMillis());
             int id = (int) dataSource.createReminder(reminder);
             dataSource.close();
-            setAlarm(thisYear, reminder, id);
+            setAlarm(thisYear, id);
 
             // Go back to MainActivity after saving
             Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -135,9 +135,9 @@ public class CategoryBirthdayFragment extends Fragment {
     }
 
     // Set alarm to notify on time gotten from calendar
-    private void setAlarm(Calendar targetCal, Reminder reminder, int id) {
+    private void setAlarm(Calendar targetCal, int id) {
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
-        intent.putExtra("reminder", reminder);
+        intent.putExtra("reminder", id);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);

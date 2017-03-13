@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Remember</string>
+    <string name="title_activity_history">Reminder History</string>
+    <string name="title_activity_new_reminder">New Reminder</string>
+    <string name="title_activity_new_category">New Category</string>
+    <string name="title_activity_details">Reminder Details</string>
 
     <!-- Labels -->
     <string name="category_label">Select Category</string>
@@ -48,5 +52,4 @@
         <item>Next month</item>
         <item>This year</item>
     </string-array>
-    <string name="title_activity_history">HistoryActivity</string>
 </resources>
