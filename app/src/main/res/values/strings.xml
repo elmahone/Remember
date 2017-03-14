@@ -30,6 +30,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_clear">Clear history</string>
     <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
     <string name="menu_save">Save</string>
     <string name="menu_history">Reminder history</string>
     <string name="menu_settings">Settings</string>
