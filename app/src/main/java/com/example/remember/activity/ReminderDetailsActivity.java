@@ -80,6 +80,7 @@ public class ReminderDetailsActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_settings:
+                showSettings();
                 return true;
 
             case R.id.action_off:
@@ -152,6 +153,8 @@ public class ReminderDetailsActivity extends AppCompatActivity {
     }
 
     private void showSettings() {
+        Intent settingsIntent = new Intent(context, SettingsActivity.class);
+        startActivity(settingsIntent);
     }
 
     private void closeApp() {

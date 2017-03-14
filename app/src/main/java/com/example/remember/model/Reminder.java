@@ -167,16 +167,30 @@ public class Reminder implements Serializable {
 
     //region Functions
 
-    public String stringBirthDate() {
+    public String stringBirthDate(String formatPref) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(birthday);
-        return new SimpleDateFormat("MMMM dd. yyyy HH:mm").format(cal.getTime());
+
+        String format = "dd.MM.yyyy HH:mm";
+        if (formatPref.matches("1")) {
+            format = "MM.dd.yyyy HH:mm";
+        } else if (formatPref.matches("2")) {
+            format = "MMMM dd. yyyy, HH:mm";
+        }
+        return new SimpleDateFormat(format).format(cal.getTime());
     }
 
-    public String stringDate() {
+    public String stringDate(String formatPref) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
-        return new SimpleDateFormat("dd.MM.yyyy HH:mm").format(cal.getTime());
+
+        String format = "dd.MM.yyyy HH:mm";
+        if (formatPref.matches("1")) {
+            format = "MM.dd.yyyy HH:mm";
+        } else if (formatPref.matches("2")) {
+            format = "MMMM dd. yyyy, HH:mm";
+        }
+        return new SimpleDateFormat(format).format(cal.getTime());
     }
     //endregion
 }

@@ -282,16 +282,6 @@ public class DataSource {
         open();
         db.delete(DatabaseHelper.TABLE_REMINDER, DatabaseHelper.KEY_ID + " = ?", new String[]{String.valueOf(reminder_id)});
     }
-
-    //Change reminders category
-    public int updateReminderCategory(long id, long category_id) {
-        open();
-        ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.KEY_CAT_ID, category_id);
-
-        // updating row
-        return db.update(DatabaseHelper.TABLE_REMINDER, values, DatabaseHelper.KEY_ID + " = ?", new String[]{String.valueOf(id)});
-    }
     //endregion
 
     //Fetch all icons
@@ -313,24 +303,6 @@ public class DataSource {
         }
         cursor.close();
         return icons;
-    }
-
-    //Fetch an icon
-    public Icon getIcon(long id) {
-        open();
-        String query = "SELECT * FROM " + DatabaseHelper.TABLE_ICON + " WHERE " + DatabaseHelper.KEY_ID + " = " + id;
-
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            Icon icon = new Icon();
-            icon.setId(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ID)));
-            icon.setIcon(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.KEY_ICON)));
-            cursor.close();
-            return icon;
-        } else {
-            return null;
-        }
     }
 
     //region Category table CRUD functions
@@ -393,28 +365,6 @@ public class DataSource {
         }
         cursor.close();
         return categories;
-    }
-
-    //Update a category
-    public int updateCategory(Category category) {
-        if (notInDb(DatabaseHelper.TABLE_CATEGORY, DatabaseHelper.KEY_CAT_NAME, category.getCategory())) {
-            open();
-            ContentValues values = new ContentValues();
-            values.put(DatabaseHelper.KEY_CAT_NAME, category.getCategory());
-            values.put(DatabaseHelper.KEY_BG_COLOR, category.getBackgroundColor());
-            values.put(DatabaseHelper.KEY_ICON_COLOR, category.getIconColor());
-            values.put(DatabaseHelper.KEY_ICON_ID, category.getIcon());
-            return db.update(DatabaseHelper.TABLE_CATEGORY, values, DatabaseHelper.KEY_ID + " = ?",
-                    new String[]{String.valueOf(category.getId())});
-        } else {
-            return 0;
-        }
-    }
-
-    //Delete a category
-    public void deleteCategory(long category_id) {
-        open();
-        db.delete(DatabaseHelper.TABLE_CATEGORY, DatabaseHelper.KEY_ID + " = ?", new String[]{String.valueOf(category_id)});
     }
     //endregion
 

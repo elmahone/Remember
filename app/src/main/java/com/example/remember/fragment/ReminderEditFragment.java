@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -14,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -41,7 +43,6 @@ import com.example.remember.model.Category;
 import com.example.remember.model.Reminder;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -54,6 +55,7 @@ public class ReminderEditFragment extends Fragment {
     private Reminder reminder;
     private ShoppingListAdapter adapter;
 
+    private SharedPreferences pref;
     private Calendar calendar = Calendar.getInstance();
     private final Calendar thisYear = Calendar.getInstance();
     private final Calendar today = Calendar.getInstance();
@@ -110,6 +112,7 @@ public class ReminderEditFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         dataSource = new DataSource(getActivity());
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         findViews();
         // Set default times from database
@@ -307,12 +310,13 @@ public class ReminderEditFragment extends Fragment {
 
     // Fill text fields with data saved to database
     private void fillViews() {
+        String formatPref = pref.getString("date_format_list", "0");
         title.setText(reminder.getTitle());
-        date.setText(reminder.stringDate());
+        date.setText(reminder.stringDate(formatPref));
         switch (category.getCategory()) {
             case "Birthday":
                 desc.setText(reminder.getDescription());
-                date.setText(reminder.stringBirthDate());
+                date.setText(reminder.stringBirthDate(formatPref));
                 break;
             case "Phone Call":
                 phone.setText(reminder.getDescription());
@@ -352,7 +356,13 @@ public class ReminderEditFragment extends Fragment {
                 desc.setText(t + " turns " + getAge());
             }
         } else {
+            String formatPref = pref.getString("date_format_list", "0");
             String format = "dd.MM.yyyy HH:mm";
+            if (formatPref.matches("1")) {
+                format = "MM.dd.yyyy HH:mm";
+            } else if (formatPref.matches("2")) {
+                format = "MMMM dd. yyyy, HH:mm";
+            }
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
             date.setText(sdf.format(calendar.getTime()));
         }
@@ -405,8 +415,12 @@ public class ReminderEditFragment extends Fragment {
 
     // Cancel previous alarm and set new alarm to notify on time gotten from calendar
     private void setAlarm(Calendar targetCal, int remId) {
+        String ringtone = pref.getString("notifications_ringtone", "none");
+        boolean vibrate = pref.getBoolean("notifications_vibrate", true);
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
         intent.putExtra("reminder", remId);
+        intent.putExtra("ringtone", ringtone);
+        intent.putExtra("vibrate", vibrate);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), remId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);

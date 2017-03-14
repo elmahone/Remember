@@ -6,8 +6,10 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +33,7 @@ public class CategoryBirthdayFragment extends Fragment {
     private DataSource dataSource;
     private int catId;
 
+    private SharedPreferences pref;
     private final Calendar calendar = Calendar.getInstance();
     private final Calendar thisYear = Calendar.getInstance();
     private final Calendar today = Calendar.getInstance();
@@ -53,6 +56,7 @@ public class CategoryBirthdayFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         dataSource = new DataSource(getActivity());
         catId = getArguments().getInt("category");
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         findViews();
 
         //region DatePicker & TimePicker listeners
@@ -136,8 +140,12 @@ public class CategoryBirthdayFragment extends Fragment {
 
     // Set alarm to notify on time gotten from calendar
     private void setAlarm(Calendar targetCal, int id) {
+        String ringtone = pref.getString("notifications_ringtone", "none");
+        boolean vibrate = pref.getBoolean("notifications_vibrate", true);
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
         intent.putExtra("reminder", id);
+        intent.putExtra("ringtone", ringtone);
+        intent.putExtra("vibrate", vibrate);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);

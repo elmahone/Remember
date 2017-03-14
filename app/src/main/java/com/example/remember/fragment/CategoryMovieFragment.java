@@ -7,10 +7,12 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -41,6 +43,7 @@ public class CategoryMovieFragment extends Fragment {
     private DataSource dataSource;
     private int catId;
 
+    private SharedPreferences pref;
     private final Calendar calendar = Calendar.getInstance();
     private final int PICK_IMAGE = 1;
     private Uri selectedImageUri;
@@ -64,6 +67,7 @@ public class CategoryMovieFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         dataSource = new DataSource(getActivity());
         catId = getArguments().getInt("category");
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         findViews();
 
@@ -166,7 +170,13 @@ public class CategoryMovieFragment extends Fragment {
 
     // Update date text field with date gotten from calendar
     private void updateLabel() {
+        String formatPref = pref.getString("date_format_list", "0");
         String format = "dd.MM.yyyy HH:mm";
+        if (formatPref.matches("1")) {
+            format = "MM.dd.yyyy HH:mm";
+        } else if (formatPref.matches("2")) {
+            format = "MMMM dd. yyyy, HH:mm";
+        }
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         date.setText(sdf.format(calendar.getTime()));
     }
@@ -191,8 +201,12 @@ public class CategoryMovieFragment extends Fragment {
 
     // Set alarm to notify on time gotten from calendar
     private void setAlarm(Calendar targetCal, int id) {
+        String ringtone = pref.getString("notifications_ringtone", "none");
+        boolean vibrate = pref.getBoolean("notifications_vibrate", true);
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
         intent.putExtra("reminder", id);
+        intent.putExtra("ringtone", ringtone);
+        intent.putExtra("vibrate", vibrate);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);

@@ -1,10 +1,12 @@
 package com.example.remember.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +22,13 @@ import com.example.remember.adapter.ShoppingListAdapter;
 import com.example.remember.model.Category;
 import com.example.remember.model.Reminder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReminderDetailsFragment extends Fragment {
     private Reminder reminder;
     private Category category;
+
+    private SharedPreferences pref;
 
     private Button callButton;
     private ImageView image;
@@ -68,6 +71,8 @@ public class ReminderDetailsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         findViews();
         fillViews();
 
@@ -124,12 +129,13 @@ public class ReminderDetailsFragment extends Fragment {
 
     // Fill text fields with data saved to database
     private void fillViews() {
+        String formatPref = pref.getString("date_format_list", "0");
         reminderTitle.setText(reminder.getTitle());
-        reminderDate.setText(reminder.stringDate());
+        reminderDate.setText(reminder.stringDate(formatPref));
         switch (category.getCategory()) {
             case "Birthday":
                 reminderDesc.setText(reminder.getDescription());
-                reminderDate.setText(reminder.stringBirthDate());
+                reminderDate.setText(reminder.stringBirthDate(formatPref));
                 break;
             case "Phone Call":
                 reminderPhone.setText(reminder.getDescription());

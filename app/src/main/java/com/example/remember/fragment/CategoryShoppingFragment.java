@@ -7,8 +7,10 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,6 +42,7 @@ public class CategoryShoppingFragment extends Fragment {
     private int catId;
     private ShoppingListAdapter adapter;
 
+    private SharedPreferences pref;
     private final Calendar calendar = Calendar.getInstance();
 
     private final List<String> values = new ArrayList<>();
@@ -55,8 +58,7 @@ public class CategoryShoppingFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_category_shopping, container, false);
@@ -67,6 +69,8 @@ public class CategoryShoppingFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         dataSource = new DataSource(getActivity());
         catId = getArguments().getInt("category");
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         findViews();
         adapter = new ShoppingListAdapter(getActivity(), values, true);
         shoppingList.setAdapter(adapter);
@@ -152,7 +156,13 @@ public class CategoryShoppingFragment extends Fragment {
 
     // Update date text field with date gotten from calendar
     private void updateLabel() {
+        String formatPref = pref.getString("date_format_list", "0");
         String format = "dd.MM.yyyy HH:mm";
+        if (formatPref.matches("1")) {
+            format = "MM.dd.yyyy HH:mm";
+        } else if (formatPref.matches("2")) {
+            format = "MMMM dd. yyyy, HH:mm";
+        }
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
         date.setText(sdf.format(calendar.getTime()));
     }
@@ -182,8 +192,12 @@ public class CategoryShoppingFragment extends Fragment {
 
     // Set alarm to notify on time gotten from calendar
     private void setAlarm(Calendar targetCal, int id) {
+        String ringtone = pref.getString("notifications_ringtone", "none");
+        boolean vibrate = pref.getBoolean("notifications_vibrate", true);
         Intent intent = new Intent(getActivity(), AlarmReceiver.class);
         intent.putExtra("reminder", id);
+        intent.putExtra("ringtone", ringtone);
+        intent.putExtra("vibrate", vibrate);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);

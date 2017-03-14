@@ -6,20 +6,9 @@ public class Icon implements Serializable {
     private int id;
     private int icon;
 
-    //region Constructors
-
+    // Constructor
     public Icon() {
     }
-
-    public Icon(int id, int icon) {
-        this.id = id;
-        this.icon = icon;
-    }
-
-    public Icon(int icon) {
-        this.icon = icon;
-    }
-    //endregion
 
     //region Getters
 

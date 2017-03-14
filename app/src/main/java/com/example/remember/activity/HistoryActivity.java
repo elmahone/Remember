@@ -218,6 +218,8 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void showSettings() {
+        Intent settingsIntent = new Intent(context, SettingsActivity.class);
+        startActivity(settingsIntent);
     }
 
     private void closeApp() {

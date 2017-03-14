@@ -22,7 +22,6 @@ public class ShoppingListAdapter extends BaseAdapter {
     private final boolean editable;
 
     public ShoppingListAdapter(Context context, List<String> items, boolean editable) {
-        Context context1 = context;
         this.items = items;
         this.editable = editable;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

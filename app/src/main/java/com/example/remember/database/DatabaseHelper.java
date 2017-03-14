@@ -37,7 +37,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_BIRTHDAY = "birthday";
     public static final String KEY_CAT_ID = "category_id";
     public static final String KEY_TIME = "time";
-
     //endregion
 
     //region CATEGORY Table - column names
@@ -94,17 +93,33 @@ class DatabaseHelper extends SQLiteOpenHelper {
         createIcon(db, R.drawable.ic_birthday);
         createIcon(db, R.drawable.ic_phone);
         createIcon(db, R.drawable.ic_important);
-        createIcon(db, R.drawable.ic_bar);
-        createIcon(db, R.drawable.ic_bike);
-        createIcon(db, R.drawable.ic_cafe);
-        createIcon(db, R.drawable.ic_cut);
-        createIcon(db, R.drawable.ic_flight);
+
+        createIcon(db, R.drawable.ic_sleep);
         createIcon(db, R.drawable.ic_group);
-        createIcon(db, R.drawable.ic_hospital);
+        createIcon(db, R.drawable.ic_exercise);
+        createIcon(db, R.drawable.ic_bike);
+        createIcon(db, R.drawable.ic_car);
+        createIcon(db, R.drawable.ic_train);
+        createIcon(db, R.drawable.ic_boat);
+        createIcon(db, R.drawable.ic_flight);
         createIcon(db, R.drawable.ic_location);
+        createIcon(db, R.drawable.ic_hospital);
+        createIcon(db, R.drawable.ic_school);
+        createIcon(db, R.drawable.ic_cut);
         createIcon(db, R.drawable.ic_mail);
         createIcon(db, R.drawable.ic_money);
-        createIcon(db, R.drawable.ic_exercise);
+        createIcon(db, R.drawable.ic_heart);
+        createIcon(db, R.drawable.ic_star);
+        createIcon(db, R.drawable.ic_paint);
+        createIcon(db, R.drawable.ic_videogame);
+        createIcon(db, R.drawable.ic_videocam);
+        createIcon(db, R.drawable.ic_camera);
+        createIcon(db, R.drawable.ic_chat);
+        createIcon(db, R.drawable.ic_gas);
+        createIcon(db, R.drawable.ic_bar);
+        createIcon(db, R.drawable.ic_cafe);
+        createIcon(db, R.drawable.ic_pizza);
+        createIcon(db, R.drawable.ic_restaurant);
         //endregion
 
         //region Create default categories

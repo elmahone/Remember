@@ -18,6 +18,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -37,7 +38,6 @@
             android:noHistory="true"
             android:parentActivityName=".activity.NewReminderActivity"
             android:windowSoftInputMode="stateHidden" />
-
         <activity
             android:name=".activity.ShowImageActivity"
             android:theme="@style/AppTheme.NoActionBar.Fullscreen" />
@@ -48,6 +48,11 @@
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />
+
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activity.MainActivity" />
     </application>
 
 </manifest>

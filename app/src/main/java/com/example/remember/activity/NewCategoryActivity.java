@@ -152,7 +152,7 @@ public class NewCategoryActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_settings:
-                //todo settings
+                showSettings();
                 return true;
 
             case R.id.action_off:
@@ -193,6 +193,8 @@ public class NewCategoryActivity extends AppCompatActivity {
     }
 
     private void showSettings() {
+        Intent settingsIntent = new Intent(context, SettingsActivity.class);
+        startActivity(settingsIntent);
     }
 
     private void closeApp() {

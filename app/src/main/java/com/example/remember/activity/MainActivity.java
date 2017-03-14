@@ -6,9 +6,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private final long currentTime = new Date().getTime();
     private final Context context = MainActivity.this;
     private Intent intent;
+    private SharedPreferences pref;
     private boolean allDates = true;
 
     private List<Category> categories = new ArrayList<>();
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
         dataSource = new DataSource(context);
 
         // if close app button was pressed
@@ -183,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_settings:
-                //todo settings
+                showSettings();
                 return true;
 
             case R.id.action_off:
@@ -230,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar endCal = Calendar.getInstance();
         Calendar startCal = Calendar.getInstance();
 
-        boolean allCategories = true;
+        boolean allCategories;
         if (catSpinner.getSelectedItemPosition() == 0) {
             allCategories = true;
         } else {
@@ -353,6 +357,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showSettings() {
+        Intent settingsIntent = new Intent(context, SettingsActivity.class);
+        startActivity(settingsIntent);
     }
 
     private void closeApp() {

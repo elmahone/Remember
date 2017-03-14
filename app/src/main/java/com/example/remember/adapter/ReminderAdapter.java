@@ -1,8 +1,10 @@
 package com.example.remember.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import java.util.List;
 
 public class ReminderAdapter extends BaseAdapter {
     private static final String TAG = "ReminderAdapter";
+    private final SharedPreferences pref;
     private final Context context;
     private final List<Reminder> reminders;
     private final List<Category> categories;
@@ -32,6 +35,8 @@ public class ReminderAdapter extends BaseAdapter {
         this.reminders = reminders;
         this.categories = categories;
         this.icons = icons;
+
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -69,9 +74,11 @@ public class ReminderAdapter extends BaseAdapter {
         LinearLayout cat_icon_bg = (LinearLayout) view.findViewById(R.id.list_icon_background);
         ImageView cat_icon = (ImageView) view.findViewById(R.id.list_icon_field);
 
+        String formatPref = pref.getString("date_format_list", "0");
+
         //set title, date and description
         header.setText(reminder.getTitle());
-        date.setText(reminder.stringDate());
+        date.setText(reminder.stringDate(formatPref));
         if (!category.getCategory().matches("Movie")) {
             text.setText(reminder.getDescription());
         } else {
