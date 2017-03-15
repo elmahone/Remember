@@ -161,10 +161,6 @@ public class HistoryActivity extends AppCompatActivity {
             case R.id.action_settings:
                 showSettings();
                 return true;
-
-            case R.id.action_off:
-                closeApp();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -222,11 +218,5 @@ public class HistoryActivity extends AppCompatActivity {
         startActivity(settingsIntent);
     }
 
-    private void closeApp() {
-        Intent exitIntent = new Intent(this, MainActivity.class);
-        exitIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        exitIntent.putExtra("EXIT", true);
-        startActivity(exitIntent);
-    }
     //endregion
 }

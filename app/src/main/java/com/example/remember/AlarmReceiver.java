@@ -5,11 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import com.example.remember.activity.MainActivity;
 import com.example.remember.database.DataSource;
@@ -39,9 +40,13 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private void showNotification(Context context, Reminder r, String ringtone, boolean vibrate) {
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context);
-        Uri ring = Uri.parse(ringtone);
+        Uri ring;
+        if (ringtone.matches("none")) {
+            ring = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        } else {
+            ring = Uri.parse(ringtone);
+        }
         notification.setContentTitle("Remember");
-
         notification.setSmallIcon(R.mipmap.ic_launcher);
         notification.setContentText(r.getTitle());
         notification.setSound(ring);
@@ -49,7 +54,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             notification.setVibrate(new long[]{1000, 1000});
         }
         notification.setLights(Color.BLUE, 1000, 1000);
-
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, notification.build());
     }
